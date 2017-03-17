@@ -1,13 +1,30 @@
 package org.catroid.catrobat.newui.data;
 
 
-public class ListItem {
+public class ListItem extends BaseListItem {
 
     private String name;
     private String filePath;
 
     public ListItem(String name, String filePath) {
         this.name = name;
+        this.filePath = filePath;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
 
