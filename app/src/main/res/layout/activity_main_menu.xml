@@ -41,7 +41,7 @@
             android:textColor="#E1F5FE"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:onClick="onRecycleViewClick"/>
+            android:onClick="onListViewClick"/>
 
         <Button
             android:id="@+id/recycle_view"
@@ -57,7 +57,7 @@
             android:textColor="#E1F5FE"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:onClick="onListViewClick"/>
+            android:onClick="onRecycleViewClick"/>
 
     </android.support.v7.widget.LinearLayoutCompat>
 

@@ -13,7 +13,7 @@ public final class Utils {
     public static List<ListItem> getItemList() {
         List<ListItem> itemList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            itemList.add(new ListItem("Item".concat(Integer.toString(i))));
+            itemList.add(new ListItem("Item ".concat(Integer.toString(i))));
         }
         return itemList;
     }

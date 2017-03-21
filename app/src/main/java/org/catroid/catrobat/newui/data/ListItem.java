@@ -11,7 +11,7 @@ public class ListItem {
     public ListItem(String name) {
         this.name = name;
         this.details = "These are the details";
-        this.imageRes = R.drawable.ic_face_black_24dp;
+        this.imageRes = R.drawable.ic_insert_photo_black_24dp;
     }
 
     public String getName() {

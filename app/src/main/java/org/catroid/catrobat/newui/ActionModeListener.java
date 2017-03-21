@@ -15,28 +15,31 @@ public final class ActionModeListener {
     private static final String RENAME = "item to rename: ";
     private static final String BACKPACK = "item to pack: ";
 
-    public void deleteItems(List<? extends ListItem> selectedItems) {
+    public boolean deleteItems(List<? extends ListItem> selectedItems) {
         Log.i(NUM_ITEMS, Integer.toString(selectedItems.size()));
         for (ListItem listItem : selectedItems) {
             Log.i(DELETE, listItem.getName());
         }
+        return true;
     }
 
-    public void copyItems(List<? extends ListItem> selectedItems) {
+    public boolean copyItems(List<? extends ListItem> selectedItems) {
         Log.i(NUM_ITEMS, Integer.toString(selectedItems.size()));
         for (ListItem listItem : selectedItems) {
             Log.i(COPY, listItem.getName());
         }
+        return true;
     }
 
     public void renameItem(ListItem selectedItem) {
         Log.i(RENAME, selectedItem.getName());
     }
 
-    public void packItems(List<? extends ListItem> selectedItems) {
+    public boolean packItems(List<? extends ListItem> selectedItems) {
         Log.i(NUM_ITEMS, Integer.toString(selectedItems.size()));
         for (ListItem listItem : selectedItems) {
             Log.i(BACKPACK, listItem.getName());
         }
+        return true;
     }
 }
