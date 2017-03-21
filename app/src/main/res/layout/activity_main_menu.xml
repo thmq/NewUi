@@ -29,17 +29,35 @@
         android:gravity="center">
         <Button
             android:id="@+id/list_view"
-            android:text="@string/title_activity_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onListViewClick"/>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:adjustViewBounds="false"
+            android:background="@drawable/color_highlight_main"
+            android:fontFamily="sans-serif-light"
+            android:scaleType="fitCenter"
+            android:text="ListViewActivity"
+            android:textColor="#E1F5FE"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:onClick="onRecycleViewClick"/>
 
         <Button
             android:id="@+id/recycle_view"
-            android:text="@string/title_activity_recycle_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onRecycleViewClick"/>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:adjustViewBounds="false"
+            android:background="@drawable/color_highlight_main"
+            android:fontFamily="sans-serif-light"
+            android:scaleType="fitCenter"
+            android:text="RecycleViewActivity"
+            android:textColor="#E1F5FE"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:onClick="onListViewClick"/>
 
     </android.support.v7.widget.LinearLayoutCompat>
 
