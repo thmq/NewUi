@@ -8,9 +8,6 @@ import android.view.ViewGroup;
 
 import org.catroid.catrobat.newui.R;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class RecycleViewActivityFragment extends Fragment {
 
     public RecycleViewActivityFragment() {
