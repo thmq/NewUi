@@ -3,7 +3,7 @@ package org.catroid.catrobat.newui;
 
 import android.util.Log;
 
-import org.catroid.catrobat.newui.data.BaseListItem;
+import org.catroid.catrobat.newui.data.ListItem;
 
 import java.util.List;
 
@@ -15,27 +15,27 @@ public final class ActionModeListener {
     private static final String RENAME = "item to rename: ";
     private static final String BACKPACK = "item to pack: ";
 
-    public void deleteItems(List<? extends BaseListItem> selectedItems) {
+    public void deleteItems(List<? extends ListItem> selectedItems) {
         Log.i(NUM_ITEMS, Integer.toString(selectedItems.size()));
-        for (BaseListItem listItem : selectedItems) {
+        for (ListItem listItem : selectedItems) {
             Log.i(DELETE, listItem.getName());
         }
     }
 
-    public void copyItems(List<? extends BaseListItem> selectedItems) {
+    public void copyItems(List<? extends ListItem> selectedItems) {
         Log.i(NUM_ITEMS, Integer.toString(selectedItems.size()));
-        for (BaseListItem listItem : selectedItems) {
+        for (ListItem listItem : selectedItems) {
             Log.i(COPY, listItem.getName());
         }
     }
 
-    public void renameItem(BaseListItem selectedItem) {
+    public void renameItem(ListItem selectedItem) {
         Log.i(RENAME, selectedItem.getName());
     }
 
-    public void packItems(List<? extends BaseListItem> selectedItems) {
+    public void packItems(List<? extends ListItem> selectedItems) {
         Log.i(NUM_ITEMS, Integer.toString(selectedItems.size()));
-        for (BaseListItem listItem : selectedItems) {
+        for (ListItem listItem : selectedItems) {
             Log.i(BACKPACK, listItem.getName());
         }
     }

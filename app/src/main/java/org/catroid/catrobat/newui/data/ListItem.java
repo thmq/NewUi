@@ -1,31 +1,28 @@
 package org.catroid.catrobat.newui.data;
 
 
-public class ListItem extends BaseListItem {
+import org.catroid.catrobat.newui.R;
+
+public class ListItem {
 
     private String name;
-    private String filePath;
+    private int imageRes;
 
-    public ListItem(String name, String filePath) {
+    public ListItem(String name) {
         this.name = name;
-        this.filePath = filePath;
+        this.imageRes = R.drawable.ic_face_black_24dp;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public int getImageRes() {
+        return imageRes;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
     }
 
     @Override
@@ -40,6 +37,6 @@ public class ListItem extends BaseListItem {
 
         ListItem listItem = (ListItem) obj;
 
-        return listItem.name.equals(this.name) && listItem.filePath.equals(this.filePath);
+        return listItem.name.equals(this.name);
     }
 }

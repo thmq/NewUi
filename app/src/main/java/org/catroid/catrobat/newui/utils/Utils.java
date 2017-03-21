@@ -1,17 +1,26 @@
 package org.catroid.catrobat.newui.utils;
 
 
-import org.catroid.catrobat.newui.data.BaseListItem;
+import org.catroid.catrobat.newui.data.ListItem;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public final class Utils {
 
-    public static String getUniqueName(String name, List<? extends BaseListItem> scope) {
+    public static List<ListItem> getItemList() {
+        List<ListItem> itemList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            itemList.add(new ListItem("Item".concat(Integer.toString(i))));
+        }
+        return itemList;
+    }
+
+    public static String getUniqueName(String name, List<? extends ListItem> scope) {
         Set<String> nameSet = new HashSet<>();
-        for (BaseListItem item : scope) {
+        for (ListItem item : scope) {
             nameSet.add(item.getName());
         }
 
