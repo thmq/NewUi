@@ -10,9 +10,6 @@ import org.catroid.catrobat.newui.R;
 
 public class RecycleViewActivityFragment extends Fragment {
 
-    public RecycleViewActivityFragment() {
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

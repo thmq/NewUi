@@ -10,9 +10,6 @@ import org.catroid.catrobat.newui.R;
 
 public class ListViewActivityFragment extends ListFragment {
 
-    public ListViewActivityFragment() {
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

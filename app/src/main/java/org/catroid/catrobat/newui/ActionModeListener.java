@@ -1,6 +1,5 @@
 package org.catroid.catrobat.newui;
 
-
 import android.util.Log;
 
 import org.catroid.catrobat.newui.data.ListItem;
