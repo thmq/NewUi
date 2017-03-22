@@ -14,7 +14,7 @@ public final class ActionModeListener {
     private static final String RENAME = "item to rename: ";
     private static final String BACKPACK = "item to pack: ";
 
-    public boolean deleteItems(List<? extends ListItem> selectedItems) {
+    public static boolean deleteItems(List<? extends ListItem> selectedItems) {
         Log.i(NUM_ITEMS, Integer.toString(selectedItems.size()));
         for (ListItem listItem : selectedItems) {
             Log.i(DELETE, listItem.getName());
@@ -22,7 +22,7 @@ public final class ActionModeListener {
         return true;
     }
 
-    public boolean copyItems(List<? extends ListItem> selectedItems) {
+    public static boolean copyItems(List<? extends ListItem> selectedItems) {
         Log.i(NUM_ITEMS, Integer.toString(selectedItems.size()));
         for (ListItem listItem : selectedItems) {
             Log.i(COPY, listItem.getName());
@@ -30,11 +30,11 @@ public final class ActionModeListener {
         return true;
     }
 
-    public void renameItem(ListItem selectedItem) {
+    public static void renameItem(ListItem selectedItem) {
         Log.i(RENAME, selectedItem.getName());
     }
 
-    public boolean packItems(List<? extends ListItem> selectedItems) {
+    public static boolean packItems(List<? extends ListItem> selectedItems) {
         Log.i(NUM_ITEMS, Integer.toString(selectedItems.size()));
         for (ListItem listItem : selectedItems) {
             Log.i(BACKPACK, listItem.getName());

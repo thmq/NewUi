@@ -11,17 +11,21 @@ import android.widget.TextView;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.ListItem;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by matthee on 22.03.17.
  */
 
-class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener {
 
     private List<ListItem> mListItems;
     private int mItemLayoutId;
     private RecyclerViewMultiSelectionManager<ListItem> mMultiSelectionManager;
+    private List<RecyclerViewAdapterDelegate> mObservers;
 
     private static int SELECTED_ITEM_BACKGROUND_COLOR = 0xFFDDDDDD;
 
@@ -29,6 +33,7 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewH
         mListItems = listItems;
         mItemLayoutId = itemLayout;
         mMultiSelectionManager = new RecyclerViewMultiSelectionManager<ListItem>();
+        mObservers = new ArrayList<>();
     }
 
     @Override
@@ -56,6 +61,14 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewH
         }
     }
 
+    public void addObserver(RecyclerViewAdapterDelegate obs) {
+        mObservers.add(obs);
+    }
+
+    public void removeObserver(RecyclerViewAdapterDelegate obs) {
+        mObservers.remove(obs);
+    }
+
     @Override
     public int getItemCount() {
         return mListItems.size();
@@ -73,12 +86,33 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewH
             mMultiSelectionManager.toggleSelected(item);
 
             notifyDataSetChanged();
+            notifySelectionChanged();
 
             return true;
         } else {
             return false;
         }
 
+    }
+
+    public RecyclerViewMultiSelectionManager<ListItem> getMultiSelectionManager() {
+        return mMultiSelectionManager;
+    }
+
+    private void notifySelectionChanged() {
+        for (RecyclerViewAdapterDelegate obs : mObservers) {
+            obs.onSelectionChanged(this);
+        }
+    }
+
+    public List<ListItem> getSelectedItems() {
+        return mMultiSelectionManager.getSelectedItems();
+    }
+
+    public void clearSelection() {
+        mMultiSelectionManager.clearSelection();
+        notifyDataSetChanged();
+        notifySelectionChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
