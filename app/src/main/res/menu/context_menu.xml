@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/btnEdit"
+        android:icon="@drawable/ic_mode_edit_white_24dp"
+        app:showAsAction="always"
+        android:title="Edit"/>
+
+    <item
+        android:id="@+id/btnCopy"
+        android:icon="@drawable/ic_content_copy_white_24dp"
+        app:showAsAction="always"
+        android:title="Copy"/>
+
+    <item
+        android:id="@+id/btnDelete"
+        android:icon="@drawable/ic_delete_white_24dp"
+        app:showAsAction="always"
+        android:title="Delete"/>
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
+
+
+
+
+</menu>

@@ -4,12 +4,19 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import org.catroid.catrobat.newui.R;
 
 public class RecycleViewActivity extends AppCompatActivity {
+
+    private static String LOG_TAG = "RecycleViewActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +24,8 @@ public class RecycleViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recycle_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -26,6 +35,14 @@ public class RecycleViewActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
 }
