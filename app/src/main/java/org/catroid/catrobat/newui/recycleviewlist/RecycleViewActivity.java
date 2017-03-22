@@ -13,6 +13,8 @@ import org.catroid.catrobat.newui.R;
 
 public class RecycleViewActivity extends AppCompatActivity {
 
+    Boolean selection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,12 +22,16 @@ public class RecycleViewActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        selection = false;
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                selection = !selection;
+                invalidateOptionsMenu();
             }
         });
     }
@@ -34,8 +40,26 @@ public class RecycleViewActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_recycle_view, menu);
+        inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        if(selection)
+        {
+            inflater.inflate(R.menu.context_menu, menu);
+        }
+        else
+        {
+            inflater.inflate(R.menu.main_menu, menu);
+        }
+
+        return  true;
+    }
+
+
 
 }
