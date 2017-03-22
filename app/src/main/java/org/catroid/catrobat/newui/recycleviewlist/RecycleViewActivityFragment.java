@@ -108,10 +108,6 @@ public class RecycleViewActivityFragment extends Fragment implements RecyclerVie
             if (mActionMode == null) {
                 Log.d(LOG_TAG, "entering edit mode");
                 mActionMode = getActivity().startActionMode(mActionModeCallback);
-
-                if (mActionMode == null) {
-                    Log.d(LOG_TAG, "U FUCKED UP!");
-                }
             }
 
             if (selectedItems.size() <= 1) {
