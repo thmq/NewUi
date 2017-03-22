@@ -18,8 +18,6 @@ import java.util.Set;
 public class RecyclerViewMultiSelectionManager<T> {
     private Set<T> mSelectedItems;
 
-    private static String LOG_TAG = "RVMultiSelectionManager";
-
     public RecyclerViewMultiSelectionManager() {
         mSelectedItems = new HashSet<T>();
     }
@@ -30,11 +28,8 @@ public class RecyclerViewMultiSelectionManager<T> {
 
     public void setSelected(T item, boolean selected) {
         if (selected) {
-            Log.d(LOG_TAG, "Selecting item " + item.toString());
             mSelectedItems.add(item);
         } else {
-            Log.d(LOG_TAG, "Deselecting item " + item.toString());
-
             mSelectedItems.remove(item);
         }
     }

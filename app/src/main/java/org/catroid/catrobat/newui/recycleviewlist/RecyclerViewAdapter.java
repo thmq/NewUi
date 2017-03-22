@@ -21,6 +21,21 @@ import java.util.Observer;
  */
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public ImageView mImageView;
+        public TextView mNameView;
+        public TextView mDetailsView;
+        public View mItemView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            mItemView = itemView;
+            mImageView = (ImageView) itemView.findViewById(R.id.image_view);
+            mNameView = (TextView) itemView.findViewById(R.id.name_view);
+            mDetailsView = (TextView) itemView.findViewById(R.id.details_view);
+        }
+    }
 
     private List<ListItem> mListItems;
     private int mItemLayoutId;
@@ -57,7 +72,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         } else {
             holder.mItemView.setBackgroundColor(0x00000000);
             holder.mImageView.setImageResource(item.getImageRes());
-
         }
     }
 
@@ -67,11 +81,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void removeObserver(RecyclerViewAdapterDelegate obs) {
         mObservers.remove(obs);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mListItems.size();
     }
 
     @Override
@@ -96,17 +105,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         } else {
             return false;
         }
-
     }
 
-    public RecyclerViewMultiSelectionManager<ListItem> getMultiSelectionManager() {
-        return mMultiSelectionManager;
-    }
-
-    private void notifySelectionChanged() {
-        for (RecyclerViewAdapterDelegate obs : mObservers) {
-            obs.onSelectionChanged(this);
-        }
+    @Override
+    public int getItemCount() {
+        return mListItems.size();
     }
 
     public List<ListItem> getSelectedItems() {
@@ -119,21 +122,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         notifySelectionChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView mImageView;
-        public TextView mNameView;
-        public TextView mDetailsView;
-        public View mItemView;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-
-            mItemView = itemView;
-            mImageView = (ImageView) itemView.findViewById(R.id.image_view);
-            mNameView = (TextView) itemView.findViewById(R.id.name_view);
-            mDetailsView = (TextView) itemView.findViewById(R.id.details_view);
+    private void notifySelectionChanged() {
+        for (RecyclerViewAdapterDelegate obs : mObservers) {
+            obs.onSelectionChanged(this);
         }
-
-
     }
 }

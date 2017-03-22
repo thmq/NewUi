@@ -120,7 +120,6 @@ public class RecyclerViewMultiSelectionManagerTest {
 
     }
 
-
     private RecyclerViewMultiSelectionManager createManager() {
         return new RecyclerViewMultiSelectionManager<ListItem>();
     }
