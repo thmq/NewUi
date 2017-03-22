@@ -25,6 +25,7 @@ public class RecycleViewActivityFragment extends Fragment {
 
     private static String LOG_TAG = "RecycleViewFragment";
     private RecyclerView recyclerView;
+    private RecyclerViewMultiSelectionManager<ListItem> mMultiselectionManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,6 +35,7 @@ public class RecycleViewActivityFragment extends Fragment {
 
         List<ListItem> items = Utils.getItemList();
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(items, R.layout.list_item);
+
         recyclerView.setAdapter(adapter);
 
         return recyclerView;

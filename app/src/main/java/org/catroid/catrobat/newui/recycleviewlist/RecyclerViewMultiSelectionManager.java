@@ -1,5 +1,8 @@
 package org.catroid.catrobat.newui.recycleviewlist;
 
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+
 import org.catroid.catrobat.newui.data.ListItem;
 
 import java.lang.reflect.Array;
@@ -15,6 +18,8 @@ import java.util.Set;
 public class RecyclerViewMultiSelectionManager<T> {
     private Set<T> mSelectedItems;
 
+    private static String LOG_TAG = "RVMultiSelectionManager";
+
     public RecyclerViewMultiSelectionManager() {
         mSelectedItems = new HashSet<T>();
     }
@@ -25,11 +30,13 @@ public class RecyclerViewMultiSelectionManager<T> {
 
     public void setSelected(T item, boolean selected) {
         if (selected) {
+            Log.d(LOG_TAG, "Selecting item " + item.toString());
             mSelectedItems.add(item);
         } else {
+            Log.d(LOG_TAG, "Deselecting item " + item.toString());
+
             mSelectedItems.remove(item);
         }
-
     }
 
     public boolean getSelected(T item) {
@@ -47,4 +54,5 @@ public class RecyclerViewMultiSelectionManager<T> {
     public void toggleSelected(T item) {
         setSelected(item, !getSelected(item));
     }
+
 }
