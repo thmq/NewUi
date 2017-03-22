@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,6 +15,8 @@ import android.view.View;
 import org.catroid.catrobat.newui.R;
 
 public class RecycleViewActivity extends AppCompatActivity {
+
+    private static String LOG_TAG = "RecycleViewActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +31,11 @@ public class RecycleViewActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
+
     }
 
     @Override
