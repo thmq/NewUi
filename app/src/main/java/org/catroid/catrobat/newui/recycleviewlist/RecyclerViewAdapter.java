@@ -1,13 +1,13 @@
 package org.catroid.catrobat.newui.recycleviewlist;
 
-import android.app.LauncherActivity;
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.ListItem;
@@ -18,47 +18,85 @@ import java.util.List;
  * Created by matthee on 22.03.17.
  */
 
-class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener {
 
-    private List<ListItem> listItems;
-    private int itemLayoutId;
+    private List<ListItem> mListItems;
+    private int mItemLayoutId;
+    private RecyclerViewMultiSelectionManager<ListItem> mMultiSelectionManager;
 
-    public RecyclerViewAdapter(List<ListItem> listItems1, int itemLayout) {
-        listItems = listItems1;
-        itemLayoutId = itemLayout;
+    private static int SELECTED_ITEM_BACKGROUND_COLOR = 0xFFDDDDDD;
+
+    public RecyclerViewAdapter(List<ListItem> listItems, int itemLayout) {
+        mListItems = listItems;
+        mItemLayoutId = itemLayout;
+        mMultiSelectionManager = new RecyclerViewMultiSelectionManager<ListItem>();
     }
 
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(itemLayoutId, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(mItemLayoutId, parent, false);
+        view.setOnLongClickListener(this);
+
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ListItem item = listItems.get(position);
+        ListItem item = mListItems.get(position);
 
-        holder.imageView.setImageResource(item.getImageRes());
-        holder.nameView.setText(item.getName());
-        holder.detailsView.setText(item.getDetails());
+        holder.mNameView.setText(item.getName());
+        holder.mDetailsView.setText(item.getDetails());
+
+        if (mMultiSelectionManager.getSelected(item)) {
+            holder.mItemView.setBackgroundColor(SELECTED_ITEM_BACKGROUND_COLOR);
+            holder.mImageView.setImageResource(R.drawable.ic_check_circle_black_24dp);
+        } else {
+            holder.mItemView.setBackgroundColor(0x00000000);
+            holder.mImageView.setImageResource(item.getImageRes());
+
+        }
     }
 
     @Override
     public int getItemCount() {
-        return listItems.size();
+        return mListItems.size();
+    }
+
+    @Override
+    public boolean onLongClick(View child) {
+        RecyclerView recyclerView = (RecyclerView) child.getParent();
+
+        int position = recyclerView.getChildAdapterPosition(child);
+
+        if (0 <= position && position < getItemCount()) {
+            ListItem item = mListItems.get(position);
+
+            mMultiSelectionManager.toggleSelected(item);
+
+            notifyDataSetChanged();
+
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView imageView;
-        public TextView nameView;
-        public TextView detailsView;
+        public ImageView mImageView;
+        public TextView mNameView;
+        public TextView mDetailsView;
+        public View mItemView;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            imageView = (ImageView) itemView.findViewById(R.id.image_view);
-            nameView = (TextView) itemView.findViewById(R.id.name_view);
-            detailsView = (TextView) itemView.findViewById(R.id.details_view);
+            mItemView = itemView;
+            mImageView = (ImageView) itemView.findViewById(R.id.image_view);
+            mNameView = (TextView) itemView.findViewById(R.id.name_view);
+            mDetailsView = (TextView) itemView.findViewById(R.id.details_view);
         }
+
+
     }
 }
