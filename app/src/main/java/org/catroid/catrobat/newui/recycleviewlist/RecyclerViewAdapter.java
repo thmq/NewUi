@@ -83,12 +83,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (0 <= position && position < getItemCount()) {
             ListItem item = mListItems.get(position);
 
-            mMultiSelectionManager.toggleSelected(item);
+            if (mMultiSelectionManager.isSelectable(item)) {
+                mMultiSelectionManager.toggleSelected(item);
 
-            notifyDataSetChanged();
-            notifySelectionChanged();
+                notifyDataSetChanged();
+                notifySelectionChanged();
 
-            return true;
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
