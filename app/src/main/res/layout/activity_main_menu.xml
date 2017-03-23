@@ -1,64 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:context="org.catroid.catrobat.newui.MainMenuActivity">
 
-    <include
-        layout="@layout/app_bar_main_menu"
+    <include layout="@layout/app_bar"/>
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main_menu"
-        app:menu="@menu/activity_main_menu_drawer"/>
-    <android.support.v7.widget.LinearLayoutCompat
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
-        <Button
-            android:id="@+id/list_view"
-            android:layout_width="match_parent"
+        tools:openDrawer="start">
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/nav_header_main_menu"
+            app:menu="@menu/activity_main_menu_drawer"/>
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:adjustViewBounds="false"
-            android:background="@drawable/color_highlight_main"
-            android:fontFamily="sans-serif-light"
-            android:scaleType="fitCenter"
-            android:text="ListViewActivity"
-            android:textColor="#E1F5FE"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:onClick="onListViewClick"/>
+            android:orientation="vertical"
+            android:gravity="center">
+            <Button
+                android:id="@+id/list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:adjustViewBounds="false"
+                android:background="@drawable/color_highlight_main"
+                android:scaleType="fitCenter"
+                android:text="ListViewActivity"
+                android:textColor="@color/white"
+                android:onClick="onListViewClick"/>
 
-        <Button
-            android:id="@+id/recycle_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:adjustViewBounds="false"
-            android:background="@drawable/color_highlight_main"
-            android:fontFamily="sans-serif-light"
-            android:scaleType="fitCenter"
-            android:text="RecycleViewActivity"
-            android:textColor="#E1F5FE"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:onClick="onRecycleViewClick"/>
+            <Button
+                android:id="@+id/recycle_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:adjustViewBounds="false"
+                android:background="@drawable/color_highlight_main"
+                android:scaleType="fitCenter"
+                android:text="RecycleViewActivity"
+                android:textColor="@color/white"
+                android:onClick="onRecycleViewClick"/>
 
-    </android.support.v7.widget.LinearLayoutCompat>
-
-</android.support.v4.widget.DrawerLayout>
+        </android.support.v7.widget.LinearLayoutCompat>
+    </android.support.v4.widget.DrawerLayout>
+</android.support.design.widget.CoordinatorLayout>

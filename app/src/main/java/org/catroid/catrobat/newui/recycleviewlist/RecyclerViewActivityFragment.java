@@ -1,10 +1,10 @@
 package org.catroid.catrobat.newui.recycleviewlist;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,9 +22,9 @@ import java.util.List;
 
 public class RecyclerViewActivityFragment extends Fragment implements RecyclerViewAdapterDelegate {
 
-    ActionMode mActionMode;
-
     public static final String TAG = RecyclerViewActivityFragment.class.getSimpleName();
+
+    private ActionMode mActionMode;
     private RecyclerView mRecyclerView;
 
     private MenuItem mEditButton;
@@ -88,7 +88,6 @@ public class RecyclerViewActivityFragment extends Fragment implements RecyclerVi
             }
         }
 
-        // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mRecyclerViewAdapter.clearSelection();
@@ -100,25 +99,17 @@ public class RecyclerViewActivityFragment extends Fragment implements RecyclerVi
     public void onSelectionChanged(RecyclerViewAdapter adapter) {
         List<ListItem> selectedItems = adapter.getSelectedItems();
 
-        if (selectedItems.size() == 0) {
+        if (selectedItems.isEmpty()) {
             if (mActionMode != null) {
                 mActionMode.finish();
             }
         } else {
             if (mActionMode == null) {
-                Log.d(TAG, "entering edit mode");
-                mActionMode = getActivity().startActionMode(mActionModeCallback);
+                mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
             }
 
-            if (selectedItems.size() <= 1) {
-                Log.d(TAG, "showing edit button");
-
-                setEditButtonVisibility(true);
-            } else {
-                Log.d(TAG, "hiding edit button");
-
-                setEditButtonVisibility(false);
-            }
+            boolean editButtonVisibility = selectedItems.size() <= 1;
+            setEditButtonVisibility(editButtonVisibility);
         }
     }
 
