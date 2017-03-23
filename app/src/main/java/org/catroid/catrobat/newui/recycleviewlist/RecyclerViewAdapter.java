@@ -1,6 +1,5 @@
 package org.catroid.catrobat.newui.recycleviewlist;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +12,6 @@ import org.catroid.catrobat.newui.data.ListItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-
-/**
- * Created by matthee on 22.03.17.
- */
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener {
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -29,7 +22,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             mItemView = itemView;
             mImageView = (ImageView) itemView.findViewById(R.id.image_view);
             mNameView = (TextView) itemView.findViewById(R.id.name_view);

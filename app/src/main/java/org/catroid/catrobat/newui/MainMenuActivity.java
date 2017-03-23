@@ -2,8 +2,6 @@ package org.catroid.catrobat.newui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.catroid.catrobat.newui.listviewlist.ListViewActivity;
-import org.catroid.catrobat.newui.recycleviewlist.RecycleViewActivity;
+import org.catroid.catrobat.newui.recycleviewlist.RecyclerViewActivity;
 
 public class MainMenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -100,7 +98,7 @@ public class MainMenuActivity extends AppCompatActivity
     }
 
     public void onRecycleViewClick(View view) {
-        Intent intent = new Intent(this, RecycleViewActivity.class);
+        Intent intent = new Intent(this, RecyclerViewActivity.class);
         startActivity(intent);
     }
 }

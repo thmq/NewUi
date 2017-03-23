@@ -1,19 +1,9 @@
 package org.catroid.catrobat.newui.recycleviewlist;
 
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-
-import org.catroid.catrobat.newui.data.ListItem;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-/**
- * Created by matthee on 22.03.17.
- */
 
 public class RecyclerViewMultiSelectionManager<T> {
     private Set<T> mSelectedItems;

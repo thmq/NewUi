@@ -20,11 +20,11 @@ import org.catroid.catrobat.newui.utils.Utils;
 
 import java.util.List;
 
-public class RecycleViewActivityFragment extends Fragment implements RecyclerViewAdapterDelegate {
+public class RecyclerViewActivityFragment extends Fragment implements RecyclerViewAdapterDelegate {
 
     ActionMode mActionMode;
 
-    private static String LOG_TAG = "RecycleViewFragment";
+    public static final String TAG = RecyclerViewActivityFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
 
     private MenuItem mEditButton;
@@ -34,7 +34,7 @@ public class RecycleViewActivityFragment extends Fragment implements RecyclerVie
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recycle_view, container, false);
+        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recycler_view, container, false);
 
         List<ListItem> items = Utils.getItemList();
         mRecyclerViewAdapter = new RecyclerViewAdapter(items, R.layout.list_item);
@@ -106,16 +106,16 @@ public class RecycleViewActivityFragment extends Fragment implements RecyclerVie
             }
         } else {
             if (mActionMode == null) {
-                Log.d(LOG_TAG, "entering edit mode");
+                Log.d(TAG, "entering edit mode");
                 mActionMode = getActivity().startActionMode(mActionModeCallback);
             }
 
             if (selectedItems.size() <= 1) {
-                Log.d(LOG_TAG, "showing edit button");
+                Log.d(TAG, "showing edit button");
 
                 setEditButtonVisibility(true);
             } else {
-                Log.d(LOG_TAG, "hiding edit button");
+                Log.d(TAG, "hiding edit button");
 
                 setEditButtonVisibility(false);
             }

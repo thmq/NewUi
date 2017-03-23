@@ -11,6 +11,8 @@ import org.catroid.catrobat.newui.R;
 
 public class ListViewActivity extends AppCompatActivity {
 
+    public static final String TAG = ListViewActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

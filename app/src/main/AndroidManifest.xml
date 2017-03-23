@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".recycleviewlist.RecycleViewActivity"
+            android:name=".recycleviewlist.RecyclerViewActivity"
             android:label="@string/title_activity_recycle_view"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
