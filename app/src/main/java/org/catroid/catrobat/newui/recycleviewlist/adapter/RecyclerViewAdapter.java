@@ -1,4 +1,4 @@
-package org.catroid.catrobat.newui.recycleviewlist;
+package org.catroid.catrobat.newui.recycleviewlist.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,16 +9,19 @@ import android.widget.TextView;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.ListItem;
+import org.catroid.catrobat.newui.recycleviewlist.RecyclerViewAdapterDelegate;
+import org.catroid.catrobat.newui.recycleviewlist.RecyclerViewMultiSelectionManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener {
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public View mItemView;
         public ImageView mImageView;
         public TextView mNameView;
         public TextView mDetailsView;
-        public View mItemView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -47,7 +50,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(mItemLayoutId, parent, false);
         view.setOnLongClickListener(this);
-
         return new ViewHolder(view);
     }
 
@@ -81,22 +83,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         int position = recyclerView.getChildAdapterPosition(child);
 
-        if (0 <= position && position < getItemCount()) {
-            ListItem item = mListItems.get(position);
-
-            if (mMultiSelectionManager.isSelectable(item)) {
-                mMultiSelectionManager.toggleSelected(item);
-
-                notifyDataSetChanged();
-                notifySelectionChanged();
-
-                return true;
-            } else {
-                return false;
-            }
-        } else {
+        if (position == RecyclerView.NO_POSITION) {
             return false;
         }
+
+        ListItem item = mListItems.get(position);
+
+        if (mMultiSelectionManager.isSelectable(item)) {
+            mMultiSelectionManager.toggleSelected(item);
+
+            notifyDataSetChanged();
+            notifySelectionChanged();
+
+            return true;
+        }
+
+        return false;
     }
 
     @Override

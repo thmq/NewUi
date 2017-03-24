@@ -8,11 +8,11 @@ import java.util.List;
 
 public final class ActionModeListener {
 
-    private static final String NUM_ITEMS = "selected item cnt: ";
-    private static final String DELETE = "item to delete: ";
-    private static final String COPY = "item to copy: ";
-    private static final String RENAME = "item to rename: ";
-    private static final String BACKPACK = "item to pack: ";
+    private static final String NUM_ITEMS = "selected item cnt";
+    private static final String DELETE = "item to delete";
+    private static final String COPY = "item to copy";
+    private static final String RENAME = "item to rename";
+    private static final String BACKPACK = "item to pack";
 
     public static boolean deleteItems(List<? extends ListItem> selectedItems) {
         Log.i(NUM_ITEMS, Integer.toString(selectedItems.size()));

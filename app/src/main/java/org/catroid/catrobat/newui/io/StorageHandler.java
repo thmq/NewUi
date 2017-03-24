@@ -10,6 +10,14 @@ import java.nio.channels.FileChannel;
 
 public final class StorageHandler {
 
+    public static FileInfo createLookFileOnSD() {
+        return new FileInfo(null, "filepath.png");
+    }
+
+    public static FileInfo createSoundFileOnSD() {
+        return new FileInfo(null, "filepath.m4a");
+    }
+
     public static File copyFile(String srcPath) throws IOException {
         String dstPath = new File(srcPath).getParent();
         return copyFile(srcPath, dstPath);
