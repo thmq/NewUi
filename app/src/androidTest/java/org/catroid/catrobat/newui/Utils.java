@@ -15,10 +15,6 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkNotNull;
 import static org.hamcrest.Matchers.instanceOf;
 
-/**
- * Created by matthee on 22.03.17.
- */
-
 public class Utils {
     public static Matcher<View> atPosition(final int position, @NonNull final Matcher<View> itemMatcher) {
         checkNotNull(itemMatcher);

@@ -76,12 +76,14 @@ public final class StorageHandler {
         }
     }
 
-    public static boolean deleteFile(String srcPath) throws FileNotFoundException {
+    public static void deleteFile(String srcPath) throws IOException {
         File file = new File(srcPath);
         if (!file.exists()) {
             throw new FileNotFoundException("File: " + srcPath + "does not exist.");
         }
-        return file.delete();
+        if (!file.delete()) {
+            throw new IOException("File: " + srcPath + "could not be deleted");
+        }
     }
 
     public static void setupDirectoryStructure() {

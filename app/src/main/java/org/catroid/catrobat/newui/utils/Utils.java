@@ -22,14 +22,14 @@ public final class Utils {
         return itemList;
     }
 
-    public static LookInfo createNewLookInfo(String name) {
-        FileInfo fileInfo = StorageHandler.createLookFileOnSD();
-        return new LookInfo(name, fileInfo);
+    public static FileInfo getImageDirectory() {
+        StorageHandler.setupDirectoryStructure();
+        return new FileInfo(StorageHandler.rootDirectory, StorageHandler.IMAGE_FOLDER);
     }
 
-    public static SoundInfo createNewSoundInfo(String name) {
-        FileInfo fileInfo = StorageHandler.createSoundFileOnSD();
-        return new SoundInfo(name, fileInfo);
+    public static FileInfo getSoundDirectory() {
+        StorageHandler.setupDirectoryStructure();
+        return new FileInfo(StorageHandler.rootDirectory, StorageHandler.SOUND_FOLDER);
     }
 
     public static String getUniqueName(String name, List<? extends ListItem> scope) {
