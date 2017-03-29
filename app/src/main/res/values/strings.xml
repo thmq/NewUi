@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NewUi</string>
+    <string name="app_name">Pocket Code</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -8,10 +8,18 @@
     <string name="title_activity_recycle_view">RecycleViewActivity</string>
     <string name="title_activity_list_view">ListViewActivity</string>
 
-    <!-- New Item Dialog -->
-    <string name="create_new_item">create</string>
+    <!-- General Dialog Strings -->
+    <string name="dialog_new_name">new name:</string>
     <string name="cancel">cancel</string>
     <string name="error_invalid_item_name">Item name is invalid.</string>
+
+    <!-- New Item Dialog -->
+    <string name="dialog_create_item">Create new Item</string>
+    <string name="create_new_item">create</string>
+
+    <!-- Rename Item Dialog -->
+    <string name="dialog_rename_item">Rename Item</string>
+    <string name="rename_item">rename</string>
 
     <!-- Action Mode Buttons -->
     <string name="delete">Delete</string>
