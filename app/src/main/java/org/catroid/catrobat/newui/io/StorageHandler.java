@@ -26,6 +26,13 @@ public final class StorageHandler {
         os.close();
     }
 
+    public static FileInfo copyFileInfo(FileInfo srcFileInfo) throws Exception {
+        String srcPath = srcFileInfo.getAbsolutePath();
+        File dstFile = copyFile(srcPath);
+
+        return new FileInfo(srcFileInfo.getParent(), dstFile.getName());
+    }
+
     public static File copyFile(String srcPath) throws Exception {
         String dstPath = new File(srcPath).getParent();
         return copyFile(srcPath, dstPath);
