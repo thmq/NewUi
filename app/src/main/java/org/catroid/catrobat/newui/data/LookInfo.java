@@ -7,6 +7,7 @@ import android.media.ThumbnailUtils;
 
 import org.catroid.catrobat.newui.io.FileInfo;
 import org.catroid.catrobat.newui.io.StorageHandler;
+import org.catroid.catrobat.newui.utils.Utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,12 +28,6 @@ public class LookInfo {
         this.name = name;
         this.fileInfo = fileInfo;
         createThumbnail();
-    }
-
-    public LookInfo(LookInfo base) throws Exception {
-        name = base.getName();
-        fileInfo = StorageHandler.copyFileInfo(base.getFileInfo());
-        thumbnail = base.getThumbnail();
     }
 
     public String getName() {
@@ -59,21 +54,25 @@ public class LookInfo {
         return thumbnail;
     }
 
-    public void deleteFile() throws Exception {
+    public void cleanup() throws Exception {
         StorageHandler.deleteFile(fileInfo.getAbsolutePath());
     }
 
-    private void createThumbnail() {
+    public Bitmap getBitmap() {
         String imagePath = fileInfo.getAbsolutePath();
 
         if (!StorageHandler.fileExists(imagePath)) {
-            return;
+            return null;
         }
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
-        Bitmap bigImage = BitmapFactory.decodeFile(imagePath, options);
+        return BitmapFactory.decodeFile(imagePath, options);
+    }
+
+    private void createThumbnail() {
+        Bitmap bigImage = getBitmap();
 
         thumbnail = ThumbnailUtils.extractThumbnail(bigImage, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
     }
