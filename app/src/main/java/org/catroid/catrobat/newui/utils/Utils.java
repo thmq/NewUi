@@ -64,6 +64,7 @@ public final class Utils {
         int suffix = 1;
         while (nameSet.contains(newName)) {
             newName = name.concat(" ").concat(Integer.toString(suffix));
+            suffix++;
         }
         return newName;
     }

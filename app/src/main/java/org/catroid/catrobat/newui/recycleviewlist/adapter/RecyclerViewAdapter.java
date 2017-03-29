@@ -1,6 +1,7 @@
 package org.catroid.catrobat.newui.recycleviewlist.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +10,11 @@ import android.widget.TextView;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.ListItem;
-import org.catroid.catrobat.newui.recycleviewlist.RecyclerViewAdapterDelegate;
-import org.catroid.catrobat.newui.recycleviewlist.RecyclerViewMultiSelectionManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener {
-
+public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener {
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View mItemView;
         public ImageView mImageView;
@@ -25,6 +23,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public ViewHolder(View itemView) {
             super(itemView);
+
             mItemView = itemView;
             mImageView = (ImageView) itemView.findViewById(R.id.image_view);
             mNameView = (TextView) itemView.findViewById(R.id.name_view);
@@ -32,49 +31,45 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    private List<ListItem> mListItems;
+    private List<T> mListItems;
     private int mItemLayoutId;
-    private RecyclerViewMultiSelectionManager<ListItem> mMultiSelectionManager;
-    private List<RecyclerViewAdapterDelegate> mObservers;
+    private RecyclerViewMultiSelectionManager<T> mMultiSelectionManager = new RecyclerViewMultiSelectionManager<T>();
+    private RecyclerViewAdapterDelegate<T> delegate = null;
 
     private static int SELECTED_ITEM_BACKGROUND_COLOR = 0xFFDDDDDD;
 
-    public RecyclerViewAdapter(List<ListItem> listItems, int itemLayout) {
+    public RecyclerViewAdapter() {
+        throw new RuntimeException("This constructor should not be used!");
+    }
+
+    public RecyclerViewAdapter(List<T> listItems, int itemLayout) {
         mListItems = listItems;
         mItemLayoutId = itemLayout;
-        mMultiSelectionManager = new RecyclerViewMultiSelectionManager<ListItem>();
-        mObservers = new ArrayList<>();
     }
 
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(mItemLayoutId, parent, false);
-        view.setOnLongClickListener(this);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ListItem item = mListItems.get(position);
+        T item = mListItems.get(position);
 
-        holder.mNameView.setText(item.getName());
-        holder.mDetailsView.setText(item.getDetails());
-
-        if (mMultiSelectionManager.getSelected(item)) {
+        holder.itemView.setOnLongClickListener(this);
+        boolean isSelected = mMultiSelectionManager.getSelected(item);
+        if (isSelected) {
             holder.mItemView.setBackgroundColor(SELECTED_ITEM_BACKGROUND_COLOR);
-            holder.mImageView.setImageResource(R.drawable.ic_check_circle_black_24dp);
         } else {
             holder.mItemView.setBackgroundColor(0x00000000);
-            holder.mImageView.setImageResource(item.getImageRes());
         }
+
+        bindDataToViewHolder(item, holder, isSelected);
     }
 
-    public void addObserver(RecyclerViewAdapterDelegate obs) {
-        mObservers.add(obs);
-    }
-
-    public void removeObserver(RecyclerViewAdapterDelegate obs) {
-        mObservers.remove(obs);
+    public void setDelegate(RecyclerViewAdapterDelegate del) {
+        delegate = del;
     }
 
     @Override
@@ -87,7 +82,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             return false;
         }
 
-        ListItem item = mListItems.get(position);
+        T item = mListItems.get(position);
 
         if (mMultiSelectionManager.isSelectable(item)) {
             mMultiSelectionManager.toggleSelected(item);
@@ -101,12 +96,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return false;
     }
 
+    public abstract void bindDataToViewHolder(T item, RecyclerViewAdapter.ViewHolder holder, boolean isSelected);
+
+    public void addItem(T item) {
+        mListItems.add(item);
+        notifyDataSetChanged();
+    }
+
+    public void removeItem(T item) {
+        mListItems.remove(item);
+        mMultiSelectionManager.removeItem(item);
+        notifyDataSetChanged();
+    }
+
+    public List<T> getItems() {
+        return mListItems;
+    }
+
+
     @Override
     public int getItemCount() {
         return mListItems.size();
     }
 
-    public List<ListItem> getSelectedItems() {
+    public List<T> getSelectedItems() {
         return mMultiSelectionManager.getSelectedItems();
     }
 
@@ -117,8 +130,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     private void notifySelectionChanged() {
-        for (RecyclerViewAdapterDelegate obs : mObservers) {
-            obs.onSelectionChanged(this);
+        if (delegate != null) {
+            delegate.onSelectionChanged(this);
         }
     }
 }

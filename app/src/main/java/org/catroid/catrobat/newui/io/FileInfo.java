@@ -25,7 +25,7 @@ public class FileInfo {
         if (parent == null) {
             return relativePath;
         } else {
-            return getParent().getAbsolutePath() + File.pathSeparator + relativePath;
+            return getParent().getAbsolutePath() + File.separator + relativePath;
         }
     }
 }

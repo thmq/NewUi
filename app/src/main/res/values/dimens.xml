@@ -10,4 +10,5 @@
     <dimen name="list_item_image_size">70dp</dimen>
     <!-- Dialog margins -->
     <dimen name="margin_content_area">25dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 </resources>

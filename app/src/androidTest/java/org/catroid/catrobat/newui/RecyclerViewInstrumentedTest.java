@@ -7,7 +7,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.catroid.catrobat.newui.data.ListItem;
-import org.catroid.catrobat.newui.recycleviewlist.RecyclerViewActivity;
+import org.catroid.catrobat.newui.recycleviewlist.SpriteActivity;
 import org.catroid.catrobat.newui.utils.Utils;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,7 +28,7 @@ import static org.hamcrest.core.AllOf.allOf;
 
 public class RecyclerViewInstrumentedTest {
     @Rule
-    public ActivityTestRule<RecyclerViewActivity> activityRule = new ActivityTestRule<>(RecyclerViewActivity.class);
+    public ActivityTestRule<SpriteActivity> activityRule = new ActivityTestRule<>(SpriteActivity.class);
 
     @Test
     public void useAppContext() throws Exception {
