@@ -86,6 +86,12 @@ public final class StorageHandler {
         }
     }
 
+    public static boolean fileExists(String path) {
+        File file = new File(path);
+
+        return file.exists();
+    }
+
     public static void setupDirectoryStructure() {
         mkDir(ROOT);
         mkDir(ROOT, IMAGE_FOLDER);
