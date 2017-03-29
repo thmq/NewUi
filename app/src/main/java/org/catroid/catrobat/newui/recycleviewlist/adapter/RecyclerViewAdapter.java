@@ -35,7 +35,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<ListItem> mListItems;
     private int mItemLayoutId;
     private RecyclerViewMultiSelectionManager<ListItem> mMultiSelectionManager;
-    private List<RecyclerViewAdapterDelegate> mObservers;
+    private RecyclerViewAdapterDelegate delegate = null;
 
     private static int SELECTED_ITEM_BACKGROUND_COLOR = 0xFFDDDDDD;
 
@@ -43,7 +43,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         mListItems = listItems;
         mItemLayoutId = itemLayout;
         mMultiSelectionManager = new RecyclerViewMultiSelectionManager<ListItem>();
-        mObservers = new ArrayList<>();
     }
 
     @Override
@@ -69,12 +68,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    public void addObserver(RecyclerViewAdapterDelegate obs) {
-        mObservers.add(obs);
-    }
-
-    public void removeObserver(RecyclerViewAdapterDelegate obs) {
-        mObservers.remove(obs);
+    public void setDelegate(RecyclerViewAdapterDelegate del) {
+        delegate = del;
     }
 
     @Override
@@ -117,8 +112,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     private void notifySelectionChanged() {
-        for (RecyclerViewAdapterDelegate obs : mObservers) {
-            obs.onSelectionChanged(this);
+        if (delegate != null) {
+            delegate.onSelectionChanged(this);
         }
     }
 }
