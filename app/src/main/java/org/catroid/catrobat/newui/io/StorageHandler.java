@@ -1,6 +1,6 @@
 package org.catroid.catrobat.newui.io;
 
-
+import android.graphics.Bitmap;
 import android.os.Environment;
 
 import java.io.File;
@@ -18,12 +18,11 @@ public final class StorageHandler {
 
     public static final FileInfo rootDirectory = new FileInfo(null, ROOT);
 
-    public static FileInfo createLookFileOnSD() {
-        return new FileInfo(rootDirectory, "filepath.png");
-    }
-
-    public static FileInfo createSoundFileOnSD() {
-        return new FileInfo(rootDirectory, "filepath.m4a");
+    public static void exportBitmapToFile(Bitmap bitmap, File file) throws IOException {
+        FileOutputStream os = new FileOutputStream(file);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, os);
+        os.flush();
+        os.close();
     }
 
     public static FileInfo copyFileInfo(FileInfo srcFileInfo) throws Exception {
@@ -50,7 +49,7 @@ public final class StorageHandler {
         return dstFile;
     }
 
-    private static synchronized File getUniqueFileName(String originalName, String dstDirectory) throws Exception {
+    public static synchronized File getUniqueFileName(String originalName, String dstDirectory) throws Exception {
         int extensionStartIndex = originalName.lastIndexOf(".");
         String extension = originalName.substring(extensionStartIndex);
         String fileName = originalName.substring(0, extensionStartIndex);
