@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.ListItem;
-import org.catroid.catrobat.newui.recycleviewlist.RecyclerViewAdapterDelegate;
-import org.catroid.catrobat.newui.recycleviewlist.RecyclerViewMultiSelectionManager;
 
 import java.util.ArrayList;
 import java.util.List;
