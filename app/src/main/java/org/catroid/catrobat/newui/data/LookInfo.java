@@ -8,6 +8,10 @@ import android.media.ThumbnailUtils;
 import org.catroid.catrobat.newui.io.FileInfo;
 import org.catroid.catrobat.newui.io.StorageHandler;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class LookInfo {
 
     private static final int THUMBNAIL_WIDTH = 150;
@@ -23,6 +27,12 @@ public class LookInfo {
         this.name = name;
         this.fileInfo = fileInfo;
         createThumbnail();
+    }
+
+    public LookInfo(LookInfo base) throws Exception {
+        name = base.getName();
+        fileInfo = StorageHandler.copyFileInfo(base.getFileInfo());
+        thumbnail = base.getThumbnail();
     }
 
     public String getName() {
@@ -47,6 +57,10 @@ public class LookInfo {
 
     public Bitmap getThumbnail() {
         return thumbnail;
+    }
+
+    public void deleteFile() throws Exception {
+        StorageHandler.deleteFile(fileInfo.getAbsolutePath());
     }
 
     private void createThumbnail() {
