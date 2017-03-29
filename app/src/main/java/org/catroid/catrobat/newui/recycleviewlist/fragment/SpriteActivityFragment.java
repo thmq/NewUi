@@ -22,32 +22,15 @@ import org.catroid.catrobat.newui.utils.Utils;
 
 import java.util.List;
 
-public class RecyclerViewActivityFragment extends Fragment implements RecyclerViewAdapterDelegate {
+public class SpriteActivityFragment extends Fragment implements RecyclerViewAdapterDelegate {
 
-    public static final String TAG = RecyclerViewActivityFragment.class.getSimpleName();
+    public static final String TAG = SpriteActivityFragment.class.getSimpleName();
+    private static final String ARG_SECTION_NUMBER = "section_number";
 
     private ActionMode mActionMode;
     private RecyclerView mRecyclerView;
-
     private MenuItem mEditButton;
     private RecyclerViewAdapter mRecyclerViewAdapter;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recycler_view, container, false);
-
-        List<ListItem> items = Utils.getItemList();
-        mRecyclerViewAdapter = new RecyclerViewAdapter(items, R.layout.list_item);
-        mRecyclerViewAdapter.addObserver(this);
-
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
-
-        return mRecyclerView;
-    }
-
-
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -97,6 +80,30 @@ public class RecyclerViewActivityFragment extends Fragment implements RecyclerVi
         }
     };
 
+
+    public static SpriteActivityFragment newInstance(int sectionNumber) {
+        SpriteActivityFragment fragment = new SpriteActivityFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recycler_view, container, false);
+
+        List<ListItem> items = Utils.getItemList();
+        mRecyclerViewAdapter = new RecyclerViewAdapter(items, R.layout.list_item);
+        mRecyclerViewAdapter.addObserver(this);
+
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+
+        return mRecyclerView;
+    }
+
     @Override
     public void onSelectionChanged(RecyclerViewAdapter adapter) {
         List<ListItem> selectedItems = adapter.getSelectedItems();
@@ -126,6 +133,10 @@ public class RecyclerViewActivityFragment extends Fragment implements RecyclerVi
             mEditButton.setVisible(visible);
             getActivity().invalidateOptionsMenu();
         }
+    }
 
+    public void clearSelection()
+    {
+        mRecyclerViewAdapter.clearSelection();
     }
 }

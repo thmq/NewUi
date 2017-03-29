@@ -7,4 +7,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <!-- ListItem dimens -->
     <dimen name="list_item_header">22dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 </resources>

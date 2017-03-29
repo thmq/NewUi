@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.catroid.catrobat.newui.listviewlist.ListViewActivity;
-import org.catroid.catrobat.newui.recycleviewlist.RecyclerViewActivity;
+import org.catroid.catrobat.newui.recycleviewlist.SpriteActivity;
 
 public class MainMenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -98,7 +98,7 @@ public class MainMenuActivity extends AppCompatActivity
     }
 
     public void onRecycleViewClick(View view) {
-        Intent intent = new Intent(this, RecyclerViewActivity.class);
+        Intent intent = new Intent(this, SpriteActivity.class);
         startActivity(intent);
     }
 }
