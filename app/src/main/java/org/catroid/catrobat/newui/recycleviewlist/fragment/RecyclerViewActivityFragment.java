@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import org.catroid.catrobat.newui.ActionModeListener;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.ListItem;
-import org.catroid.catrobat.newui.recycleviewlist.RecyclerViewAdapterDelegate;
+import org.catroid.catrobat.newui.recycleviewlist.adapter.RecyclerViewAdapterDelegate;
 import org.catroid.catrobat.newui.recycleviewlist.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.utils.Utils;
 
