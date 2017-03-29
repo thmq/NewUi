@@ -98,6 +98,22 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
     public abstract void bindDataToViewHolder(T item, RecyclerViewAdapter.ViewHolder holder, boolean isSelected);
 
+    public void addItem(T item) {
+        mListItems.add(item);
+        notifyDataSetChanged();
+    }
+
+    public void removeItem(T item) {
+        mListItems.remove(item);
+        mMultiSelectionManager.removeItem(item);
+        notifyDataSetChanged();
+    }
+
+    public List<T> getItems() {
+        return mListItems;
+    }
+
+
     @Override
     public int getItemCount() {
         return mListItems.size();

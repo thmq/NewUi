@@ -1,12 +1,16 @@
 package org.catroid.catrobat.newui.recycleviewlist.adapter;
 
-import android.support.v7.widget.RecyclerView;
-
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.LookInfo;
 
+import java.util.List;
 
-public class LooksAdapter extends RecyclerViewAdapter<LookInfo> {
+
+public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
+
+    public LookAdapter(List<LookInfo> lookInfos, int listItem) {
+        super(lookInfos, listItem);
+    }
 
     @Override
     public void bindDataToViewHolder(LookInfo item, ViewHolder holder, boolean isSelected) {
