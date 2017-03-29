@@ -1,6 +1,7 @@
 package org.catroid.catrobat.newui.data;
 
 
+import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.io.FileInfo;
 
 public class SoundInfo {
@@ -29,6 +30,14 @@ public class SoundInfo {
 
     public void setFileInfo(FileInfo fileInfo) {
         this.fileInfo = fileInfo;
+    }
+
+    public int getThumbnailResource() {
+        return R.drawable.ic_insert_photo_black_24dp;
+    }
+
+    public String getDuration() {
+        return duration;
     }
 
     private void getDurationFromFile() {
