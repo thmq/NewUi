@@ -22,16 +22,16 @@ import org.catroid.catrobat.newui.utils.Utils;
 
 import java.util.List;
 
-public class SpriteActivityFragment extends Fragment implements RecyclerViewAdapterDelegate {
+public abstract class BaseRecyclerListFragment extends Fragment implements RecyclerViewAdapterDelegate {
 
-    public static final String TAG = SpriteActivityFragment.class.getSimpleName();
+    public static final String TAG = BaseRecyclerListFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number";
-
-    private ActionMode mActionMode;
-    private RecyclerView mRecyclerView;
-    private MenuItem mEditButton;
-    private RecyclerViewAdapter mRecyclerViewAdapter;
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+    public final String NAME = "";
+    protected ActionMode mActionMode;
+    protected RecyclerView mRecyclerView;
+    protected MenuItem mEditButton;
+    protected RecyclerViewAdapter mRecyclerViewAdapter;
+    protected ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
         @Override
@@ -80,13 +80,8 @@ public class SpriteActivityFragment extends Fragment implements RecyclerViewAdap
         }
     };
 
-
-    public static SpriteActivityFragment newInstance(int sectionNumber) {
-        SpriteActivityFragment fragment = new SpriteActivityFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
-        return fragment;
+    public static Fragment newInstance(int sectionNumber) {
+        return null;
     }
 
     @Override
@@ -135,8 +130,7 @@ public class SpriteActivityFragment extends Fragment implements RecyclerViewAdap
         }
     }
 
-    public void clearSelection()
-    {
+    public void clearSelection() {
         mRecyclerViewAdapter.clearSelection();
     }
 }
