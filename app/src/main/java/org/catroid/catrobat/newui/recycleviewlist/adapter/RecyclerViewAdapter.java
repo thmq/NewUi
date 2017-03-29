@@ -1,6 +1,7 @@
 package org.catroid.catrobat.newui.recycleviewlist.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(mItemLayoutId, parent, false);
-        view.setOnLongClickListener(this);
         return new ViewHolder(view);
     }
 
@@ -56,6 +56,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         ListItem item = mListItems.get(position);
 
+        holder.itemView.setOnLongClickListener(this);
         holder.mNameView.setText(item.getName());
         holder.mDetailsView.setText(item.getDetails());
 
