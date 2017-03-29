@@ -32,7 +32,7 @@ public final class Utils {
         return new FileInfo(StorageHandler.rootDirectory, StorageHandler.SOUND_FOLDER);
     }
 
-    public static String getUniqueName(String name, List<ListItem> scope) {
+    public static String getUniqueListItemName(String name, List<ListItem> scope) {
         Set<String> nameSet = new HashSet<>();
         for (ListItem item : scope) {
             nameSet.add(item.getName());
