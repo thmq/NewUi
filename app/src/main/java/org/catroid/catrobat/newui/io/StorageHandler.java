@@ -19,6 +19,8 @@ public final class StorageHandler {
 
     public static final FileInfo rootDirectory = new FileInfo(null, ROOT);
 
+    public static final String TAG = StorageHandler.class.getSimpleName();
+
     public static void exportBitmapToFile(Bitmap bitmap, File file) throws IOException {
         FileOutputStream os = new FileOutputStream(file);
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, os);
@@ -44,7 +46,7 @@ public final class StorageHandler {
             throw new FileNotFoundException("File: " + srcPath + "does not exist.");
         }
 
-        File dstFile = getUniqueFile(srcPath, dstPath);
+        File dstFile = getUniqueFile(srcFile.getName(), dstPath);
         copyFile(srcFile, dstFile);
 
         return dstFile;
@@ -109,17 +111,26 @@ public final class StorageHandler {
         File directory = new File(name);
         if (!directory.exists()) {
             if (!directory.mkdir()) {
-                Log.d("SH", "Directory NOT created! " + directory.getAbsolutePath());
+                Log.d(TAG, "Directory NOT created! " + directory.getAbsolutePath());
             }
         }
     }
 
     private static void mkDir(String parentDirectory, String name) {
         File directory = new File(parentDirectory, name);
+
         if (!directory.exists()) {
             if (!directory.mkdir()) {
-                Log.d("SH", "Directory NOT created! " + directory.getAbsolutePath());
+                Log.d(TAG, "Directory NOT created! " + directory.getAbsolutePath());
             }
         }
+    }
+
+    public static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
     }
 }
