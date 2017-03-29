@@ -2,6 +2,7 @@ package org.catroid.catrobat.newui.io;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,7 +13,7 @@ import java.nio.channels.FileChannel;
 
 public final class StorageHandler {
 
-    public static final String ROOT = Environment.getExternalStorageDirectory().toString() + "NewUi";
+    public static final String ROOT = Environment.getExternalStorageDirectory().toString() + File.separator  + "NewUi";
     public static final String IMAGE_FOLDER = "images";
     public static final String SOUND_FOLDER = "sounds";
 
@@ -36,13 +37,13 @@ public final class StorageHandler {
             throw new FileNotFoundException("File: " + srcPath + "does not exist.");
         }
 
-        File dstFile = getUniqueFileName(srcPath, dstPath);
+        File dstFile = getUniqueFile(srcPath, dstPath);
         copyFile(srcFile, dstFile);
 
         return dstFile;
     }
 
-    public static synchronized File getUniqueFileName(String originalName, String dstDirectory) throws Exception {
+    public static synchronized File getUniqueFile(String originalName, String dstDirectory) throws Exception {
         int extensionStartIndex = originalName.lastIndexOf(".");
         String extension = originalName.substring(extensionStartIndex);
         String fileName = originalName.substring(0, extensionStartIndex);
@@ -94,14 +95,18 @@ public final class StorageHandler {
     private static void mkDir(String name) {
         File directory = new File(name);
         if (!directory.exists()) {
-            directory.mkdir();
+            if (!directory.mkdir()) {
+                Log.d("SH", "Directory NOT created! " + directory.getAbsolutePath());
+            }
         }
     }
 
-    private static void mkDir(String name, String parentDirectory) {
+    private static void mkDir(String parentDirectory, String name) {
         File directory = new File(parentDirectory, name);
         if (!directory.exists()) {
-            directory.mkdir();
+            if (!directory.mkdir()) {
+                Log.d("SH", "Directory NOT created! " + directory.getAbsolutePath());
+            }
         }
     }
 }
