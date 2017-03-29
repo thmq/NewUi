@@ -40,7 +40,7 @@ public class RecyclerViewActivityFragment extends Fragment implements RecyclerVi
 
         List<ListItem> items = Utils.getItemList();
         mRecyclerViewAdapter = new RecyclerViewAdapter(items, R.layout.list_item);
-        mRecyclerViewAdapter.addObserver(this);
+        mRecyclerViewAdapter.setDelegate(this);
 
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
