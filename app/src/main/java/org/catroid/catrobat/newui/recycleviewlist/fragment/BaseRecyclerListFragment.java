@@ -13,16 +13,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.catroid.catrobat.newui.ActionModeListener;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.ListItem;
+import org.catroid.catrobat.newui.data.LookInfo;
+import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.recycleviewlist.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.recycleviewlist.adapter.RecyclerViewAdapterDelegate;
 import org.catroid.catrobat.newui.utils.Utils;
 
 import java.util.List;
 
-public abstract class BaseRecyclerListFragment<T> extends Fragment implements RecyclerViewAdapterDelegate<T> {
+public abstract class BaseRecyclerListFragment<T> extends Fragment implements RecyclerViewAdapterDelegate<T>, NewItemDialog.NewItemInterface {
 
     public static final String TAG = BaseRecyclerListFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number";
@@ -57,14 +58,17 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
             switch (item.getItemId()) {
                 case R.id.btnEdit:
                     //ActionModeListener.renameItem(mRecyclerViewAdapter.getSelectedItems().get(0));
+
                     mRecyclerViewAdapter.clearSelection();
                     return true;
                 case R.id.btnCopy:
                     //ActionModeListener.copyItems(mRecyclerViewAdapter.getSelectedItems());
+                    copyItems(mRecyclerViewAdapter.getSelectedItems());
                     mRecyclerViewAdapter.clearSelection();
                     return true;
                 case R.id.btnDelete:
                     //ActionModeListener.deleteItems(mRecyclerViewAdapter.getSelectedItems());
+                    removeItems(mRecyclerViewAdapter.getSelectedItems());
                     mRecyclerViewAdapter.clearSelection();
                     return true;
 
@@ -101,6 +105,34 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
 
     public abstract RecyclerViewAdapter<T> createAdapter();
 
+    private void copyItems(List<T> items) {
+        for (T item : items) {
+            try {
+                T newItem = copyItem(item);
+
+                mRecyclerViewAdapter.addItem(newItem);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected abstract T copyItem(T item) throws Exception;
+
+    private void removeItems(List<T> items) {
+        for (T item : items) {
+            try {
+                cleanupItem(item);
+
+                mRecyclerViewAdapter.removeItem(item);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected abstract void cleanupItem(T item) throws Exception;
+
     @Override
     public void onSelectionChanged(RecyclerViewAdapter<T> adapter) {
         List<T> selectedItems = adapter.getSelectedItems();
@@ -135,4 +167,32 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
     public void clearSelection() {
         mRecyclerViewAdapter.clearSelection();
     }
+
+
+    private void showNewDialog() {
+        NewItemDialog dialog = NewItemDialog.newInstance(
+                R.string.dialog_create_item,
+                R.string.create_new_item,
+                R.string.create_new_item,
+                R.string.cancel,
+                false
+        );
+
+        dialog.setNewItemInterface(this);
+        dialog.show(getFragmentManager(), dialog.getTag());
+    }
+
+    @Override
+    public boolean isNameValid(String itemName) {
+        return true;
+    }
+
+    @Override
+    public void addNewItem(String itemName) {
+        T item = createNewItem(itemName);
+
+        mRecyclerViewAdapter.addItem(item);
+    }
+
+    protected abstract T createNewItem(String itemName);
 }
