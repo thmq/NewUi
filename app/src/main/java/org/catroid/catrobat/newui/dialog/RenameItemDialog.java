@@ -4,8 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -14,7 +14,7 @@ import android.widget.EditText;
 
 import org.catroid.catrobat.newui.R;
 
-public class RenameItemDialog extends DialogFragment {
+public class RenameItemDialog extends AppCompatDialogFragment {
 
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
