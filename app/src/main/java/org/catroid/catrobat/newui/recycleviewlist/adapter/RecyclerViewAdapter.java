@@ -34,7 +34,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     private List<T> mListItems;
     private int mItemLayoutId;
     private RecyclerViewMultiSelectionManager<T> mMultiSelectionManager = new RecyclerViewMultiSelectionManager<T>();
-    private RecyclerViewAdapterDelegate delegate = null;
+    private RecyclerViewAdapterDelegate<T> delegate = null;
 
     private static int SELECTED_ITEM_BACKGROUND_COLOR = 0xFFDDDDDD;
 
