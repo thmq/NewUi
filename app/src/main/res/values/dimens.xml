@@ -7,4 +7,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <!-- ListItem dimens -->
     <dimen name="list_item_header">22dp</dimen>
+    <dimen name="list_item_image_size">70dp</dimen>
+    <!-- Dialog margins -->
+    <dimen name="margin_content_area">25dp</dimen>
 </resources>
