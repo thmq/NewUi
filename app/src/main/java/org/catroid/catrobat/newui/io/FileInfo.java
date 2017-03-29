@@ -1,6 +1,8 @@
 
 package org.catroid.catrobat.newui.io;
 
+import java.io.File;
+
 public class FileInfo {
 
     private FileInfo parent;
@@ -23,7 +25,7 @@ public class FileInfo {
         if (parent == null) {
             return relativePath;
         } else {
-            return getParent().getAbsolutePath().concat(relativePath);
+            return getParent().getAbsolutePath() + File.pathSeparator + relativePath;
         }
     }
 }
