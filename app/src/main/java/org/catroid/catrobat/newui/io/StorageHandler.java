@@ -21,6 +21,8 @@ public final class StorageHandler {
 
     public static final FileInfo rootDirectory = new FileInfo(null, ROOT);
 
+    private static final String FILE_NAME_APPENDIX = "_#";
+
     public static void exportBitmapToFile(Bitmap bitmap, File file) throws IOException {
         FileOutputStream os = new FileOutputStream(file);
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, os);
@@ -54,13 +56,19 @@ public final class StorageHandler {
 
     public static synchronized File getUniqueFile(String originalName, String dstDirectory) throws Exception {
         int extensionStartIndex = originalName.lastIndexOf(".");
+
+        int appendixStartIndex = originalName.lastIndexOf(FILE_NAME_APPENDIX);
+        if(appendixStartIndex == -1) {
+            appendixStartIndex = extensionStartIndex;
+        }
+
         String extension = originalName.substring(extensionStartIndex);
-        String fileName = originalName.substring(0, extensionStartIndex);
+        String fileName = originalName.substring(0, appendixStartIndex);
 
         int appendix = 0;
 
         while(appendix < Integer.MAX_VALUE) {
-            String dstFileName = fileName + String.valueOf(appendix) + extension;
+            String dstFileName = fileName + FILE_NAME_APPENDIX + String.valueOf(appendix) + extension;
             File dstFile = new File(dstDirectory, dstFileName);
             if(!dstFile.exists()) {
                 return dstFile;
