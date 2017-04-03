@@ -1,4 +1,4 @@
-package org.catroid.catrobat.newui.recycleviewlist.fragment;
+package org.catroid.catrobat.newui.ui.fragment;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,8 +9,8 @@ import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.LookInfo;
 import org.catroid.catrobat.newui.io.FileInfo;
 import org.catroid.catrobat.newui.io.StorageHandler;
-import org.catroid.catrobat.newui.recycleviewlist.adapter.LookAdapter;
-import org.catroid.catrobat.newui.recycleviewlist.adapter.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.adapter.LookAdapter;
+import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.utils.Utils;
 
 import java.io.File;
@@ -52,10 +52,10 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo> {
 
     @Override
     protected LookInfo createNewItem(String itemName) {
-        String uniqItemName = Utils.getUniqueLookName(itemName, mRecyclerViewAdapter.getItems());
+        String uniqueLookName = Utils.getUniqueLookName(itemName, mRecyclerViewAdapter.getItems());
 
         FileInfo fileInfo = createLookImage();
-        return new LookInfo(uniqItemName, fileInfo);
+        return new LookInfo(uniqueLookName, fileInfo);
     }
 
 

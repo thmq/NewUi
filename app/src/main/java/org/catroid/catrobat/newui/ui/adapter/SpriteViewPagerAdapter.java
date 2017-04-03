@@ -1,15 +1,14 @@
-package org.catroid.catrobat.newui.recycleviewlist.adapter;
+package org.catroid.catrobat.newui.ui.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import org.catroid.catrobat.newui.recycleviewlist.fragment.BaseRecyclerListFragment;
-import org.catroid.catrobat.newui.recycleviewlist.fragment.LookListFragment;
-import org.catroid.catrobat.newui.recycleviewlist.fragment.SoundListFragment;
+import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragment;
+import org.catroid.catrobat.newui.ui.fragment.LookListFragment;
+import org.catroid.catrobat.newui.ui.fragment.SoundListFragment;
 
 import java.util.List;
-
 
 public class SpriteViewPagerAdapter extends FragmentPagerAdapter {
 
@@ -29,7 +28,6 @@ public class SpriteViewPagerAdapter extends FragmentPagerAdapter {
                 return LookListFragment.newInstance(position);
             case 1:
                 return SoundListFragment.newInstance(position);
-
             default:
                 return null;
         }
@@ -44,11 +42,9 @@ public class SpriteViewPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-
                 return LookListFragment.NAME;
             case 1:
                 return SoundListFragment.NAME;
-
             default:
                 return "";
         }

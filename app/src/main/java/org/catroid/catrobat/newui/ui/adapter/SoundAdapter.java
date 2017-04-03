@@ -1,15 +1,13 @@
-package org.catroid.catrobat.newui.recycleviewlist.adapter;
-
-import android.support.v7.widget.RecyclerView;
+package org.catroid.catrobat.newui.ui.adapter;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.SoundInfo;
 
 import java.util.ArrayList;
 
-public class SoundsAdapter extends RecyclerViewAdapter<SoundInfo> {
+public class SoundAdapter extends RecyclerViewAdapter<SoundInfo> {
 
-    public SoundsAdapter(ArrayList<SoundInfo> soundInfos, int listItem) {
+    public SoundAdapter(ArrayList<SoundInfo> soundInfos, int listItem) {
         super(soundInfos, listItem);
     }
 

@@ -1,6 +1,5 @@
 package org.catroid.catrobat.newui.data;
 
-
 import android.media.MediaMetadataRetriever;
 
 import org.catroid.catrobat.newui.R;
@@ -55,7 +54,6 @@ public class SoundInfo {
 
     private void getDurationFromFile() {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-
         retriever.setDataSource(fileInfo.getAbsolutePath());
         duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
     }

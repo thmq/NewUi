@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".recycleviewlist.SpriteActivity"
+            android:name=".ui.SpriteActivity"
             android:label="@string/title_activity_recycle_view"
             android:screenOrientation="portrait" />
         <activity

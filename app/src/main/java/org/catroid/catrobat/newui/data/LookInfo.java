@@ -1,17 +1,11 @@
 package org.catroid.catrobat.newui.data;
 
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 
 import org.catroid.catrobat.newui.io.FileInfo;
 import org.catroid.catrobat.newui.io.StorageHandler;
-import org.catroid.catrobat.newui.utils.Utils;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class LookInfo {
 
@@ -73,7 +67,6 @@ public class LookInfo {
 
     private void createThumbnail() {
         Bitmap bigImage = getBitmap();
-
         thumbnail = ThumbnailUtils.extractThumbnail(bigImage, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
     }
 

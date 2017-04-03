@@ -13,13 +13,13 @@ import java.nio.channels.FileChannel;
 
 public final class StorageHandler {
 
+    public static final String TAG = StorageHandler.class.getSimpleName();
+
     public static final String ROOT = Environment.getExternalStorageDirectory().toString() + File.separator  + "NewUi";
     public static final String IMAGE_FOLDER = "images";
     public static final String SOUND_FOLDER = "sounds";
 
     public static final FileInfo rootDirectory = new FileInfo(null, ROOT);
-
-    public static final String TAG = StorageHandler.class.getSimpleName();
 
     public static void exportBitmapToFile(Bitmap bitmap, File file) throws IOException {
         FileOutputStream os = new FileOutputStream(file);
@@ -97,7 +97,6 @@ public final class StorageHandler {
 
     public static boolean fileExists(String path) {
         File file = new File(path);
-
         return file.exists();
     }
 

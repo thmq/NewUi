@@ -1,21 +1,13 @@
-package org.catroid.catrobat.newui.recycleviewlist.fragment;
+package org.catroid.catrobat.newui.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import org.catroid.catrobat.newui.R;
-import org.catroid.catrobat.newui.data.ListItem;
 import org.catroid.catrobat.newui.data.SoundInfo;
-import org.catroid.catrobat.newui.recycleviewlist.adapter.RecyclerViewAdapter;
-import org.catroid.catrobat.newui.recycleviewlist.adapter.SoundsAdapter;
-import org.catroid.catrobat.newui.utils.Utils;
+import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.adapter.SoundAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 
 public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
@@ -34,7 +26,7 @@ public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
 
     @Override
     public RecyclerViewAdapter createAdapter() {
-        return new SoundsAdapter(new ArrayList<SoundInfo>(), R.layout.list_item);
+        return new SoundAdapter(new ArrayList<SoundInfo>(), R.layout.list_item);
     }
 
     @Override
