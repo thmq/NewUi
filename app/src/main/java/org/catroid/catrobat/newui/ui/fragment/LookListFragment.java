@@ -40,7 +40,7 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo> {
     @Override
     protected LookInfo copyItem(LookInfo item) throws Exception {
         String name = Utils.getUniqueLookName(item.getName(), mRecyclerViewAdapter.getItems());
-        FileInfo fileInfo = StorageHandler.copyFileInfo(item.getFileInfo());
+        FileInfo fileInfo = StorageHandler.copyFile(item.getFileInfo());
 
         return new LookInfo(name, fileInfo);
     }
@@ -54,12 +54,12 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo> {
     protected LookInfo createNewItem(String itemName) {
         String uniqueLookName = Utils.getUniqueLookName(itemName, mRecyclerViewAdapter.getItems());
 
-        FileInfo fileInfo = createLookImage();
+        FileInfo fileInfo = createImage();
         return new LookInfo(uniqueLookName, fileInfo);
     }
 
 
-    private FileInfo createLookImage() {
+    private FileInfo createImage() {
         StorageHandler.setupDirectoryStructure();
 
         String dir = Utils.getImageDirectory().getAbsolutePath();
@@ -67,10 +67,6 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo> {
         try {
             file = StorageHandler.getUniqueFile("look.png", dir);
         } catch (Exception e) {
-            // Should never be hit.
-            // Exception is thrown if there are INT_MAX duplicate filenames
-            // So, if an error occurs, we've got other problems ;)
-
             e.printStackTrace();
             return null;
         }

@@ -86,7 +86,6 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
 
         mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recycler_view, container, false);
 
-        List<ListItem> items = Utils.getItemList();
         mRecyclerViewAdapter = createAdapter();
         mRecyclerViewAdapter.setDelegate(this);
 

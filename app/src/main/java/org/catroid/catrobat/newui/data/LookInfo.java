@@ -49,7 +49,7 @@ public class LookInfo {
     }
 
     public void cleanup() throws Exception {
-        StorageHandler.deleteFile(fileInfo.getAbsolutePath());
+        StorageHandler.deleteFile(fileInfo);
     }
 
     public Bitmap getBitmap() {

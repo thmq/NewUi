@@ -107,7 +107,6 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         return mListItems;
     }
 
-
     @Override
     public int getItemCount() {
         return mListItems.size();
