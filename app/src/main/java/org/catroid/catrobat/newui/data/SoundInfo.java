@@ -6,15 +6,22 @@ import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.io.FileInfo;
 import org.catroid.catrobat.newui.io.StorageHandler;
 
-public class SoundInfo {
+import java.io.Serializable;
 
+public class SoundInfo implements Serializable {
+
+    //TODO: uncomment after XStream integration
+    //@XStreamAsAttribute
     private String name;
-    private FileInfo fileInfo;
+    private String fileName;
+    private transient FileInfo fileInfo;
     private String duration;
 
     public SoundInfo(String name, FileInfo fileInfo) {
         this.name = name;
         this.fileInfo = fileInfo;
+        //TODO what if the fileInfo's relative path is not the filename alone?
+        fileName = fileInfo.getAbsolutePath();
         getDurationFromFile();
     }
 
@@ -22,6 +29,12 @@ public class SoundInfo {
         name = srcSoundInfo.getName();
         duration = srcSoundInfo.getDuration();
         fileInfo = StorageHandler.copyFile(srcSoundInfo.getFileInfo());
+        //TODO what if the fileInfo's relative path is not the filename alone?
+        fileName = fileInfo.getAbsolutePath();
+    }
+
+    public void initializeAfterDeserialize(FileInfo parent) {
+        fileInfo = new FileInfo(parent, fileName);
     }
 
     public String getName() {
