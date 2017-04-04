@@ -19,7 +19,7 @@ public final class StorageHandler {
     public static final String IMAGE_FOLDER = "images";
     public static final String SOUND_FOLDER = "sounds";
 
-    public static final FileInfo rootDirectory = new FileInfo(null, ROOT);
+    public static final FileInfo ROOT_DIRECTORY = new FileInfo(null, ROOT);
 
     private static final String FILE_NAME_APPENDIX = "_#";
 
