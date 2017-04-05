@@ -19,7 +19,7 @@ import static org.catroid.catrobat.newui.fragment.Utils.checkItemNamedExists;
 import static org.catroid.catrobat.newui.fragment.Utils.checkItemNamedNotExists;
 import static org.catroid.catrobat.newui.fragment.Utils.selectItemNamed;
 
-public class LooksViewInstrumentedTest {
+public class LookViewInstrumentedTest {
     @Rule
     public ActivityTestRule<SpriteActivity> activityRule = new ActivityTestRule<>(SpriteActivity.class);
 
