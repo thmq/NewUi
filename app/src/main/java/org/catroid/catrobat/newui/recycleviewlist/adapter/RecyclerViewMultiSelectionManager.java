@@ -40,4 +40,7 @@ public class RecyclerViewMultiSelectionManager<T> {
         setSelected(item, !getSelected(item));
     }
 
+    public void removeItem(T item) {
+        setSelected(item, false);
+    }
 }

@@ -16,39 +16,22 @@ import android.view.ViewGroup;
 import org.catroid.catrobat.newui.ActionModeListener;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.ListItem;
-import org.catroid.catrobat.newui.recycleviewlist.adapter.RecyclerViewAdapterDelegate;
 import org.catroid.catrobat.newui.recycleviewlist.adapter.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.recycleviewlist.adapter.RecyclerViewAdapterDelegate;
 import org.catroid.catrobat.newui.utils.Utils;
 
 import java.util.List;
 
-public class RecyclerViewActivityFragment extends Fragment implements RecyclerViewAdapterDelegate {
+public abstract class BaseRecyclerListFragment<T> extends Fragment implements RecyclerViewAdapterDelegate<T> {
 
-    public static final String TAG = RecyclerViewActivityFragment.class.getSimpleName();
-
-    private ActionMode mActionMode;
-    private RecyclerView mRecyclerView;
-
-    private MenuItem mEditButton;
-    private RecyclerViewAdapter mRecyclerViewAdapter;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recycler_view, container, false);
-
-        List<ListItem> items = Utils.getItemList();
-        mRecyclerViewAdapter = new RecyclerViewAdapter(items, R.layout.list_item);
-        mRecyclerViewAdapter.setDelegate(this);
-
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
-
-        return mRecyclerView;
-    }
-
-
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+    public static final String TAG = BaseRecyclerListFragment.class.getSimpleName();
+    private static final String ARG_SECTION_NUMBER = "section_number";
+    public final String NAME = "";
+    protected ActionMode mActionMode;
+    protected RecyclerView mRecyclerView;
+    protected MenuItem mEditButton;
+    protected RecyclerViewAdapter<T> mRecyclerViewAdapter;
+    protected ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
         @Override
@@ -73,15 +56,15 @@ public class RecyclerViewActivityFragment extends Fragment implements RecyclerVi
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.btnEdit:
-                    ActionModeListener.renameItem(mRecyclerViewAdapter.getSelectedItems().get(0));
+                    //ActionModeListener.renameItem(mRecyclerViewAdapter.getSelectedItems().get(0));
                     mRecyclerViewAdapter.clearSelection();
                     return true;
                 case R.id.btnCopy:
-                    ActionModeListener.copyItems(mRecyclerViewAdapter.getSelectedItems());
+                    //ActionModeListener.copyItems(mRecyclerViewAdapter.getSelectedItems());
                     mRecyclerViewAdapter.clearSelection();
                     return true;
                 case R.id.btnDelete:
-                    ActionModeListener.deleteItems(mRecyclerViewAdapter.getSelectedItems());
+                    //ActionModeListener.deleteItems(mRecyclerViewAdapter.getSelectedItems());
                     mRecyclerViewAdapter.clearSelection();
                     return true;
 
@@ -97,9 +80,30 @@ public class RecyclerViewActivityFragment extends Fragment implements RecyclerVi
         }
     };
 
+    public static Fragment newInstance(int sectionNumber) {
+        return null;
+    }
+
     @Override
-    public void onSelectionChanged(RecyclerViewAdapter adapter) {
-        List<ListItem> selectedItems = adapter.getSelectedItems();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recycler_view, container, false);
+
+        List<ListItem> items = Utils.getItemList();
+        mRecyclerViewAdapter = createAdapter();
+        mRecyclerViewAdapter.setDelegate(this);
+
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+
+        return mRecyclerView;
+    }
+
+    public abstract RecyclerViewAdapter<T> createAdapter();
+
+    @Override
+    public void onSelectionChanged(RecyclerViewAdapter<T> adapter) {
+        List<T> selectedItems = adapter.getSelectedItems();
 
         if (selectedItems.isEmpty()) {
             if (mActionMode != null) {
@@ -126,6 +130,9 @@ public class RecyclerViewActivityFragment extends Fragment implements RecyclerVi
             mEditButton.setVisible(visible);
             getActivity().invalidateOptionsMenu();
         }
+    }
 
+    public void clearSelection() {
+        mRecyclerViewAdapter.clearSelection();
     }
 }
