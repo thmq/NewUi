@@ -1,7 +1,6 @@
 package org.catroid.catrobat.newui.ui.adapter;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 
@@ -13,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpriteViewPagerAdapter extends FragmentPagerAdapter {
-
-    FragmentManager mFragmentManager;
     private int mCurrentPosition;
 
     private List<BaseRecyclerListFragment> mFragments = new ArrayList<>();
