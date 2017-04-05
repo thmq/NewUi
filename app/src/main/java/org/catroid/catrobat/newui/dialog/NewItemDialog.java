@@ -46,7 +46,6 @@ public class NewItemDialog extends InputDialog {
     }
 
     public interface NewItemInterface {
-
         boolean isNameValid(String itemName);
         void addNewItem(String itemName);
     }

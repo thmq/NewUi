@@ -28,4 +28,13 @@
     <string name="title_activity_test_tabed">TestTabedActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_fragment__test">FRAGMENT_TEST</string>
+
+    <!-- Sound Info -->
+    <string name="unknown_duration">unknown</string>
+    <string name="sound_duration_label">Duration</string>
+
+    <!-- Tab Names-->
+    <string name="tab_name_looks">Looks</string>
+    <string name="tab_name_sounds">Sounds</string>
+
 </resources>

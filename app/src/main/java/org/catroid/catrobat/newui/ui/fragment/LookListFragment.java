@@ -3,10 +3,14 @@ package org.catroid.catrobat.newui.ui.fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.LookInfo;
+import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.io.FileInfo;
 import org.catroid.catrobat.newui.io.StorageHandler;
 import org.catroid.catrobat.newui.ui.adapter.LookAdapter;
@@ -18,10 +22,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class LookListFragment extends BaseRecyclerListFragment<LookInfo> {
-
+public class LookListFragment extends BaseRecyclerListFragment<LookInfo> implements NewItemDialog.NewItemInterface {
     private static final String ARG_SECTION_NUMBER = "section_number_look_list";
-    public static final String NAME = "LOOKS";
+
+    public static final String TAG = LookListFragment.class.getSimpleName();
+
+    @Override
+    public int getTabNameResource() {
+        return R.string.tab_name_looks;
+    }
 
     public static BaseRecyclerListFragment newInstance(int sectionNumber) {
         BaseRecyclerListFragment fragment = new LookListFragment();
