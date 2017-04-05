@@ -31,4 +31,9 @@
 
     <!-- Sound Info -->
     <string name="unknown_duration">unknown</string>
+
+    <!-- Tab Names-->
+    <string name="tab_name_looks">Looks</string>
+    <string name="tab_name_sounds">Sounds</string>
+
 </resources>

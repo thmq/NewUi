@@ -23,15 +23,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class LookListFragment extends BaseRecyclerListFragment<LookInfo> implements NewItemDialog.NewItemInterface {
-
     private static final String ARG_SECTION_NUMBER = "section_number_look_list";
-    public static final String NAME = "LOOKS";
 
     public static final String TAG = LookListFragment.class.getSimpleName();
 
     @Override
-    public String getTabName() {
-        return NAME;
+    public int getTabNameResource() {
+        return R.string.tab_name_looks;
     }
 
     public static BaseRecyclerListFragment newInstance(int sectionNumber) {

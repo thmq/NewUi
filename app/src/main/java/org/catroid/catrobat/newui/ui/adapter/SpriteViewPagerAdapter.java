@@ -3,6 +3,7 @@ package org.catroid.catrobat.newui.ui.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v7.app.AppCompatActivity;
 
 import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragment;
 import org.catroid.catrobat.newui.ui.fragment.LookListFragment;
@@ -17,10 +18,11 @@ public class SpriteViewPagerAdapter extends FragmentPagerAdapter {
     private int mCurrentPosition;
 
     private List<BaseRecyclerListFragment> mFragments = new ArrayList<>();
+    private AppCompatActivity mActivity;
 
-    public SpriteViewPagerAdapter(FragmentManager fm) {
-        super(fm);
-        mFragmentManager = fm;
+    public SpriteViewPagerAdapter(AppCompatActivity activity) {
+        super(activity.getSupportFragmentManager());
+        mActivity = activity;
 
         setupFragments();
     }
@@ -53,7 +55,9 @@ public class SpriteViewPagerAdapter extends FragmentPagerAdapter {
         BaseRecyclerListFragment fragment = getBaseRecyclerListFragmentAtPosition(position);
 
         if (fragment != null) {
-            return fragment.getTabName();
+            int tabNameResource = fragment.getTabNameResource();
+
+            return mActivity.getString(tabNameResource);
         } else {
             return null;
         }

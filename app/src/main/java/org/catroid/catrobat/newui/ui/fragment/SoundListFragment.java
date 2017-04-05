@@ -17,13 +17,11 @@ import java.util.ArrayList;
 public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
 
     private static final String ARG_SECTION_NUMBER = "section_number_sound_list";
-    public static final String NAME = "Sounds";
-
     public static final String TAG = SoundListFragment.class.getSimpleName();
 
     @Override
-    public String getTabName() {
-        return NAME;
+    public int getTabNameResource() {
+        return R.string.tab_name_sounds;
     }
 
     public static BaseRecyclerListFragment newInstance(int sectionNumber) {

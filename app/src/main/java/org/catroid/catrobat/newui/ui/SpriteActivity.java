@@ -33,7 +33,7 @@ public class SpriteActivity extends AppCompatActivity {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mSpriteViewPagerAdapter = new SpriteViewPagerAdapter(getSupportFragmentManager());
+        mSpriteViewPagerAdapter = new SpriteViewPagerAdapter(this);
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSpriteViewPagerAdapter);

@@ -31,7 +31,7 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
     protected MenuItem mEditButton;
     protected RecyclerViewAdapter<T> mRecyclerViewAdapter;
 
-    public abstract String getTabName();
+    public abstract int getTabNameResource();
 
     protected ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
