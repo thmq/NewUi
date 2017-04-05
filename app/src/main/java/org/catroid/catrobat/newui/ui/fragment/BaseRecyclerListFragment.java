@@ -178,7 +178,11 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
 
     @Override
     public boolean isNameValid(String itemName) {
-        return true;
+        if (itemName != null) {
+            return itemName.length() > 0;
+        } else {
+            return false;
+        }
     }
 
     @Override
