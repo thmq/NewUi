@@ -14,7 +14,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public class Utils {
+public class
+Utils {
 
     static void addNewItemNamed(String name) {
         onView(ViewMatchers.withId(R.id.fab)).perform(click());

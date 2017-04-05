@@ -39,7 +39,7 @@ public class BaseRecyclerListFragmentTest {
         }
     }
 
-    private class TestFragment extends BaseRecyclerListFragment<TestItem> {
+    public class TestFragment extends BaseRecyclerListFragment<TestItem> {
         @Override
         public int getTabNameResource() {
             return 0;
@@ -57,6 +57,11 @@ public class BaseRecyclerListFragmentTest {
 
         @Override
         protected void cleanupItem(TestItem item) throws Exception {
+        }
+
+        @Override
+        protected void renameItem(TestItem item, String itemName) {
+
         }
 
         @Override

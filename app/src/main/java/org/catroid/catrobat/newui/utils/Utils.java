@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 
 public final class Utils {
-
     public static FileInfo getImageDirectory() {
         StorageHandler.setupDirectoryStructure();
         return new FileInfo(StorageHandler.ROOT_DIRECTORY, StorageHandler.IMAGE_FOLDER);
