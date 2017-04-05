@@ -1,4 +1,3 @@
-
 package org.catroid.catrobat.newui.io;
 
 import java.io.File;

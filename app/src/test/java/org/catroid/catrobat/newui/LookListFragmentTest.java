@@ -9,6 +9,7 @@ import static junit.framework.TestCase.assertEquals;
 
 public class LookListFragmentTest {
     LookListFragment subject;
+
     @Before
     public void setup() {
         subject = createLookListFragment();
@@ -30,7 +31,6 @@ public class LookListFragmentTest {
 
         return fragment;
     }
-
 
 
 }

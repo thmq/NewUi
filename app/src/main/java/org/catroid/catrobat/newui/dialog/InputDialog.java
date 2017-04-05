@@ -41,7 +41,7 @@ public abstract class InputDialog extends AppCompatDialogFragment {
         View view = inflateLayout(inflater);
 
         builder.setView(view);
-        ((TextView) view.findViewById(R.id.input_label)).setText(getArguments().getInt(INPUT_LABEL));
+        ((TextView)view.findViewById(R.id.input_label)).setText(getArguments().getInt(INPUT_LABEL));
 
         input = (EditText) view.findViewById(R.id.input);
 
@@ -89,7 +89,9 @@ public abstract class InputDialog extends AppCompatDialogFragment {
 
     protected void showKeyboard() {
         if (input.requestFocus()) {
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager)
+                    getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
             imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
         }
     }

@@ -22,10 +22,10 @@ public class SoundInfo implements Serializable {
         this.fileInfo = fileInfo;
 
         if (fileInfo != null) {
-	        //TODO what if the fileInfo's relative path is not the filename alone?
+            //TODO what if the fileInfo's relative path is not the filename alone?
 
-	        fileName = fileInfo.getAbsolutePath();
-          getDurationFromFile();
+            fileName = fileInfo.getAbsolutePath();
+            getDurationFromFile();
         }
     }
 

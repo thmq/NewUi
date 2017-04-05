@@ -5,18 +5,12 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
 public class RecyclerViewMultiSelectionManagerTest {
     private int itemCount = 0;
-
-    private class ListItem {
-        private final String mName;
-
-        public ListItem(String name) {
-            mName = name;
-        }
-    }
 
     @Test
     public void testSetItemAsSelected() {
@@ -130,5 +124,13 @@ public class RecyclerViewMultiSelectionManagerTest {
     private ListItem createListItem() {
         itemCount++;
         return new ListItem("test item " + itemCount);
+    }
+
+    private class ListItem {
+        private final String mName;
+
+        public ListItem(String name) {
+            mName = name;
+        }
     }
 }

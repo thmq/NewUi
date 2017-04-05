@@ -13,6 +13,20 @@ import static junit.framework.Assert.assertTrue;
 
 public class BaseRecyclerListFragmentTest {
 
+    @Test
+    public void testValidItemNames() {
+        TestFragment fragment = createFragment();
+
+        assertFalse(fragment.isNameValid(null));
+        assertFalse(fragment.isNameValid(""));
+
+        assertTrue(fragment.isNameValid("Name"));
+    }
+
+    private TestFragment createFragment() {
+        return new TestFragment();
+    }
+
     class TestItem {
         String mName;
 
@@ -26,16 +40,6 @@ public class BaseRecyclerListFragmentTest {
     }
 
     private class TestFragment extends BaseRecyclerListFragment<TestItem> {
-        class TestAdapter extends RecyclerViewAdapter<TestItem> {
-            public TestAdapter(List<TestItem> listItems, int itemLayout) {
-                super(listItems, itemLayout);
-            }
-
-            @Override
-            public void bindDataToViewHolder(TestItem item, ViewHolder holder, boolean isSelected) {
-
-            }
-        }
         @Override
         public int getTabNameResource() {
             return 0;
@@ -59,20 +63,17 @@ public class BaseRecyclerListFragmentTest {
         protected TestItem createNewItem(String itemName) {
             return new TestItem(itemName);
         }
-    }
 
-    @Test
-    public void testValidItemNames() {
-        TestFragment fragment = createFragment();
+        class TestAdapter extends RecyclerViewAdapter<TestItem> {
+            public TestAdapter(List<TestItem> listItems, int itemLayout) {
+                super(listItems, itemLayout);
+            }
 
-        assertFalse(fragment.isNameValid(null));
-        assertFalse(fragment.isNameValid(""));
+            @Override
+            public void bindDataToViewHolder(TestItem item, ViewHolder holder, boolean isSelected) {
 
-        assertTrue(fragment.isNameValid("Name"));
-    }
-
-    private TestFragment createFragment() {
-        return new TestFragment();
+            }
+        }
     }
 
 }
