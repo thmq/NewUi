@@ -13,18 +13,21 @@
     <string name="cancel">cancel</string>
     <string name="error_invalid_item_name">Item name is invalid.</string>
 
+    <!-- Shared Item Dialog Strings -->
+    <string name="dialog_item_name_label">Item name</string>
+
     <!-- New Item Dialog -->
     <string name="dialog_create_item">Create new Item</string>
-    <string name="create_new_item">create</string>
+    <string name="dialog_create_item_primary_action">create</string>
 
     <!-- Rename Item Dialog -->
     <string name="dialog_rename_item">Rename Item</string>
-    <string name="rename_item">rename</string>
+    <string name="dialog_rename_primary_action">rename</string>
 
     <!-- Action Mode Buttons -->
-    <string name="delete">Delete</string>
-    <string name="copy">Copy</string>
-    <string name="rename">Rename</string>
+    <string name="delete_button">Delete</string>
+    <string name="copy_button">Copy</string>
+    <string name="rename_button">Rename</string>
     <string name="title_activity_test_tabed">TestTabedActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_fragment__test">FRAGMENT_TEST</string>

@@ -3,11 +3,9 @@ package org.catroid.catrobat.newui.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,12 +18,13 @@ import android.widget.Toast;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
+import org.catroid.catrobat.newui.dialog.RenameItemDialog;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapterDelegate;
 
 import java.util.List;
 
-public abstract class BaseRecyclerListFragment<T> extends Fragment implements RecyclerViewAdapterDelegate<T>, NewItemDialog.NewItemInterface {
+public abstract class BaseRecyclerListFragment<T> extends Fragment implements RecyclerViewAdapterDelegate<T>, NewItemDialog.NewItemInterface, RenameItemDialog.RenameItemInterface {
 
     public static final String TAG = BaseRecyclerListFragment.class.getSimpleName();
 
@@ -62,7 +61,8 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.btnEdit:
-                    mRecyclerViewAdapter.clearSelection();
+                    showItemRenameDialog();
+
                     return true;
                 case R.id.btnCopy:
                     copyItems(mRecyclerViewAdapter.getSelectedItems());
@@ -109,15 +109,32 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
     public abstract RecyclerViewAdapter<T> createAdapter();
 
     public void onAddButtonClicked() {
+        showNewItemDialog();
+    }
+
+    private void showNewItemDialog() {
         NewItemDialog dialog = NewItemDialog.newInstance(
                 R.string.dialog_create_item,
-                R.string.create_new_item,
-                R.string.create_new_item,
+                R.string.dialog_item_name_label,
+                R.string.dialog_create_item_primary_action,
                 R.string.cancel,
                 false
         );
 
         dialog.setNewItemInterface(this);
+        dialog.show(getFragmentManager(), dialog.getTag());
+    }
+
+    private void showItemRenameDialog() {
+        RenameItemDialog dialog = RenameItemDialog.newInstance(
+                R.string.dialog_rename_item,
+                R.string.dialog_item_name_label,
+                R.string.dialog_rename_primary_action,
+                R.string.cancel,
+                false
+        );
+
+        dialog.setRenameItemInterface(this);
         dialog.show(getFragmentManager(), dialog.getTag());
     }
 
@@ -187,7 +204,11 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
 
     @Override
     public boolean isNameValid(String itemName) {
-        return true;
+        if (itemName != null) {
+            return itemName.length() > 0;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -198,6 +219,22 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
             mRecyclerViewAdapter.addItem(item);
         }
     }
+
+    @Override
+    public void renameItem(String itemName) {
+        List<T> selectedItems = mRecyclerViewAdapter.getSelectedItems();
+
+
+        if (selectedItems.size() == 1) {
+            T item = mRecyclerViewAdapter.getSelectedItems().get(0);
+
+            renameItem(item, itemName);
+
+            mRecyclerViewAdapter.itemChanged(item);
+        }
+    }
+
+    protected abstract void renameItem(T item, String itemName);
 
     protected abstract T createNewItem(String itemName);
 }

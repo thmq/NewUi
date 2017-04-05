@@ -15,27 +15,27 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 
 public class TabsInstrumentedTest {
-    @Rule
-    public ActivityTestRule<TabsViewActivity> activityRule = new ActivityTestRule<>(TabsViewActivity.class);
-
-    private static String SOUNDS_TAB_TEXT = "Sounds";
-    private static String LOOKS_TAB_TEXT = "Looks";
-
-    @Test
-    public void testTabsExist() {
-        onView(withText(SOUNDS_TAB_TEXT)).perform(click());
-        onView(withText(LOOKS_TAB_TEXT)).perform(click());
-    }
-
-    @Test
-    public void testContentOfSoundsTab() {
-        onView(withText(SOUNDS_TAB_TEXT)).perform(click());
-        onView(withId(R.id.tab_contents)).check(matches(withText("Sound 1")));
-    }
-
-    @Test
-    public void testContentOfLooksTab() {
-        onView(withText(LOOKS_TAB_TEXT)).perform(click());
-        onView(withId(R.id.tab_contents)).check(matches(withText("Look 1")));
-    }
+//    @Rule
+//    public ActivityTestRule<TabsViewActivity> activityRule = new ActivityTestRule<>(TabsViewActivity.class);
+//
+//    private static String SOUNDS_TAB_TEXT = "Sounds";
+//    private static String LOOKS_TAB_TEXT = "Looks";
+//
+//    @Test
+//    public void testTabsExist() {
+//        onView(withText(SOUNDS_TAB_TEXT)).perform(click());
+//        onView(withText(LOOKS_TAB_TEXT)).perform(click());
+//    }
+//
+//    @Test
+//    public void testContentOfSoundsTab() {
+//        onView(withText(SOUNDS_TAB_TEXT)).perform(click());
+//        onView(withId(R.id.tab_contents)).check(matches(withText("Sound 1")));
+//    }
+//
+//    @Test
+//    public void testContentOfLooksTab() {
+//        onView(withText(LOOKS_TAB_TEXT)).perform(click());
+//        onView(withId(R.id.tab_contents)).check(matches(withText("Look 1")));
+//    }
 }
