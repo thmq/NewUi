@@ -4,10 +4,16 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
-    <ImageView
+   <ImageView
         android:id="@+id/image_view"
         android:layout_width="@dimen/list_item_image_size"
         android:layout_height="@dimen/list_item_image_size"/>
+
+    <ImageSwitcher
+        android:id="@+id/slide_trans_imageswitcher"
+        android:layout_width="@dimen/list_item_image_size"
+        android:layout_height="@dimen/list_item_image_size">
+    </ImageSwitcher>
 
     <LinearLayout
         android:orientation="vertical"

@@ -1,5 +1,6 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
+import android.app.LauncherActivity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LookListFragment extends BaseRecyclerListFragment<LookInfo> {
 
@@ -34,7 +36,14 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo> {
 
     @Override
     public RecyclerViewAdapter<LookInfo> createAdapter() {
-        return new LookAdapter(new ArrayList<LookInfo>(), R.layout.list_item);
+        //TODO change again
+        List<LookInfo> lookInfoList = new ArrayList<LookInfo>();
+        for(int i = 0; i < 10; i++) {
+            lookInfoList.add( new LookInfo("Item " + i, createImage()));
+        }
+        //return new LookAdapter(new ArrayList<LookInfo>(), R.layout.list_item);
+        return new LookAdapter(lookInfoList, R.layout.list_item);
+
     }
 
     @Override
