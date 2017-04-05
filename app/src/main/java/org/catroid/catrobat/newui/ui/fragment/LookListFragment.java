@@ -3,9 +3,6 @@ package org.catroid.catrobat.newui.ui.fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 
 import org.catroid.catrobat.newui.R;
@@ -57,6 +54,11 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo> impleme
     @Override
     protected void cleanupItem(LookInfo item) throws Exception {
         item.cleanup();
+    }
+
+    @Override
+    protected void renameItem(LookInfo item, String itemName) {
+        item.setName(itemName);
     }
 
     @Override

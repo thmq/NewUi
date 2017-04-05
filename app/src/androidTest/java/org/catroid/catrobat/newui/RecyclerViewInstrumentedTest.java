@@ -37,20 +37,4 @@ public class RecyclerViewInstrumentedTest {
         assertEquals("org.catroid.catrobat.newui", appContext.getPackageName());
     }
 
-    @Test
-    public void testLongClickOnListItems() {
-        List<ListItem> items = Utils.getItemList();
-
-        for (int i = 0; i < 10; i++) {
-            ListItem item = items.get(i);
-
-            onView(withId(R.id.fragment)).perform(
-                    RecyclerViewActions.actionOnItem(
-                            hasDescendant(withText(item.getName()))
-                            , longClick())
-            );
-
-        }
-    }
-
 }
