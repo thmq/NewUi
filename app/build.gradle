@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'checkstyle'
+
+apply from: 'gradle/code_quality_tasks.gradle'
 
 android {
     compileSdkVersion 25
@@ -17,6 +20,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -34,4 +41,6 @@ dependencies {
     compile 'com.android.support:design:25.3.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
+
+    checkstyle 'com.puppycrawl.tools:checkstyle:7.6.1'
 }

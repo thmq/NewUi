@@ -1,9 +1,11 @@
 package org.catroid.catrobat.newui.data;
 
-
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 
 import org.catroid.catrobat.newui.io.FileInfo;
+import org.catroid.catrobat.newui.io.StorageHandler;
 
 public class LookInfo {
 
@@ -46,8 +48,26 @@ public class LookInfo {
         return thumbnail;
     }
 
+    public void cleanup() throws Exception {
+        StorageHandler.deleteFile(fileInfo);
+    }
+
+    public Bitmap getBitmap() {
+        String imagePath = fileInfo.getAbsolutePath();
+
+        if (!StorageHandler.fileExists(imagePath)) {
+            return null;
+        }
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+        return BitmapFactory.decodeFile(imagePath, options);
+    }
+
     private void createThumbnail() {
-        //TODO: implement
+        Bitmap bigImage = getBitmap();
+        thumbnail = ThumbnailUtils.extractThumbnail(bigImage, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
     }
 
 }

@@ -1,4 +1,4 @@
-package org.catroid.catrobat.newui.recycleviewlist;
+package org.catroid.catrobat.newui.ui.adapter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -40,4 +40,7 @@ public class RecyclerViewMultiSelectionManager<T> {
         setSelected(item, !getSelected(item));
     }
 
+    public void removeItem(T item) {
+        setSelected(item, false);
+    }
 }
