@@ -20,9 +20,13 @@ public class SoundInfo implements Serializable {
     public SoundInfo(String name, FileInfo fileInfo) {
         this.name = name;
         this.fileInfo = fileInfo;
-        //TODO what if the fileInfo's relative path is not the filename alone?
-        fileName = fileInfo.getAbsolutePath();
-        getDurationFromFile();
+
+        if (fileInfo != null) {
+	        //TODO what if the fileInfo's relative path is not the filename alone?
+
+	        fileName = fileInfo.getAbsolutePath();
+          getDurationFromFile();
+        }
     }
 
     public SoundInfo(SoundInfo srcSoundInfo) throws Exception {
@@ -60,7 +64,7 @@ public class SoundInfo implements Serializable {
     public String getDuration() {
         return duration;
     }
-    
+
     public void deleteFile() throws Exception {
         StorageHandler.deleteFile(fileInfo);
     }

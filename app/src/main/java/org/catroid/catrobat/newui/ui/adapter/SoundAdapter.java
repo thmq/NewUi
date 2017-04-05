@@ -14,7 +14,14 @@ public class SoundAdapter extends RecyclerViewAdapter<SoundInfo> {
     @Override
     public void bindDataToViewHolder(SoundInfo item, ViewHolder holder, boolean isSelected) {
         holder.mNameView.setText(item.getName());
-        holder.mDetailsView.setText("Duration: " + item.getDuration());
+
+        String durationLabel = item.getDuration();
+
+        if (durationLabel == null) {
+            durationLabel = holder.mImageView.getResources().getString(R.string.unknown_duration);
+        }
+
+        holder.mDetailsView.setText("Duration: " + durationLabel);
 
         if (isSelected) {
             holder.mImageView.setImageResource(R.drawable.ic_check_circle_black_24dp);
