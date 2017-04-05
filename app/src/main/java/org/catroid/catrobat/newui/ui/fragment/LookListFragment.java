@@ -38,15 +38,11 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo> impleme
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
 
-        Log.d(TAG, "New Instance created (" + System.identityHashCode(fragment) + ")");
-
         return fragment;
     }
 
     @Override
     public RecyclerViewAdapter<LookInfo> createAdapter() {
-        Log.d(TAG, "Adapter created! (" + System.identityHashCode(this) + ")");
-
         return new LookAdapter(new ArrayList<LookInfo>(), R.layout.list_item);
     }
 
@@ -65,7 +61,6 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo> impleme
 
     @Override
     protected LookInfo createNewItem(String itemName) {
-        Log.d(TAG, "Creating new item! (" + System.identityHashCode(this) + ")");
         String uniqueLookName = Utils.getUniqueLookName(itemName, mRecyclerViewAdapter.getItems());
 
         FileInfo fileInfo = createImage();
