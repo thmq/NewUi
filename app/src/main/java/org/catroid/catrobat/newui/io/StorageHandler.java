@@ -13,13 +13,15 @@ import java.nio.channels.FileChannel;
 
 public final class StorageHandler {
 
+    public static final String TAG = StorageHandler.class.getSimpleName();
+
     public static final String ROOT = Environment.getExternalStorageDirectory().toString() + File.separator  + "NewUi";
     public static final String IMAGE_FOLDER = "images";
     public static final String SOUND_FOLDER = "sounds";
 
-    public static final FileInfo rootDirectory = new FileInfo(null, ROOT);
+    public static final FileInfo ROOT_DIRECTORY = new FileInfo(null, ROOT);
 
-    public static final String TAG = StorageHandler.class.getSimpleName();
+    private static final String FILE_NAME_APPENDIX = "_#";
 
     public static void exportBitmapToFile(Bitmap bitmap, File file) throws IOException {
         FileOutputStream os = new FileOutputStream(file);
@@ -28,19 +30,27 @@ public final class StorageHandler {
         os.close();
     }
 
-    public static FileInfo copyFileInfo(FileInfo srcFileInfo) throws Exception {
+    public static FileInfo copyFile(FileInfo srcFileInfo) throws Exception {
         String srcPath = srcFileInfo.getAbsolutePath();
         File dstFile = copyFile(srcPath);
 
         return new FileInfo(srcFileInfo.getParent(), dstFile.getName());
     }
 
-    public static File copyFile(String srcPath) throws Exception {
+    public static FileInfo copyFile(FileInfo srcFileInfo, FileInfo dstDirectoryInfo) throws Exception {
+        String srcPath = srcFileInfo.getAbsolutePath();
+        String dstPath = dstDirectoryInfo.getAbsolutePath();
+        File dstFile = copyFile(srcPath, dstPath);
+
+        return new FileInfo(dstDirectoryInfo, dstFile.getName());
+    }
+
+    private static File copyFile(String srcPath) throws Exception {
         String dstPath = new File(srcPath).getParent();
         return copyFile(srcPath, dstPath);
     }
 
-    public static File copyFile(String srcPath, String dstPath) throws Exception {
+    private static File copyFile(String srcPath, String dstPath) throws Exception {
         File srcFile = new File(srcPath);
         if (!srcFile.exists()) {
             throw new FileNotFoundException("File: " + srcPath + "does not exist.");
@@ -54,13 +64,19 @@ public final class StorageHandler {
 
     public static synchronized File getUniqueFile(String originalName, String dstDirectory) throws Exception {
         int extensionStartIndex = originalName.lastIndexOf(".");
+
+        int appendixStartIndex = originalName.lastIndexOf(FILE_NAME_APPENDIX);
+        if(appendixStartIndex == -1) {
+            appendixStartIndex = extensionStartIndex;
+        }
+
         String extension = originalName.substring(extensionStartIndex);
-        String fileName = originalName.substring(0, extensionStartIndex);
+        String fileName = originalName.substring(0, appendixStartIndex);
 
         int appendix = 0;
 
         while(appendix < Integer.MAX_VALUE) {
-            String dstFileName = fileName + String.valueOf(appendix) + extension;
+            String dstFileName = fileName + FILE_NAME_APPENDIX + String.valueOf(appendix) + extension;
             File dstFile = new File(dstDirectory, dstFileName);
             if(!dstFile.exists()) {
                 return dstFile;
@@ -85,7 +101,11 @@ public final class StorageHandler {
         }
     }
 
-    public static void deleteFile(String srcPath) throws IOException {
+    public static void deleteFile(FileInfo srcFileInfo) throws IOException {
+        deleteFile(srcFileInfo.getAbsolutePath());
+    }
+
+    private static void deleteFile(String srcPath) throws IOException {
         File file = new File(srcPath);
         if (!file.exists()) {
             throw new FileNotFoundException("File: " + srcPath + "does not exist.");
@@ -97,7 +117,6 @@ public final class StorageHandler {
 
     public static boolean fileExists(String path) {
         File file = new File(path);
-
         return file.exists();
     }
 
@@ -111,7 +130,7 @@ public final class StorageHandler {
         File directory = new File(name);
         if (!directory.exists()) {
             if (!directory.mkdir()) {
-                Log.d(TAG, "Directory NOT created! " + directory.getAbsolutePath());
+                Log.e(TAG, "Directory NOT created! " + directory.getAbsolutePath());
             }
         }
     }
@@ -121,16 +140,8 @@ public final class StorageHandler {
 
         if (!directory.exists()) {
             if (!directory.mkdir()) {
-                Log.d(TAG, "Directory NOT created! " + directory.getAbsolutePath());
+                Log.e(TAG, "Directory NOT created! " + directory.getAbsolutePath());
             }
         }
-    }
-
-    public static boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
     }
 }

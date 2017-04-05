@@ -6,8 +6,7 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.catroid.catrobat.newui.data.ListItem;
-import org.catroid.catrobat.newui.recycleviewlist.SpriteActivity;
+import org.catroid.catrobat.newui.ui.SpriteActivity;
 import org.catroid.catrobat.newui.utils.Utils;
 import org.junit.Rule;
 import org.junit.Test;

@@ -1,7 +1,6 @@
-package org.catroid.catrobat.newui.recycleviewlist.adapter;
+package org.catroid.catrobat.newui.ui.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.catroid.catrobat.newui.R;
-import org.catroid.catrobat.newui.data.ListItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener {
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View mItemView;
         public ImageView mImageView;
@@ -37,10 +35,6 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     private RecyclerViewAdapterDelegate<T> delegate = null;
 
     private static int SELECTED_ITEM_BACKGROUND_COLOR = 0xFFDDDDDD;
-
-    public RecyclerViewAdapter() {
-        throw new RuntimeException("This constructor should not be used!");
-    }
 
     public RecyclerViewAdapter(List<T> listItems, int itemLayout) {
         mListItems = listItems;
@@ -112,7 +106,6 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     public List<T> getItems() {
         return mListItems;
     }
-
 
     @Override
     public int getItemCount() {

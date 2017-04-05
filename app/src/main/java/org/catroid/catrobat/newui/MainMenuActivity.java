@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.catroid.catrobat.newui.listviewlist.ListViewActivity;
-import org.catroid.catrobat.newui.recycleviewlist.SpriteActivity;
+import org.catroid.catrobat.newui.ui.SpriteActivity;
 
 public class MainMenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

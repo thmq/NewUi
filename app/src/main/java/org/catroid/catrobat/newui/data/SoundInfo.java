@@ -1,6 +1,5 @@
 package org.catroid.catrobat.newui.data;
 
-
 import android.media.MediaMetadataRetriever;
 
 import org.catroid.catrobat.newui.R;
@@ -22,7 +21,7 @@ public class SoundInfo {
     public SoundInfo(SoundInfo srcSoundInfo) throws Exception {
         name = srcSoundInfo.getName();
         duration = srcSoundInfo.getDuration();
-        fileInfo = StorageHandler.copyFileInfo(srcSoundInfo.getFileInfo());
+        fileInfo = StorageHandler.copyFile(srcSoundInfo.getFileInfo());
     }
 
     public String getName() {
@@ -50,12 +49,11 @@ public class SoundInfo {
     }
     
     public void deleteFile() throws Exception {
-        StorageHandler.deleteFile(fileInfo.getAbsolutePath());
+        StorageHandler.deleteFile(fileInfo);
     }
 
     private void getDurationFromFile() {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-
         retriever.setDataSource(fileInfo.getAbsolutePath());
         duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
     }

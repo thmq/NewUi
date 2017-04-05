@@ -1,4 +1,4 @@
-package org.catroid.catrobat.newui.recycleviewlist;
+package org.catroid.catrobat.newui.ui;
 
 import android.Manifest;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import org.catroid.catrobat.newui.R;
-import org.catroid.catrobat.newui.recycleviewlist.adapter.SpriteViewPagerAdapter;
+import org.catroid.catrobat.newui.ui.adapter.SpriteViewPagerAdapter;
 
 public class SpriteActivity extends AppCompatActivity {
 
