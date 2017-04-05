@@ -44,7 +44,7 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo> impleme
     }
 
     @Override
-    public LookInfo copyItem(LookInfo item) throws Exception {
+    protected LookInfo copyItem(LookInfo item) throws Exception {
         String name = Utils.getUniqueLookName(item.getName(), mRecyclerViewAdapter.getItems());
         FileInfo fileInfo = StorageHandler.copyFile(item.getFileInfo());
 
@@ -52,8 +52,13 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo> impleme
     }
 
     @Override
-    public void cleanupItem(LookInfo item) throws Exception {
+    protected void cleanupItem(LookInfo item) throws Exception {
         item.cleanup();
+    }
+
+    @Override
+    protected void renameItem(LookInfo item, String itemName) {
+        item.setName(itemName);
     }
 
     @Override

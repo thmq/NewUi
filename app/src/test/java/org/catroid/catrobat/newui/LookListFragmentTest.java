@@ -7,10 +7,6 @@ import org.junit.Test;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertEquals;
 
-/**
- * Created by matthee on 05.04.17.
- */
-
 public class LookListFragmentTest {
     LookListFragment subject;
     @Before
