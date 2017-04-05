@@ -33,7 +33,6 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
             mNameView = (TextView) itemView.findViewById(R.id.name_view);
             mDetailsView = (TextView) itemView.findViewById(R.id.details_view);
             mImageSwitcher = (ImageSwitcher) itemView.findViewById(R.id.slide_trans_imageswitcher);
-
         }
     }
 
@@ -68,7 +67,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
             public View makeView() {
                 //return holder.mItemView;
                ImageView mImageView = new ImageView(parent.getContext());
-                mImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 mImageView.setLayoutParams(new ImageSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 return mImageView;
             }

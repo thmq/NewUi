@@ -1,7 +1,9 @@
 package org.catroid.catrobat.newui.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.animation.Animation;
@@ -42,9 +44,9 @@ public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
                     holderCopy.mImageSwitcher.setImageResource(R.drawable.ic_check_circle_black_24dp);
 
                 } else {
-
+                  //  Bitmap thumbnail = ThumbnailUtils.extractThumbnail(itemCopy.getBitmap(), THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
                     holderCopy.mImageSwitcher.setImageDrawable(new BitmapDrawable(itemCopy.getBitmap()));
-                    
+
                 }
                 holderCopy.mImageSwitcher.startAnimation(out);
             }
