@@ -1,12 +1,5 @@
 package org.catroid.catrobat.newui;
 
-import org.catroid.catrobat.newui.ui.adapter.RecyclerViewMultiSelectionManager;
-import org.junit.Test;
-
-import java.util.List;
-
-import static junit.framework.Assert.*;
-
 public class RecyclerViewMultiSelectionManagerTest {
     private int itemCount = 0;
 

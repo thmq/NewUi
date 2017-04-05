@@ -2,10 +2,15 @@ package org.catroid.catrobat.newui.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
 import android.widget.Toast;
 
 import org.catroid.catrobat.newui.R;
@@ -46,6 +50,8 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
 
             mEditButton = menu.findItem(R.id.btnEdit);
 
+            setTabColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.colorActionMode));
+
             return true;
         }
 
@@ -55,7 +61,6 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             return false; // Return false if nothing is done
         }
-
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -71,10 +76,11 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
                 case R.id.btnDelete:
                     try {
                         removeItems(mRecyclerViewAdapter.getSelectedItems());
-                    } catch (Exception ex) {
-                        Context mContext = getActivity().getApplicationContext();
-                        Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Context context = getActivity().getApplicationContext();
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
+
                     mRecyclerViewAdapter.clearSelection();
                     return true;
 
@@ -86,6 +92,7 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mRecyclerViewAdapter.clearSelection();
+            setTabColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.colorPrimary));
             mActionMode = null;
         }
     };
@@ -237,4 +244,13 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
     protected abstract void renameItem(T item, String itemName);
 
     protected abstract T createNewItem(String itemName);
+
+    protected void setTabColor(int color)
+    {
+        TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_layout);
+        if(tabLayout != null) {
+            tabLayout.setBackgroundColor(color);
+        }
+    }
+
 }

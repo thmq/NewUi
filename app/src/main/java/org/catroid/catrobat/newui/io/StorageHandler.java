@@ -15,7 +15,8 @@ public final class StorageHandler {
 
     public static final String TAG = StorageHandler.class.getSimpleName();
 
-    public static final String ROOT = Environment.getExternalStorageDirectory().toString() + File.separator  + "NewUi";
+    public static final String ROOT = Environment.getExternalStorageDirectory().toString()
+            + File.separator + "NewUi";
     public static final String IMAGE_FOLDER = "images";
     public static final String SOUND_FOLDER = "sounds";
 
@@ -37,7 +38,8 @@ public final class StorageHandler {
         return new FileInfo(srcFileInfo.getParent(), dstFile.getName());
     }
 
-    public static FileInfo copyFile(FileInfo srcFileInfo, FileInfo dstDirectoryInfo) throws Exception {
+    public static FileInfo copyFile(FileInfo srcFileInfo, FileInfo dstDirectoryInfo)
+            throws Exception {
         String srcPath = srcFileInfo.getAbsolutePath();
         String dstPath = dstDirectoryInfo.getAbsolutePath();
         File dstFile = copyFile(srcPath, dstPath);
@@ -62,11 +64,12 @@ public final class StorageHandler {
         return dstFile;
     }
 
-    public static synchronized File getUniqueFile(String originalName, String dstDirectory) throws Exception {
+    public static synchronized File getUniqueFile(String originalName, String dstDirectory)
+            throws Exception {
         int extensionStartIndex = originalName.lastIndexOf(".");
 
         int appendixStartIndex = originalName.lastIndexOf(FILE_NAME_APPENDIX);
-        if(appendixStartIndex == -1) {
+        if (appendixStartIndex == -1) {
             appendixStartIndex = extensionStartIndex;
         }
 
@@ -75,10 +78,11 @@ public final class StorageHandler {
 
         int appendix = 0;
 
-        while(appendix < Integer.MAX_VALUE) {
-            String dstFileName = fileName + FILE_NAME_APPENDIX + String.valueOf(appendix) + extension;
+        while (appendix < Integer.MAX_VALUE) {
+            String dstFileName = fileName + FILE_NAME_APPENDIX + String.valueOf(appendix) +
+                    extension;
             File dstFile = new File(dstDirectory, dstFileName);
-            if(!dstFile.exists()) {
+            if (!dstFile.exists()) {
                 return dstFile;
             }
             appendix++;
@@ -94,10 +98,12 @@ public final class StorageHandler {
         try {
             ic.transferTo(0, ic.size(), oc);
         } finally {
-            if (ic != null)
+            if (ic != null) {
                 ic.close();
-            if (oc != null)
+            }
+            if (oc != null) {
                 oc.close();
+            }
         }
     }
 

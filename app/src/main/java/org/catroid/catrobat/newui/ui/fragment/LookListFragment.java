@@ -19,7 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class LookListFragment extends BaseRecyclerListFragment<LookInfo> implements NewItemDialog.NewItemInterface {
+public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
+        implements NewItemDialog.NewItemInterface {
     private static final String ARG_SECTION_NUMBER = "section_number_look_list";
 
     public static final String TAG = LookListFragment.class.getSimpleName();

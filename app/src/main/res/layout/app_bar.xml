@@ -14,5 +14,4 @@
         app:layout_scrollFlags="exitUntilCollapsed"
         app:popupTheme="@style/AppTheme.OptionsMenu" />
 
-
 </android.support.design.widget.AppBarLayout>
