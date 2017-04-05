@@ -24,7 +24,7 @@ public class RenameItemDialog extends InputDialog {
         return dialog;
     }
 
-    public void setNewItemInterface(RenameItemInterface renameItemInterface) {
+    public void setRenameItemInterface(RenameItemInterface renameItemInterface) {
         this.renameItemInterface = renameItemInterface;
     }
 
