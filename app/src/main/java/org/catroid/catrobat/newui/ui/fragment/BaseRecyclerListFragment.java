@@ -1,5 +1,6 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
@@ -54,6 +56,7 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
             return false; // Return false if nothing is done
         }
 
+
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
@@ -65,7 +68,12 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
                     mRecyclerViewAdapter.clearSelection();
                     return true;
                 case R.id.btnDelete:
-                    removeItems(mRecyclerViewAdapter.getSelectedItems());
+                    try {
+                        removeItems(mRecyclerViewAdapter.getSelectedItems());
+                    } catch (Exception ex) {
+                        Context mContext = getActivity().getApplicationContext();
+                        Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                     mRecyclerViewAdapter.clearSelection();
                     return true;
 
