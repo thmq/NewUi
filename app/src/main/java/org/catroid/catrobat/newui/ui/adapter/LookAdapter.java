@@ -33,10 +33,10 @@ public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
         final LookInfo itemCopy = item;
         //final Context view_context = holder.mItemView.getContext();
 
+
         in.setAnimationListener(new Animation.AnimationListener(){
             @Override
             public void onAnimationStart(Animation animation) {
-
             }
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -44,8 +44,11 @@ public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
                     holderCopy.mImageSwitcher.setImageResource(R.drawable.ic_check_circle_black_24dp);
 
                 } else {
+                    Bitmap croppedBitmap = itemCopy.getCroppedBitmap(itemCopy.getBitmap());
+
+
                   //  Bitmap thumbnail = ThumbnailUtils.extractThumbnail(itemCopy.getBitmap(), THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
-                    holderCopy.mImageSwitcher.setImageDrawable(new BitmapDrawable(itemCopy.getBitmap()));
+                    holderCopy.mImageSwitcher.setImageDrawable(new BitmapDrawable(holderCopy.mItemView.getResources(), croppedBitmap));
 
                 }
                 holderCopy.mImageSwitcher.startAnimation(out);
@@ -55,8 +58,8 @@ public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
 
             }
         });
-
         holder.mImageSwitcher.startAnimation(in);
+
 
 
 

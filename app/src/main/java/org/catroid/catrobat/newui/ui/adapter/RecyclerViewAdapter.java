@@ -25,6 +25,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         public TextView mNameView;
         public TextView mDetailsView;
         public ImageSwitcher mImageSwitcher;
+        public boolean mHasToBeAnimated;
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -33,6 +34,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
             mNameView = (TextView) itemView.findViewById(R.id.name_view);
             mDetailsView = (TextView) itemView.findViewById(R.id.details_view);
             mImageSwitcher = (ImageSwitcher) itemView.findViewById(R.id.slide_trans_imageswitcher);
+            mHasToBeAnimated = true;
         }
     }
 
@@ -88,16 +90,6 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
             holder.mItemView.setBackgroundColor(0x00000000);
         }
 
-       /* holder.mImageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-            @Override
-            public View makeView() {
-                //return holder.mItemView;
-               ImageView mImageView = new ImageView();
-                mImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                mImageView.setLayoutParams(new ImageSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                return mImageView;
-            }
-        }); */
 
         bindDataToViewHolder(item, holder, isSelected);
     }
@@ -120,6 +112,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
         if (mMultiSelectionManager.isSelectable(item)) {
             mMultiSelectionManager.toggleSelected(item);
+
             notifyItemChanged(position);
             //notifyDataSetChanged();
             //notifySelectionChanged();
