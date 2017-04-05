@@ -12,7 +12,6 @@ import org.catroid.catrobat.newui.R;
 import java.util.List;
 
 public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener {
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View mItemView;
         public ImageView mImageView;
@@ -102,6 +101,13 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         mMultiSelectionManager.removeItem(item);
         notifyDataSetChanged();
     }
+
+    public void itemChanged(T item) {
+        if (mListItems.contains(item)) {
+            notifyDataSetChanged();
+        }
+    }
+
 
     public List<T> getItems() {
         return mListItems;

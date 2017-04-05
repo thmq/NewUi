@@ -54,7 +54,8 @@ public class SpriteActivity extends AppCompatActivity {
         });
 
 
-        ActivityCompat.requestPermissions(SpriteActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        ActivityCompat.requestPermissions(SpriteActivity.this, new String[]
+                {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
 
     }
 

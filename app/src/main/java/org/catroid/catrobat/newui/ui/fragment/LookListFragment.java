@@ -3,9 +3,6 @@ package org.catroid.catrobat.newui.ui.fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 
 import org.catroid.catrobat.newui.R;
@@ -22,7 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class LookListFragment extends BaseRecyclerListFragment<LookInfo> implements NewItemDialog.NewItemInterface {
+public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
+        implements NewItemDialog.NewItemInterface {
     private static final String ARG_SECTION_NUMBER = "section_number_look_list";
 
     public static final String TAG = LookListFragment.class.getSimpleName();
@@ -57,6 +55,11 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo> impleme
     @Override
     protected void cleanupItem(LookInfo item) throws Exception {
         item.cleanup();
+    }
+
+    @Override
+    protected void renameItem(LookInfo item, String itemName) {
+        item.setName(itemName);
     }
 
     @Override

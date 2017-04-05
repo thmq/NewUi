@@ -56,8 +56,15 @@ public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
 
     @Override
     protected SoundInfo createNewItem(String itemName) {
-        SoundInfo soundInfo = new SoundInfo(itemName, null);
+        String uniqueSoundName = Utils.getUniqueSoundName(itemName, mRecyclerViewAdapter.getItems());
+
+        SoundInfo soundInfo = new SoundInfo(uniqueSoundName, null);
 
         return soundInfo;
+    }
+
+    @Override
+    protected void renameItem(SoundInfo item, String itemName) {
+        item.setName(itemName);
     }
 }
