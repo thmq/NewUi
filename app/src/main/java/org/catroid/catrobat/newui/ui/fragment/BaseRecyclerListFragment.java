@@ -2,9 +2,11 @@ package org.catroid.catrobat.newui.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,7 +19,6 @@ import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapterDelegate;
-import org.catroid.catrobat.newui.utils.Utils;
 
 import java.util.List;
 
@@ -29,6 +30,9 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
     protected RecyclerView mRecyclerView;
     protected MenuItem mEditButton;
     protected RecyclerViewAdapter<T> mRecyclerViewAdapter;
+
+    public abstract int getTabNameResource();
+
     protected ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -83,7 +87,6 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recycler_view, container, false);
 
         mRecyclerViewAdapter = createAdapter();
@@ -96,12 +99,27 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
 
     public abstract RecyclerViewAdapter<T> createAdapter();
 
+    public void onAddButtonClicked() {
+        NewItemDialog dialog = NewItemDialog.newInstance(
+                R.string.dialog_create_item,
+                R.string.create_new_item,
+                R.string.create_new_item,
+                R.string.cancel,
+                false
+        );
+
+        dialog.setNewItemInterface(this);
+        dialog.show(getFragmentManager(), dialog.getTag());
+    }
+
     private void copyItems(List<T> items) {
         for (T item : items) {
             try {
                 T newItem = copyItem(item);
 
-                mRecyclerViewAdapter.addItem(newItem);
+                if (newItem != null) {
+                    mRecyclerViewAdapter.addItem(newItem);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -158,19 +176,6 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
         mRecyclerViewAdapter.clearSelection();
     }
 
-    private void showNewDialog() {
-        NewItemDialog dialog = NewItemDialog.newInstance(
-                R.string.dialog_create_item,
-                R.string.dialog_new_name,
-                R.string.create_new_item,
-                R.string.cancel,
-                false
-        );
-
-        dialog.setNewItemInterface(this);
-        dialog.show(getFragmentManager(), dialog.getTag());
-    }
-
     @Override
     public boolean isNameValid(String itemName) {
         return true;
@@ -179,7 +184,10 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
     @Override
     public void addNewItem(String itemName) {
         T item = createNewItem(itemName);
-        mRecyclerViewAdapter.addItem(item);
+
+        if (item != null) {
+            mRecyclerViewAdapter.addItem(item);
+        }
     }
 
     protected abstract T createNewItem(String itemName);
