@@ -10,7 +10,8 @@ import org.junit.Test;
 
 public class SoundViewInstrumentedTest {
     @Rule
-    public ActivityTestRule<SpriteActivity> activityRule = new ActivityTestRule<>(SpriteActivity.class);
+    public ActivityTestRule<SpriteActivity> activityRule =
+            new ActivityTestRule<>(SpriteActivity.class);
 
     @Before
     public void navigateToTab() {

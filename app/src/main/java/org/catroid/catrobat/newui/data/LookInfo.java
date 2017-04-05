@@ -78,7 +78,8 @@ public class LookInfo implements Serializable {
 
     private void createThumbnail() {
         Bitmap bigImage = getBitmap();
-        thumbnail = ThumbnailUtils.extractThumbnail(bigImage, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        thumbnail = ThumbnailUtils.extractThumbnail(bigImage, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT,
+                ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
     }
 
 }

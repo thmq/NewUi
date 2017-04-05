@@ -41,17 +41,19 @@ public abstract class InputDialog extends AppCompatDialogFragment {
         View view = inflateLayout(inflater);
 
         builder.setView(view);
-        ((TextView) view.findViewById(R.id.input_label)).setText(getArguments().getInt(INPUT_LABEL));
+        ((TextView) view.findViewById(R.id.input_label)).setText(getArguments()
+                .getInt(INPUT_LABEL));
 
         input = (EditText) view.findViewById(R.id.input);
 
         builder.setPositiveButton(getArguments().getInt(POSITIVE_BUTTON), null);
-        builder.setNegativeButton(getArguments().getInt(NEGATIVE_BUTTON), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                handleNegativeButtonClick(dialogInterface);
-            }
-        });
+        builder.setNegativeButton(getArguments().getInt(NEGATIVE_BUTTON),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        handleNegativeButtonClick(dialogInterface);
+                    }
+                });
 
         final AlertDialog alertDialog = builder.create();
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -89,7 +91,9 @@ public abstract class InputDialog extends AppCompatDialogFragment {
 
     protected void showKeyboard() {
         if (input.requestFocus()) {
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager)
+                    getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
             imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
         }
     }

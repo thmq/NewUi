@@ -1,7 +1,10 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
@@ -21,7 +25,9 @@ import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapterDelegate;
 
 import java.util.List;
 
-public abstract class BaseRecyclerListFragment<T> extends Fragment implements RecyclerViewAdapterDelegate<T>, NewItemDialog.NewItemInterface, RenameItemDialog.RenameItemInterface {
+public abstract class BaseRecyclerListFragment<T> extends Fragment
+        implements RecyclerViewAdapterDelegate<T>, NewItemDialog.NewItemInterface,
+        RenameItemDialog.RenameItemInterface {
 
     public static final String TAG = BaseRecyclerListFragment.class.getSimpleName();
 
@@ -29,9 +35,6 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
     protected RecyclerView mRecyclerView;
     protected MenuItem mEditButton;
     protected RecyclerViewAdapter<T> mRecyclerViewAdapter;
-
-    public abstract int getTabNameResource();
-
     protected ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -42,6 +45,9 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
             inflater.inflate(R.menu.context_menu, menu);
 
             mEditButton = menu.findItem(R.id.btnEdit);
+
+            setTabColor(ContextCompat.getColor(getActivity().getApplicationContext(),
+                    R.color.colorActionMode));
 
             return true;
         }
@@ -65,7 +71,13 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
                     mRecyclerViewAdapter.clearSelection();
                     return true;
                 case R.id.btnDelete:
-                    removeItems(mRecyclerViewAdapter.getSelectedItems());
+                    try {
+                        removeItems(mRecyclerViewAdapter.getSelectedItems());
+                    } catch (Exception e) {
+                        Context context = getActivity().getApplicationContext();
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
                     mRecyclerViewAdapter.clearSelection();
                     return true;
 
@@ -77,6 +89,9 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mRecyclerViewAdapter.clearSelection();
+            setTabColor(ContextCompat.getColor(getActivity().getApplicationContext(),
+                    R.color.colorPrimary));
+
             mActionMode = null;
         }
     };
@@ -85,9 +100,14 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
         return null;
     }
 
+    public abstract int getTabNameResource();
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recycler_view, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recycler_view,
+                container, false);
 
         mRecyclerViewAdapter = createAdapter();
         mRecyclerViewAdapter.setDelegate(this);
@@ -168,7 +188,8 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
             }
         } else {
             if (mActionMode == null) {
-                mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
+                mActionMode = ((AppCompatActivity)
+                        getActivity()).startSupportActionMode(mActionModeCallback);
             }
 
             boolean editButtonVisibility = selectedItems.size() <= 1;
@@ -177,7 +198,9 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+
         mEditButton = (MenuItem) v.findViewById(R.id.btnEdit);
     }
 
@@ -228,4 +251,12 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
     protected abstract void renameItem(T item, String itemName);
 
     protected abstract T createNewItem(String itemName);
+
+    protected void setTabColor(int color) {
+        TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tab_layout);
+        if (tabLayout != null) {
+            tabLayout.setBackgroundColor(color);
+        }
+    }
+
 }
