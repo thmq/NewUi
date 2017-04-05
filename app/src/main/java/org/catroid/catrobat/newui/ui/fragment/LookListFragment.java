@@ -83,7 +83,7 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo> impleme
         String dir = Utils.getImageDirectory().getAbsolutePath();
         File file;
         try {
-            file = StorageHandler.getUniqueFile("look.png", dir);
+            file = StorageHandler.getUniqueFile("bg_260.png", dir);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

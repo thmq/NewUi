@@ -2,6 +2,7 @@ package org.catroid.catrobat.newui.ui.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -23,24 +24,39 @@ public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
     }
 
     @Override
-    public void bindDataToViewHolder(LookInfo item, ViewHolder holder, boolean isSelected) {
+    public void bindDataToViewHolder(LookInfo item, ViewHolder holder, final boolean isSelected) {
         holder.mNameView.setText(item.getName());
         holder.mDetailsView.setText("");
+        final ViewHolder holderCopy = holder;
+        final LookInfo itemCopy = item;
         //final Context view_context = holder.mItemView.getContext();
 
-        if (isSelected) {
-            holder.mImageSwitcher.setInAnimation(in);
-            holder.mImageSwitcher.setImageResource(R.drawable.ic_check_circle_black_24dp);
-            holder.mImageSwitcher.setOutAnimation(out);
-            //holder.mImageView.setImageResource(R.drawable.ic_check_circle_black_24dp);
+        in.setAnimationListener(new Animation.AnimationListener(){
+            @Override
+            public void onAnimationStart(Animation animation) {
 
-        } else {
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if(isSelected) {
+                    holderCopy.mImageSwitcher.setImageResource(R.drawable.ic_check_circle_black_24dp);
 
-            holder.mImageSwitcher.setInAnimation(in);
-            holder.mImageSwitcher.setImageResource(R.drawable.ic_donut_small_black_24dp);
-            holder.mImageSwitcher.setOutAnimation(out);
-            //imageSwitcher.setImageDrawable(new BitmapDrawable(item.getThumbnail()));
+                } else {
 
-        }
+                    holderCopy.mImageSwitcher.setImageDrawable(new BitmapDrawable(itemCopy.getBitmap()));
+                    
+                }
+                holderCopy.mImageSwitcher.startAnimation(out);
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        holder.mImageSwitcher.startAnimation(in);
+
+
+
     }
 }

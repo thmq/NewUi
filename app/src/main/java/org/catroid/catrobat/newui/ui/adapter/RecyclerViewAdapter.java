@@ -29,10 +29,11 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
             super(itemView);
 
             mItemView = itemView;
-            mImageView = (ImageView) itemView.findViewById(R.id.image_view);
+           // mImageView = (ImageView) itemView.findViewById(R.id.image_view);
             mNameView = (TextView) itemView.findViewById(R.id.name_view);
             mDetailsView = (TextView) itemView.findViewById(R.id.details_view);
             mImageSwitcher = (ImageSwitcher) itemView.findViewById(R.id.slide_trans_imageswitcher);
+
         }
     }
 
@@ -43,6 +44,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     private RecyclerViewMultiSelectionManager<T> mMultiSelectionManager = new RecyclerViewMultiSelectionManager<T>();
     private RecyclerViewAdapterDelegate<T> delegate = null;
     private  View view;
+    private boolean showingBack = false;
 
     private static int SELECTED_ITEM_BACKGROUND_COLOR = 0xFFDDDDDD;
 
@@ -56,6 +58,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         view = LayoutInflater.from(parent.getContext()).inflate(mItemLayoutId, parent, false);
         in = AnimationUtils.loadAnimation(parent.getContext(), R.anim.in_animation);
         out = AnimationUtils.loadAnimation(parent.getContext(), R.anim.out_animation);
+
         //mSetRightOut = (AnimatorSet) AnimatorInflater.loadAnimator(parent.getContext(), R.animator.out_animation);
         //mSetLeftIn = (AnimatorSet) AnimatorInflater.loadAnimator(parent.getContext(), R.animator.in_animation);
 
@@ -118,10 +121,9 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
         if (mMultiSelectionManager.isSelectable(item)) {
             mMultiSelectionManager.toggleSelected(item);
-
             notifyItemChanged(position);
             //notifyDataSetChanged();
-            notifySelectionChanged();
+            //notifySelectionChanged();
 
             return true;
         }
