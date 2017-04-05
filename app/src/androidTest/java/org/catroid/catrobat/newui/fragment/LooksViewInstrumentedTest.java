@@ -8,13 +8,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class SoundViewInstrumentedTest {
+public class LooksViewInstrumentedTest {
     @Rule
     public ActivityTestRule<SpriteActivity> activityRule = new ActivityTestRule<>(SpriteActivity.class);
 
     @Before
     public void navigateToTab() {
-        Utils.navigateToTab(R.string.tab_name_sounds);
+        Utils.navigateToTab(R.string.tab_name_looks);
     }
 
     @Test
@@ -42,4 +42,5 @@ public class SoundViewInstrumentedTest {
     public void testEditItems() {
         CommonTests.testEditItems();
     }
+
 }

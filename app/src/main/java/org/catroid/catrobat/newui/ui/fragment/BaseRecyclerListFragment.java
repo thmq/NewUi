@@ -121,9 +121,9 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment implements Re
 
     private void showNewItemDialog() {
         NewItemDialog dialog = NewItemDialog.newInstance(
-                R.string.dialog_create_item,
+                R.string.dialog_rename_item,
                 R.string.dialog_item_name_label,
-                R.string.dialog_create_item_primary_action,
+                R.string.dialog_rename_primary_action,
                 R.string.cancel,
                 false
         );

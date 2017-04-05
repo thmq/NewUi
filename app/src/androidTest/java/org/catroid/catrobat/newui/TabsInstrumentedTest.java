@@ -12,11 +12,12 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-//@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidJUnit4.class)
 
-//public class TabsInstrumentedTest {
+public class TabsInstrumentedTest {
 //    @Rule
-//    public ActivityTestRule<TabsViewActivity> activityRule = new ActivityTestRule<>(TabsViewActivity.class);
+//    public ActivityTestRule<TabsViewActivity> activityRule =
+//        new ActivityTestRule<>(TabsViewActivity.class);
 //
 //    private static String SOUNDS_TAB_TEXT = "Sounds";
 //    private static String LOOKS_TAB_TEXT = "Looks";
@@ -38,4 +39,4 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 //        onView(withText(LOOKS_TAB_TEXT)).perform(click());
 //        onView(withId(R.id.tab_contents)).check(matches(withText("Look 1")));
 //    }
-//}
+}

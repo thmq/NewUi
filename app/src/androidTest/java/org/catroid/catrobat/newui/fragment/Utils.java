@@ -33,4 +33,8 @@ public class Utils {
     static void selectItemNamed(String name) {
         onView(withText(name)).perform(longClick());
     }
+
+    static void navigateToTab(int resource_name) {
+        onView(ViewMatchers.withText(resource_name)).perform(click());
+    }
 }
