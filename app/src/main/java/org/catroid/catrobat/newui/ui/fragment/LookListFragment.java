@@ -8,7 +8,7 @@ import android.util.Log;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.LookInfo;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
-import org.catroid.catrobat.newui.io.FileInfo;
+import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
 import org.catroid.catrobat.newui.ui.adapter.LookAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
@@ -47,9 +47,9 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     @Override
     protected LookInfo copyItem(LookInfo item) throws Exception {
         String name = Utils.getUniqueLookName(item.getName(), mRecyclerViewAdapter.getItems());
-        FileInfo fileInfo = StorageHandler.copyFile(item.getFileInfo());
+        PathInfoFile pathInfo = StorageHandler.copyFile(item.getPathInfo());
 
-        return new LookInfo(name, fileInfo);
+        return new LookInfo(name, pathInfo);
     }
 
     @Override
@@ -66,12 +66,12 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     protected LookInfo createNewItem(String itemName) {
         String uniqueLookName = Utils.getUniqueLookName(itemName, mRecyclerViewAdapter.getItems());
 
-        FileInfo fileInfo = createImage();
-        return new LookInfo(uniqueLookName, fileInfo);
+        PathInfoFile pathInfo = createImage();
+        return new LookInfo(uniqueLookName, pathInfo);
     }
 
 
-    private FileInfo createImage() {
+    private PathInfoFile createImage() {
         StorageHandler.setupDirectoryStructure();
 
         String dir = Utils.getImageDirectory().getAbsolutePath();
@@ -104,6 +104,6 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
             return null;
         }
 
-        return new FileInfo(Utils.getImageDirectory(), file.getName());
+        return new PathInfoFile(Utils.getImageDirectory(), file.getName());
     }
 }

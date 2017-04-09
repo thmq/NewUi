@@ -3,7 +3,9 @@ package org.catroid.catrobat.newui.data;
 import android.media.MediaMetadataRetriever;
 
 import org.catroid.catrobat.newui.R;
-import org.catroid.catrobat.newui.io.FileInfo;
+
+import org.catroid.catrobat.newui.io.PathInfoFile;
+import org.catroid.catrobat.newui.io.PathInfoDirectory;
 import org.catroid.catrobat.newui.io.StorageHandler;
 
 import java.io.Serializable;
@@ -14,17 +16,17 @@ public class SoundInfo implements Serializable {
     //@XStreamAsAttribute
     private String name;
     private String fileName;
-    private transient FileInfo fileInfo;
+    private transient PathInfoFile pathInfo;
     private String duration;
 
-    public SoundInfo(String name, FileInfo fileInfo) {
+    public SoundInfo(String name, PathInfoFile pathInfo) {
         this.name = name;
-        this.fileInfo = fileInfo;
+        this.pathInfo = pathInfo;
 
-        if (fileInfo != null) {
-            //TODO what if the fileInfo's relative path is not the filename alone?
+        if (pathInfo != null) {
+	        //TODO what if the pathInfo's relative path is not the filename alone?
 
-            fileName = fileInfo.getAbsolutePath();
+	        fileName = pathInfo.getAbsolutePath();
             getDurationFromFile();
         }
     }
@@ -32,13 +34,13 @@ public class SoundInfo implements Serializable {
     public SoundInfo(SoundInfo srcSoundInfo) throws Exception {
         name = srcSoundInfo.getName();
         duration = srcSoundInfo.getDuration();
-        fileInfo = StorageHandler.copyFile(srcSoundInfo.getFileInfo());
-        //TODO what if the fileInfo's relative path is not the filename alone?
-        fileName = fileInfo.getAbsolutePath();
+        pathInfo = StorageHandler.copyFile(srcSoundInfo.getPathInfo());
+        //TODO what if the pathInfo's relative path is not the filename alone?
+        fileName = pathInfo.getAbsolutePath();
     }
 
-    public void initializeAfterDeserialize(FileInfo parent) {
-        fileInfo = new FileInfo(parent, fileName);
+    public void initializeAfterDeserialize(PathInfoDirectory parent) {
+        pathInfo = new PathInfoFile(parent, fileName);
     }
 
     public String getName() {
@@ -49,12 +51,12 @@ public class SoundInfo implements Serializable {
         this.name = name;
     }
 
-    public FileInfo getFileInfo() {
-        return fileInfo;
+    public PathInfoFile getPathInfo() {
+        return pathInfo;
     }
 
-    public void setFileInfo(FileInfo fileInfo) {
-        this.fileInfo = fileInfo;
+    public void setPathInfo(PathInfoFile pathInfo) {
+        this.pathInfo = pathInfo;
     }
 
     public int getThumbnailResource() {
@@ -66,12 +68,12 @@ public class SoundInfo implements Serializable {
     }
 
     public void deleteFile() throws Exception {
-        StorageHandler.deleteFile(fileInfo);
+        StorageHandler.deleteFile(pathInfo);
     }
 
     private void getDurationFromFile() {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(fileInfo.getAbsolutePath());
+        retriever.setDataSource(pathInfo.getAbsolutePath());
         duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
     }
 }
