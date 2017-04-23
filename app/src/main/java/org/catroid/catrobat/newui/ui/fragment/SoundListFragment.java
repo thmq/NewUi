@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.SoundInfo;
-import org.catroid.catrobat.newui.io.FileInfo;
+import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.SoundAdapter;
@@ -40,12 +40,12 @@ public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
     @Override
     protected SoundInfo copyItem(SoundInfo item) throws Exception {
         String name = Utils.getUniqueSoundName(item.getName(), mRecyclerViewAdapter.getItems());
-        FileInfo fileInfo = null;
-        if (item.getFileInfo() != null) {
-            fileInfo = StorageHandler.copyFile(item.getFileInfo());
+        PathInfoFile pathInfo = null;
+        if (item.getPathInfo() != null) {
+            pathInfo = StorageHandler.copyFile(item.getPathInfo());
         }
 
-        return new SoundInfo(name, fileInfo);
+        return new SoundInfo(name, pathInfo);
     }
 
     @Override

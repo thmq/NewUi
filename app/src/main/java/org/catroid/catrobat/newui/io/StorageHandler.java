@@ -20,7 +20,7 @@ public final class StorageHandler {
     public static final String IMAGE_FOLDER = "images";
     public static final String SOUND_FOLDER = "sounds";
 
-    public static final FileInfo ROOT_DIRECTORY = new FileInfo(null, ROOT);
+    public static final PathInfoDirectory ROOT_DIRECTORY = new PathInfoDirectory (ROOT);
 
     private static final String FILE_NAME_APPENDIX = "_#";
 
@@ -31,20 +31,20 @@ public final class StorageHandler {
         os.close();
     }
 
-    public static FileInfo copyFile(FileInfo srcFileInfo) throws Exception {
-        String srcPath = srcFileInfo.getAbsolutePath();
+    public static PathInfoFile copyFile(PathInfo srcPathInfo) throws Exception {
+        String srcPath = srcPathInfo.getAbsolutePath();
         File dstFile = copyFile(srcPath);
 
-        return new FileInfo(srcFileInfo.getParent(), dstFile.getName());
+        return new PathInfoFile((PathInfoDirectory)srcPathInfo.getParent(), dstFile.getName());
     }
 
-    public static FileInfo copyFile(FileInfo srcFileInfo, FileInfo dstDirectoryInfo)
+    public static PathInfoFile copyFile(PathInfoFile srcPathInfo, PathInfoDirectory dstDirectoryInfo)
             throws Exception {
-        String srcPath = srcFileInfo.getAbsolutePath();
+        String srcPath = srcPathInfo.getAbsolutePath();
         String dstPath = dstDirectoryInfo.getAbsolutePath();
         File dstFile = copyFile(srcPath, dstPath);
 
-        return new FileInfo(dstDirectoryInfo, dstFile.getName());
+        return new PathInfoFile(dstDirectoryInfo, dstFile.getName());
     }
 
     private static File copyFile(String srcPath) throws Exception {
@@ -107,8 +107,8 @@ public final class StorageHandler {
         }
     }
 
-    public static void deleteFile(FileInfo srcFileInfo) throws IOException {
-        deleteFile(srcFileInfo.getAbsolutePath());
+    public static void deleteFile(PathInfo srcPathInfo) throws IOException {
+        deleteFile(srcPathInfo.getAbsolutePath());
     }
 
     private static void deleteFile(String srcPath) throws IOException {

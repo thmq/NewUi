@@ -3,7 +3,7 @@ package org.catroid.catrobat.newui.utils;
 
 import org.catroid.catrobat.newui.data.LookInfo;
 import org.catroid.catrobat.newui.data.SoundInfo;
-import org.catroid.catrobat.newui.io.FileInfo;
+import org.catroid.catrobat.newui.io.PathInfoDirectory;
 import org.catroid.catrobat.newui.io.StorageHandler;
 
 import java.util.HashSet;
@@ -11,14 +11,15 @@ import java.util.List;
 import java.util.Set;
 
 public final class Utils {
-    public static FileInfo getImageDirectory() {
+
+    public static PathInfoDirectory getImageDirectory() {
         StorageHandler.setupDirectoryStructure();
-        return new FileInfo(StorageHandler.ROOT_DIRECTORY, StorageHandler.IMAGE_FOLDER);
+        return new PathInfoDirectory(StorageHandler.ROOT_DIRECTORY, StorageHandler.IMAGE_FOLDER);
     }
 
-    public static FileInfo getSoundDirectory() {
+    public static PathInfoDirectory getSoundDirectory() {
         StorageHandler.setupDirectoryStructure();
-        return new FileInfo(StorageHandler.ROOT_DIRECTORY, StorageHandler.SOUND_FOLDER);
+        return new PathInfoDirectory(StorageHandler.ROOT_DIRECTORY, StorageHandler.SOUND_FOLDER);
     }
 
     public static String getUniqueLookName(String name, List<LookInfo> scope) {
