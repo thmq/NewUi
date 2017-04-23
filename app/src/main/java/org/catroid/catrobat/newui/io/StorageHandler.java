@@ -20,7 +20,7 @@ public final class StorageHandler {
     public static final String IMAGE_FOLDER = "images";
     public static final String SOUND_FOLDER = "sounds";
 
-    public static final PathInfoDirectory ROOT_DIRECTORY = new PathInfoDirectory (ROOT);
+    public static final PathInfoDirectory ROOT_DIRECTORY = new PathInfoDirectory(ROOT);
 
     private static final String FILE_NAME_APPENDIX = "_#";
 
@@ -35,7 +35,7 @@ public final class StorageHandler {
         String srcPath = srcPathInfo.getAbsolutePath();
         File dstFile = copyFile(srcPath);
 
-        return new PathInfoFile((PathInfoDirectory)srcPathInfo.getParent(), dstFile.getName());
+        return new PathInfoFile(srcPathInfo.getParent(), dstFile.getName());
     }
 
     public static PathInfoFile copyFile(PathInfoFile srcPathInfo, PathInfoDirectory dstDirectoryInfo)

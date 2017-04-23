@@ -2,7 +2,7 @@ task checkstyle(type: Checkstyle) {
     configFile file('config/checkstyle.xml')
     source '.'
     include '**/*.java', '**/*.xml', '**/*.gradle'
-    exclude '**/gen/**', '**/build/**', 'libraryProjects/**', '**/.idea/**'
+    exclude '**/gen/**', '**/build/**', 'libraryProjects/**', '**/.idea/**', '**/checkstyle.xml'
 
     classpath = files()
 
@@ -11,7 +11,7 @@ task checkstyle(type: Checkstyle) {
     ignoreFailures false
 
     reports {
-        xml.enabled = true
+        xml.enabled = false
         xml.destination "build/reports/checkstyle.xml"
     }
 }
