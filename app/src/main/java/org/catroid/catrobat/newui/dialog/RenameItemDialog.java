@@ -12,7 +12,7 @@ public class RenameItemDialog extends InputDialog {
     private RenameItemInterface renameItemInterface;
 
     public static RenameItemDialog newInstance(int title, int inputLabel, int positiveButton,
-                                     int negativeButton, boolean allowEmptyInput) {
+                                               int negativeButton, boolean allowEmptyInput) {
         RenameItemDialog dialog = new RenameItemDialog();
         Bundle bundle = new Bundle();
         bundle.putInt(TITLE, title);
@@ -48,6 +48,7 @@ public class RenameItemDialog extends InputDialog {
     public interface RenameItemInterface {
 
         boolean isNameValid(String itemName);
+
         void renameItem(String itemName);
     }
 }

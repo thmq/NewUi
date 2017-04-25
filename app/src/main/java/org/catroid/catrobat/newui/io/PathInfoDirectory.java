@@ -13,9 +13,9 @@ public class PathInfoDirectory extends PathInfo {
     }
 
     void checkPathSanity() throws IllegalArgumentException {
-        if(parent != null) {
+        if (parent != null) {
             // this is not a root directory, check relative path
-            if(relativePath.contains(File.separator) || relativePath.contains("\\")){
+            if (relativePath.contains(File.separator) || relativePath.contains("\\")) {
                 throw new IllegalArgumentException("Parameter directoryName may not contain path separator characters.");
             }
         }
@@ -23,7 +23,7 @@ public class PathInfoDirectory extends PathInfo {
         File dir = new File(getAbsolutePath());
         // Note: Android API 26 will support java.nio.file package, which will make this check
         // way better.
-        if(dir.exists() && !dir.isDirectory()) {
+        if (dir.exists() && !dir.isDirectory()) {
             throw new IllegalArgumentException("Path is not a directory.");
         }
     }

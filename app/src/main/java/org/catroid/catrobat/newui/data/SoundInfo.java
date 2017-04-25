@@ -3,9 +3,8 @@ package org.catroid.catrobat.newui.data;
 import android.media.MediaMetadataRetriever;
 
 import org.catroid.catrobat.newui.R;
-
-import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.PathInfoDirectory;
+import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
 
 import java.io.Serializable;
@@ -23,10 +22,9 @@ public class SoundInfo implements Serializable {
         this.name = name;
         this.pathInfo = pathInfo;
 
+        //TODO what if the pathInfo's relative path is not the filename alone?
         if (pathInfo != null) {
-	        //TODO what if the pathInfo's relative path is not the filename alone?
-
-	        fileName = pathInfo.getAbsolutePath();
+            fileName = pathInfo.getAbsolutePath();
             getDurationFromFile();
         }
     }

@@ -21,14 +21,8 @@ import java.util.ArrayList;
 
 public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         implements NewItemDialog.NewItemInterface {
-    private static final String ARG_SECTION_NUMBER = "section_number_look_list";
-
     public static final String TAG = LookListFragment.class.getSimpleName();
-
-    @Override
-    public int getTabNameResource() {
-        return R.string.tab_name_looks;
-    }
+    private static final String ARG_SECTION_NUMBER = "section_number_look_list";
 
     public static BaseRecyclerListFragment newInstance(int sectionNumber) {
         BaseRecyclerListFragment fragment = new LookListFragment();
@@ -37,6 +31,11 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @Override
+    public int getTabNameResource() {
+        return R.string.tab_name_looks;
     }
 
     @Override

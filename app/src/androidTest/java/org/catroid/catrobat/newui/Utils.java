@@ -13,7 +13,7 @@ import static android.support.test.espresso.core.deps.guava.base.Preconditions.c
 public class Utils {
     public static Matcher<View> atPosition(final int position,
                                            @NonNull final Matcher<View> itemMatcher) {
-        
+
         checkNotNull(itemMatcher);
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             @Override

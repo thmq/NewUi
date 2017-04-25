@@ -4,8 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 
-import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.PathInfoDirectory;
+import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
 
 import java.io.Serializable;
