@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.catroid.catrobat.newui.ui.ProjectActivity;
 import org.catroid.catrobat.newui.ui.SpriteActivity;
 
 public class MainMenuActivity extends AppCompatActivity
@@ -94,6 +95,11 @@ public class MainMenuActivity extends AppCompatActivity
 
     public void onRecycleViewClick(View view) {
         Intent intent = new Intent(this, SpriteActivity.class);
+        startActivity(intent);
+    }
+
+    public void onGridViewClick(View view) {
+        Intent intent = new Intent(this, ProjectActivity.class);
         startActivity(intent);
     }
 }

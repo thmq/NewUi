@@ -34,7 +34,7 @@ public class Utils {
         onView(withText(name)).perform(longClick());
     }
 
-    static void navigateToTab(int resource_name) {
-        onView(ViewMatchers.withText(resource_name)).perform(click());
+    static void navigateToTab(int resourceName) {
+        onView(ViewMatchers.withText(resourceName)).perform(click());
     }
 }
