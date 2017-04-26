@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/image_view"
+
+    <ImageSwitcher
+        android:id="@+id/slide_trans_imageswitcher"
         android:layout_width="@dimen/list_item_image_size"
-        android:layout_height="@dimen/list_item_image_size" />
+        android:layout_height="@dimen/list_item_image_size">
+    </ImageSwitcher>
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:orientation="vertical">
+        android:layout_gravity="center_vertical">
 
         <TextView
             android:id="@+id/name_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/list_item_header" />
+            android:textSize="@dimen/list_item_header"/>
 
         <TextView
             android:id="@+id/details_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
