@@ -38,7 +38,8 @@ public final class StorageHandler {
         return new PathInfoFile(srcPathInfo.getParent(), dstFile.getName());
     }
 
-    public static PathInfoFile copyFile(PathInfoFile srcPathInfo, PathInfoDirectory dstDirectoryInfo)
+    public static PathInfoFile copyFile(PathInfoFile srcPathInfo,
+                                        PathInfoDirectory dstDirectoryInfo)
             throws Exception {
         String srcPath = srcPathInfo.getAbsolutePath();
         String dstPath = dstDirectoryInfo.getAbsolutePath();

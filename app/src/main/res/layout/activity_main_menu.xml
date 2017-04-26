@@ -56,6 +56,19 @@
                 android:textColor="@color/white"
                 android:onClick="onRecycleViewClick"/>
 
+            <Button
+                android:id="@+id/grid_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:adjustViewBounds="false"
+                android:background="@drawable/color_highlight_main"
+                android:scaleType="fitCenter"
+                android:text="GridViewActivity"
+                android:textColor="@color/white"
+                android:onClick="onGridViewClick"/>
+
         </android.support.v7.widget.LinearLayoutCompat>
     </android.support.v4.widget.DrawerLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -16,7 +16,8 @@ public class PathInfoDirectory extends PathInfo {
         if (parent != null) {
             // this is not a root directory, check relative path
             if (relativePath.contains(File.separator) || relativePath.contains("\\")) {
-                throw new IllegalArgumentException("Parameter directoryName may not contain path separator characters.");
+                throw new IllegalArgumentException("Parameter directoryName may not contain path " +
+                        "separator characters.");
             }
         }
 
