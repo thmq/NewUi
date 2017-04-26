@@ -37,8 +37,7 @@ public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
 
                 } else {
                     Bitmap croppedBitmap = itemCopy.getCroppedBitmap(itemCopy.getBitmap());
-
-
+                    
                   //  Bitmap thumbnail = ThumbnailUtils.extractThumbnail(itemCopy.getBitmap(), THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
                     holderCopy.mImageSwitcher.setImageDrawable(new BitmapDrawable(holderCopy.mItemView.getResources(), croppedBitmap));
 
