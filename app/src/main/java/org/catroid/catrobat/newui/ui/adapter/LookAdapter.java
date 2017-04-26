@@ -9,7 +9,6 @@ import org.catroid.catrobat.newui.data.LookInfo;
 
 import java.util.List;
 
-
 public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
 
 
@@ -23,35 +22,29 @@ public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
         holder.mDetailsView.setText("");
         final ViewHolder holderCopy = holder;
         final LookInfo itemCopy = item;
-        //final Context view_context = holder.mItemView.getContext();
 
-
-        in.setAnimationListener(new Animation.AnimationListener(){
+        in.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
             }
+
             @Override
             public void onAnimationEnd(Animation animation) {
-                if(isSelected) {
+                if (isSelected) {
                     holderCopy.mImageSwitcher.setImageResource(R.drawable.ic_check_circle_black_24dp);
 
                 } else {
-                    Bitmap croppedBitmap = itemCopy.getCroppedBitmap(itemCopy.getBitmap());
-
-                  //  Bitmap thumbnail = ThumbnailUtils.extractThumbnail(itemCopy.getBitmap(), THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+                    Bitmap croppedBitmap = itemCopy.getThumbnail();
                     holderCopy.mImageSwitcher.setImageDrawable(new BitmapDrawable(holderCopy.mItemView.getResources(), croppedBitmap));
                 }
                 holderCopy.mImageSwitcher.startAnimation(out);
             }
+
             @Override
             public void onAnimationRepeat(Animation animation) {
 
             }
         });
         holder.mImageSwitcher.startAnimation(in);
-
-
-
-
     }
 }

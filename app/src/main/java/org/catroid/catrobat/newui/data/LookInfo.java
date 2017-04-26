@@ -61,9 +61,7 @@ public class LookInfo implements Serializable {
         return height;
     }
 
-    public Bitmap getThumbnail() {
-        return thumbnail;
-    }
+    public Bitmap getThumbnail() {  return thumbnail; }
 
     public void cleanup() throws Exception {
         StorageHandler.deleteFile(pathInfo);
@@ -86,9 +84,10 @@ public class LookInfo implements Serializable {
         Bitmap bigImage = getBitmap();
         thumbnail = ThumbnailUtils.extractThumbnail(bigImage, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT,
                 ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        thumbnail = getCroppedBitmap(thumbnail);
     }
 
-    public Bitmap getCroppedBitmap(Bitmap bitmap) {
+    private Bitmap getCroppedBitmap(Bitmap bitmap) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
                 bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
@@ -106,5 +105,4 @@ public class LookInfo implements Serializable {
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;
     }
-
 }
