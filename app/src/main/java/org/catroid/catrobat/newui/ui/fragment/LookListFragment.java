@@ -1,6 +1,5 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
-import android.app.LauncherActivity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -44,10 +43,10 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     public RecyclerViewAdapter<LookInfo> createAdapter() {
         //TODO change again
         List<LookInfo> lookInfoList = new ArrayList<LookInfo>();
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 3; i++) {
             lookInfoList.add( new LookInfo("Item " + i, createImage()));
         }
-        //return new LookAdapter(new ArrayList<LookInfo>(), R.layout.list_item);
+
         return new LookAdapter(lookInfoList, R.layout.list_item);
 
     }

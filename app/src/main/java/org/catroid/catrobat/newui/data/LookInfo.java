@@ -1,5 +1,6 @@
 package org.catroid.catrobat.newui.data;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -7,7 +8,11 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.util.Log;
 
 import org.catroid.catrobat.newui.io.PathInfoDirectory;
 import org.catroid.catrobat.newui.io.PathInfoFile;
@@ -17,8 +22,8 @@ import java.io.Serializable;
 
 public class LookInfo implements Serializable {
 
-    private static final transient int THUMBNAIL_WIDTH = 150;
-    private static final transient int THUMBNAIL_HEIGHT = 150;
+    private static final transient int THUMBNAIL_WIDTH = 80;
+    private static final transient int THUMBNAIL_HEIGHT = 80;
 
     //TODO: uncomment after XStream integration
     //@XStreamAsAttribute
@@ -27,14 +32,18 @@ public class LookInfo implements Serializable {
     private transient PathInfoFile pathInfo;
     private transient int width;
     private transient int height;
-    private transient Bitmap thumbnail;
+    private transient Bitmap mThumbnail;
+    private RoundedBitmapDrawable mThumbnailDrawable;
 
     public LookInfo(String name, PathInfoFile pathInfo) {
         this.name = name;
         this.pathInfo = pathInfo;
         //TODO what if the pathInfo's relative path is not the filename alone?
         fileName = pathInfo.getRelativePath();
+
         createThumbnail();
+
+        // createCroppedThumbnail();
     }
 
     public void initializeAfterDeserialize(PathInfoDirectory parent) {
@@ -62,7 +71,7 @@ public class LookInfo implements Serializable {
     }
 
     public Bitmap getThumbnail() {
-        return thumbnail;
+        return mThumbnail;
     }
 
     public void cleanup() throws Exception {
@@ -82,28 +91,22 @@ public class LookInfo implements Serializable {
         return BitmapFactory.decodeFile(imagePath, options);
     }
 
+    public Drawable getRoundedDrawable() {
+        if (mThumbnailDrawable == null) {
+            // Bitmap thumbnail = getThumbnail();
+
+            Bitmap thumbnail = getThumbnail();
+
+            mThumbnailDrawable = RoundedBitmapDrawableFactory.create(Resources.getSystem(), thumbnail);
+            mThumbnailDrawable.setCircular(true);
+        }
+
+        return mThumbnailDrawable;
+    }
+
+
     private void createThumbnail() {
         Bitmap bigImage = getBitmap();
-			  thumbnail = ThumbnailUtils.extractThumbnail(bigImage, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
+        mThumbnail = ThumbnailUtils.extractThumbnail(bigImage, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
     }
-
-    public Bitmap getCroppedBitmap(Bitmap bitmap) {
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
-                bitmap.getWidth() / 2, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        return output;
-    }
-
 }

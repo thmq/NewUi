@@ -1,7 +1,6 @@
 package org.catroid.catrobat.newui.ui.adapter;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,37 +17,89 @@ import org.catroid.catrobat.newui.R;
 import java.util.List;
 
 public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener {
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public RecyclerViewAdapter mAdapter;
+
         public View mItemView;
-        public ImageView mImageView;
         public TextView mNameView;
         public TextView mDetailsView;
         public ImageSwitcher mImageSwitcher;
-        public boolean mHasToBeAnimated;
 
-        public ViewHolder(View itemView) {
+        public Animation collapseAnimation;
+        public Animation expandAnimation;
+
+        public ViewHolder(final View itemView) {
             super(itemView);
 
             mItemView = itemView;
-           // mImageView = (ImageView) itemView.findViewById(R.id.image_view);
             mNameView = (TextView) itemView.findViewById(R.id.name_view);
             mDetailsView = (TextView) itemView.findViewById(R.id.details_view);
             mImageSwitcher = (ImageSwitcher) itemView.findViewById(R.id.slide_trans_imageswitcher);
-            mHasToBeAnimated = true;
+
+            collapseAnimation = AnimationUtils.loadAnimation(mItemView.getContext(), R.anim.in_animation);
+            expandAnimation = AnimationUtils.loadAnimation(mItemView.getContext(), R.anim.out_animation);
+            expandAnimation.setStartOffset(collapseAnimation.getDuration());
+
+            mImageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+                @Override
+                public View makeView() {
+                    ImageView mImageView = new ImageView(itemView.getContext());
+
+                    mImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                    mImageView.setLayoutParams(new ImageSwitcher.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+                    return mImageView;
+                }
+            });
         }
+
+        public boolean mIsSelected;
+        public void updateImageSwitcher(boolean shouldAnimate) {
+
+            if (shouldAnimate) {
+                enableAnimations();
+            } else {
+                disableAnimations();
+            }
+
+            setImageSwitcherImage(mIsSelected);
+
+        }
+
+        private void enableAnimations() {
+            mImageSwitcher.setOutAnimation(collapseAnimation);
+            mImageSwitcher.setInAnimation(expandAnimation);
+        }
+
+        private void disableAnimations() {
+            mImageSwitcher.setInAnimation(null);
+            mImageSwitcher.setOutAnimation(null);
+        }
+
+
+        public void updateBackground() {
+            if (mIsSelected) {
+                mItemView.setBackgroundColor(SELECTED_ITEM_BACKGROUND_COLOR);
+            } else {
+                mItemView.setBackgroundColor(0x00000000);
+            }
+        }
+
+        private void setImageSwitcherImage(boolean isSelected) {
+            mAdapter.updateThumbnail(mAdapter.getItemAtPosition(getAdapterPosition()), this, isSelected);
+        }
+
     }
-
-    protected  Animation in, out;
-
     private List<T> mListItems;
+    private T mItemToAnimate;
     private int mItemLayoutId;
     private RecyclerViewMultiSelectionManager<T> mMultiSelectionManager =
             new RecyclerViewMultiSelectionManager<T>();
-    private RecyclerViewCurrentSelectionManager<T> mCurrentSelectionManager = new RecyclerViewCurrentSelectionManager<>();
+
     private RecyclerViewAdapterDelegate<T> delegate = null;
-    private  View view;
-    private boolean showingBack = false;
+
+    private static int SELECTED_ITEM_BACKGROUND_COLOR = 0xFFDDDDDD;
+    protected static int CHECK_MARK_IMAGE_RESOURCE = R.drawable.ic_check_circle_black_24dp;
 
     public RecyclerViewAdapter(List<T> listItems, int itemLayout) {
         mListItems = listItems;
@@ -57,24 +108,9 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        view = LayoutInflater.from(parent.getContext()).inflate(mItemLayoutId, parent, false);
-        in = AnimationUtils.loadAnimation(parent.getContext(), R.anim.in_animation);
-        out = AnimationUtils.loadAnimation(parent.getContext(), R.anim.out_animation);
-
-        //mSetRightOut = (AnimatorSet) AnimatorInflater.loadAnimator(parent.getContext(), R.animator.out_animation);
-        //mSetLeftIn = (AnimatorSet) AnimatorInflater.loadAnimator(parent.getContext(), R.animator.in_animation);
+        View view = LayoutInflater.from(parent.getContext()).inflate(mItemLayoutId, parent, false);
 
         ViewHolder holder = new ViewHolder(view);
-        holder.mImageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-            @Override
-            public View makeView() {
-                //return holder.mItemView;
-               ImageView mImageView = new ImageView(parent.getContext());
-                mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                mImageView.setLayoutParams(new ImageSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                return mImageView;
-            }
-        });
 
         return holder;
     }
@@ -83,18 +119,26 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     public void onBindViewHolder(ViewHolder holder, int position) {
         T item = mListItems.get(position);
 
-        holder.itemView.setOnLongClickListener(this);
         boolean isSelected = mMultiSelectionManager.getIsSelected(item);
-        boolean wasChanged = mCurrentSelectionManager.getWasChanged(item);
 
-        if (isSelected) {
-            holder.mItemView.setBackgroundColor(SELECTED_ITEM_BACKGROUND_COLOR);
-        } else {
-            holder.mItemView.setBackgroundColor(0x00000000);
+        holder.itemView.setOnLongClickListener(this);
+        holder.mAdapter = this;
+        holder.mIsSelected = isSelected;
+
+        boolean shouldAnimate = shouldAnimateItem(item);
+
+        if (shouldAnimate) {
+            resetItemToAnimate();
         }
 
-        bindDataToViewHolder(item, holder, isSelected, wasChanged);
+        bindDataToViewHolder(item, holder);
+
+        holder.updateBackground();
+        holder.updateImageSwitcher(shouldAnimate);
     }
+
+    public abstract void bindDataToViewHolder(T item, ViewHolder holder);
+    public abstract void updateThumbnail(T item, ViewHolder holder, boolean isSelected);
 
     public void setDelegate(RecyclerViewAdapterDelegate del) {
         delegate = del;
@@ -110,17 +154,15 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
             return false;
         }
 
-        T item = mListItems.get(position);
+        T item = getItemAtPosition(position);
 
         if (mMultiSelectionManager.isSelectable(item)) {
             mMultiSelectionManager.toggleSelected(item);
 
-            updateNewSelection();
+            setItemToAnimate(item);
 
             notifyItemChanged(position);
             notifySelectionChanged();
-
-            updateCurrentSelection();
 
             return true;
         }
@@ -128,16 +170,9 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         return false;
     }
 
-    private void updateNewSelection() {
-        mCurrentSelectionManager.setNewSelection(mMultiSelectionManager.getSelectedItems());
+    protected T getItemAtPosition(int position) {
+        return mListItems.get(position);
     }
-
-    public void updateCurrentSelection() {
-        mCurrentSelectionManager.setCurrentSelection(mMultiSelectionManager.getSelectedItems());
-    }
-
-    public abstract void bindDataToViewHolder(T item, ViewHolder holder,
-                                              boolean isSelected, boolean wasChanged);
 
     public void addItem(T item) {
         mListItems.add(item);
@@ -151,7 +186,10 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         mListItems.remove(item);
         mMultiSelectionManager.removeItem(item);
 
-        updateCurrentSelection();
+        if (shouldAnimateItem(item)) {
+            resetItemToAnimate();
+        }
+
         notifyItemRemoved(pos);
     }
 
@@ -185,5 +223,17 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         if (delegate != null) {
             delegate.onSelectionChanged(this);
         }
+    }
+
+    private void setItemToAnimate(T item) {
+        mItemToAnimate = item;
+    }
+
+    private boolean shouldAnimateItem(T item) {
+        return mItemToAnimate == item;
+    }
+
+    private void resetItemToAnimate() {
+        mItemToAnimate = null;
     }
 }

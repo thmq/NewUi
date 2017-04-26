@@ -1,6 +1,7 @@
 package org.catroid.catrobat.newui.ui.adapter;
 
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.SoundInfo;
@@ -14,8 +15,8 @@ public class SoundAdapter extends RecyclerViewAdapter<SoundInfo> {
     }
 
     @Override
-    public void bindDataToViewHolder(SoundInfo item, ViewHolder holder, boolean isSelected, boolean wasChanged) {
-        Resources res = holder.mImageView.getResources();
+    public void bindDataToViewHolder(SoundInfo item, ViewHolder holder) {
+        Resources res = holder.mItemView.getResources();
 
         String durationDescription = item.getDuration();
         if (durationDescription == null) {
@@ -27,11 +28,14 @@ public class SoundAdapter extends RecyclerViewAdapter<SoundInfo> {
 
         holder.mNameView.setText(item.getName());
         holder.mDetailsView.setText(duration);
+    }
 
+    @Override
+    public void updateThumbnail(SoundInfo item, ViewHolder holder, boolean isSelected) {
         if (isSelected) {
-            holder.mImageView.setImageResource(R.drawable.ic_check_circle_black_24dp);
+            holder.mImageSwitcher.setImageResource(CHECK_MARK_IMAGE_RESOURCE);
         } else {
-            holder.mImageView.setImageResource(item.getThumbnailResource());
+            holder.mImageSwitcher.setImageResource(item.getThumbnailResource());
         }
     }
 }

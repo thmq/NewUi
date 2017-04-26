@@ -75,7 +75,7 @@ public class BaseRecyclerListFragmentTest {
             }
 
             @Override
-            public void bindDataToViewHolder(TestItem item, ViewHolder holder, boolean isSelected, boolean wasChanged) {
+            public void bindDataToViewHolder(TestItem item, ViewHolder holder) {
 
             }
         }

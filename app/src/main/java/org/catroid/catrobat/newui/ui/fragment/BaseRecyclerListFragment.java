@@ -245,6 +245,7 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
             renameItem(item, itemName);
 
             mRecyclerViewAdapter.itemChanged(item);
+            mRecyclerViewAdapter.clearSelection();
         }
     }
 
