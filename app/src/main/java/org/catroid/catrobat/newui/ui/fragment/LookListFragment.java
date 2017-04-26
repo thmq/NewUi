@@ -1,6 +1,5 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
-import android.app.LauncherActivity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;

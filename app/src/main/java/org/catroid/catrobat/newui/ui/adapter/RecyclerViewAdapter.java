@@ -1,7 +1,5 @@
 package org.catroid.catrobat.newui.ui.adapter;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
