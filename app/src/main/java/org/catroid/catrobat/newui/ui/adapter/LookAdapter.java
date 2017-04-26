@@ -13,7 +13,7 @@ public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
     }
 
     @Override
-    public void bindDataToViewHolder(LookInfo item, ViewHolder holder, boolean isSelected) {
+    public void bindDataToViewHolder(LookInfo item, ViewHolder holder, boolean isSelected, boolean wasChanged) {
         holder.mNameView.setText(item.getName());
         holder.mDetailsView.setText("");
 

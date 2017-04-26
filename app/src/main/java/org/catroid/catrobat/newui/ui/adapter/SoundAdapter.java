@@ -14,7 +14,7 @@ public class SoundAdapter extends RecyclerViewAdapter<SoundInfo> {
     }
 
     @Override
-    public void bindDataToViewHolder(SoundInfo item, ViewHolder holder, boolean isSelected) {
+    public void bindDataToViewHolder(SoundInfo item, ViewHolder holder, boolean isSelected, boolean wasChanged) {
         Resources res = holder.mImageView.getResources();
 
         String durationDescription = item.getDuration();
