@@ -1,19 +1,19 @@
-
 package org.catroid.catrobat.newui.io;
 
 import java.io.File;
 
-public class FileInfo {
+public abstract class PathInfo {
 
-    private FileInfo parent;
-    private String relativePath;
+    protected PathInfoDirectory parent;
+    protected String relativePath;
 
-    public FileInfo(FileInfo parent, String relativePath) {
+    protected PathInfo(PathInfoDirectory parent, String relativePath) {
         this.parent = parent;
         this.relativePath = relativePath;
+        checkPathSanity();
     }
 
-    public FileInfo getParent() {
+    public PathInfoDirectory getParent() {
         return parent;
     }
 
@@ -28,4 +28,6 @@ public class FileInfo {
             return getParent().getAbsolutePath() + File.separator + relativePath;
         }
     }
+
+    abstract void checkPathSanity() throws IllegalArgumentException;
 }

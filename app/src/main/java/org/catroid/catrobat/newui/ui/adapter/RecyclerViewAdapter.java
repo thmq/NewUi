@@ -26,6 +26,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         public TextView mDetailsView;
         public ImageSwitcher mImageSwitcher;
         public boolean mHasToBeAnimated;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -39,15 +40,15 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     }
 
     protected  Animation in, out;
-    //protected AnimatorSet mSetRightOut, mSetLeftIn;
+
     private List<T> mListItems;
     private int mItemLayoutId;
-    private RecyclerViewMultiSelectionManager<T> mMultiSelectionManager = new RecyclerViewMultiSelectionManager<T>();
+    private RecyclerViewMultiSelectionManager<T> mMultiSelectionManager =
+            new RecyclerViewMultiSelectionManager<T>();
+    private RecyclerViewCurrentSelectionManager<T> mCurrentSelectionManager = new RecyclerViewCurrentSelectionManager<>();
     private RecyclerViewAdapterDelegate<T> delegate = null;
     private  View view;
     private boolean showingBack = false;
-
-    private static int SELECTED_ITEM_BACKGROUND_COLOR = 0xFFDDDDDD;
 
     public RecyclerViewAdapter(List<T> listItems, int itemLayout) {
         mListItems = listItems;
@@ -83,15 +84,16 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         T item = mListItems.get(position);
 
         holder.itemView.setOnLongClickListener(this);
-        boolean isSelected = mMultiSelectionManager.getSelected(item);
+        boolean isSelected = mMultiSelectionManager.getIsSelected(item);
+        boolean wasChanged = mCurrentSelectionManager.getWasChanged(item);
+
         if (isSelected) {
             holder.mItemView.setBackgroundColor(SELECTED_ITEM_BACKGROUND_COLOR);
         } else {
             holder.mItemView.setBackgroundColor(0x00000000);
         }
 
-
-        bindDataToViewHolder(item, holder, isSelected);
+        bindDataToViewHolder(item, holder, isSelected, wasChanged);
     }
 
     public void setDelegate(RecyclerViewAdapterDelegate del) {
@@ -113,9 +115,12 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         if (mMultiSelectionManager.isSelectable(item)) {
             mMultiSelectionManager.toggleSelected(item);
 
+            updateNewSelection();
+
             notifyItemChanged(position);
-            //notifyDataSetChanged();
-            //notifySelectionChanged();
+            notifySelectionChanged();
+
+            updateCurrentSelection();
 
             return true;
         }
@@ -123,17 +128,38 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         return false;
     }
 
-    public abstract void bindDataToViewHolder(T item, RecyclerViewAdapter.ViewHolder holder, boolean isSelected);
+    private void updateNewSelection() {
+        mCurrentSelectionManager.setNewSelection(mMultiSelectionManager.getSelectedItems());
+    }
+
+    public void updateCurrentSelection() {
+        mCurrentSelectionManager.setCurrentSelection(mMultiSelectionManager.getSelectedItems());
+    }
+
+    public abstract void bindDataToViewHolder(T item, ViewHolder holder,
+                                              boolean isSelected, boolean wasChanged);
 
     public void addItem(T item) {
         mListItems.add(item);
-        notifyDataSetChanged();
+
+        int pos = mListItems.indexOf(item);
+        notifyItemInserted(pos);
     }
 
     public void removeItem(T item) {
+        int pos = mListItems.indexOf(item);
         mListItems.remove(item);
         mMultiSelectionManager.removeItem(item);
-        notifyDataSetChanged();
+
+        updateCurrentSelection();
+        notifyItemRemoved(pos);
+    }
+
+    public void itemChanged(T item) {
+        if (mListItems.contains(item)) {
+            int pos = mListItems.indexOf(item);
+            notifyItemChanged(pos);
+        }
     }
 
     public List<T> getItems() {

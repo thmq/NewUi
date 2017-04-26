@@ -26,13 +26,12 @@ public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
     }
 
     @Override
-    public void bindDataToViewHolder(LookInfo item, ViewHolder holder, final boolean isSelected) {
+    public void bindDataToViewHolder(LookInfo item, ViewHolder holder, boolean isSelected, boolean wasChanged) {
         holder.mNameView.setText(item.getName());
         holder.mDetailsView.setText("");
         final ViewHolder holderCopy = holder;
         final LookInfo itemCopy = item;
         //final Context view_context = holder.mItemView.getContext();
-
 
         in.setAnimationListener(new Animation.AnimationListener(){
             @Override
@@ -59,9 +58,5 @@ public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
             }
         });
         holder.mImageSwitcher.startAnimation(in);
-
-
-
-
     }
 }

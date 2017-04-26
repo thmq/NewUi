@@ -3,9 +3,8 @@ package org.catroid.catrobat.newui.ui.fragment;
 import android.os.Bundle;
 
 import org.catroid.catrobat.newui.R;
-import org.catroid.catrobat.newui.data.LookInfo;
 import org.catroid.catrobat.newui.data.SoundInfo;
-import org.catroid.catrobat.newui.io.FileInfo;
+import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.SoundAdapter;
@@ -16,13 +15,8 @@ import java.util.ArrayList;
 
 public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
 
-    private static final String ARG_SECTION_NUMBER = "section_number_sound_list";
     public static final String TAG = SoundListFragment.class.getSimpleName();
-
-    @Override
-    public int getTabNameResource() {
-        return R.string.tab_name_sounds;
-    }
+    private static final String ARG_SECTION_NUMBER = "section_number_sound_list";
 
     public static BaseRecyclerListFragment newInstance(int sectionNumber) {
         BaseRecyclerListFragment fragment = new SoundListFragment();
@@ -34,6 +28,11 @@ public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
     }
 
     @Override
+    public int getTabNameResource() {
+        return R.string.tab_name_sounds;
+    }
+
+    @Override
     public RecyclerViewAdapter createAdapter() {
         return new SoundAdapter(new ArrayList<SoundInfo>(), R.layout.list_item);
     }
@@ -41,12 +40,12 @@ public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
     @Override
     protected SoundInfo copyItem(SoundInfo item) throws Exception {
         String name = Utils.getUniqueSoundName(item.getName(), mRecyclerViewAdapter.getItems());
-        FileInfo fileInfo = null;
-        if (item.getFileInfo() != null) {
-            fileInfo = StorageHandler.copyFile(item.getFileInfo());
+        PathInfoFile pathInfo = null;
+        if (item.getPathInfo() != null) {
+            pathInfo = StorageHandler.copyFile(item.getPathInfo());
         }
 
-        return new SoundInfo(name, fileInfo);
+        return new SoundInfo(name, pathInfo);
     }
 
     @Override
@@ -56,8 +55,16 @@ public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
 
     @Override
     protected SoundInfo createNewItem(String itemName) {
-        SoundInfo soundInfo = new SoundInfo(itemName, null);
+        String uniqueSoundName = Utils.getUniqueSoundName(itemName,
+                mRecyclerViewAdapter.getItems());
+
+        SoundInfo soundInfo = new SoundInfo(uniqueSoundName, null);
 
         return soundInfo;
+    }
+
+    @Override
+    protected void renameItem(SoundInfo item, String itemName) {
+        item.setName(itemName);
     }
 }

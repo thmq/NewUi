@@ -9,7 +9,8 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.media.ThumbnailUtils;
 
-import org.catroid.catrobat.newui.io.FileInfo;
+import org.catroid.catrobat.newui.io.PathInfoDirectory;
+import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
 
 import java.io.Serializable;
@@ -23,21 +24,21 @@ public class LookInfo implements Serializable {
     //@XStreamAsAttribute
     private String name;
     private String fileName;
-    private transient FileInfo fileInfo;
+    private transient PathInfoFile pathInfo;
     private transient int width;
     private transient int height;
     private transient Bitmap thumbnail;
 
-    public LookInfo(String name, FileInfo fileInfo) {
+    public LookInfo(String name, PathInfoFile pathInfo) {
         this.name = name;
-        this.fileInfo = fileInfo;
-        //TODO what if the fileInfo's relative path is not the filename alone?
-        fileName = fileInfo.getRelativePath();
+        this.pathInfo = pathInfo;
+        //TODO what if the pathInfo's relative path is not the filename alone?
+        fileName = pathInfo.getRelativePath();
         createThumbnail();
     }
 
-    public void initializeAfterDeserialize(FileInfo parent) {
-        fileInfo = new FileInfo(parent, fileName);
+    public void initializeAfterDeserialize(PathInfoDirectory parent) {
+        pathInfo = new PathInfoFile(parent, fileName);
     }
 
     public String getName() {
@@ -48,8 +49,8 @@ public class LookInfo implements Serializable {
         this.name = name;
     }
 
-    public FileInfo getFileInfo() {
-        return fileInfo;
+    public PathInfoFile getPathInfo() {
+        return pathInfo;
     }
 
     public int getWidth() {
@@ -65,11 +66,11 @@ public class LookInfo implements Serializable {
     }
 
     public void cleanup() throws Exception {
-        StorageHandler.deleteFile(fileInfo);
+        StorageHandler.deleteFile(pathInfo);
     }
 
     public Bitmap getBitmap() {
-        String imagePath = fileInfo.getAbsolutePath();
+        String imagePath = pathInfo.getAbsolutePath();
 
         if (!StorageHandler.fileExists(imagePath)) {
             return null;
@@ -83,7 +84,7 @@ public class LookInfo implements Serializable {
 
     private void createThumbnail() {
         Bitmap bigImage = getBitmap();
-        thumbnail = ThumbnailUtils.extractThumbnail(bigImage, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
+			  thumbnail = ThumbnailUtils.extractThumbnail(bigImage, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
     }
 
     public Bitmap getCroppedBitmap(Bitmap bitmap) {

@@ -24,7 +24,7 @@ public class RecyclerViewMultiSelectionManager<T> {
         }
     }
 
-    public boolean getSelected(T item) {
+    public boolean getIsSelected(T item) {
         return mSelectedItems.contains(item);
     }
 
@@ -37,7 +37,7 @@ public class RecyclerViewMultiSelectionManager<T> {
     }
 
     public void toggleSelected(T item) {
-        setSelected(item, !getSelected(item));
+        setSelected(item, !getIsSelected(item));
     }
 
     public void removeItem(T item) {

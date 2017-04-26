@@ -2,7 +2,6 @@ package org.catroid.catrobat.newui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,8 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import org.catroid.catrobat.newui.listviewlist.ListViewActivity;
 import org.catroid.catrobat.newui.ui.SpriteActivity;
 
 public class MainMenuActivity extends AppCompatActivity
@@ -27,7 +26,8 @@ public class MainMenuActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -90,11 +90,6 @@ public class MainMenuActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void onListViewClick(View view) {
-        Intent intent = new Intent(this, ListViewActivity.class);
-        startActivity(intent);
     }
 
     public void onRecycleViewClick(View view) {

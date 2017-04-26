@@ -15,11 +15,12 @@ public final class StorageHandler {
 
     public static final String TAG = StorageHandler.class.getSimpleName();
 
-    public static final String ROOT = Environment.getExternalStorageDirectory().toString() + File.separator  + "NewUi";
+    public static final String ROOT = Environment.getExternalStorageDirectory().toString()
+            + File.separator + "NewUi";
     public static final String IMAGE_FOLDER = "images";
     public static final String SOUND_FOLDER = "sounds";
 
-    public static final FileInfo ROOT_DIRECTORY = new FileInfo(null, ROOT);
+    public static final PathInfoDirectory ROOT_DIRECTORY = new PathInfoDirectory(ROOT);
 
     private static final String FILE_NAME_APPENDIX = "_#";
 
@@ -30,19 +31,20 @@ public final class StorageHandler {
         os.close();
     }
 
-    public static FileInfo copyFile(FileInfo srcFileInfo) throws Exception {
-        String srcPath = srcFileInfo.getAbsolutePath();
+    public static PathInfoFile copyFile(PathInfo srcPathInfo) throws Exception {
+        String srcPath = srcPathInfo.getAbsolutePath();
         File dstFile = copyFile(srcPath);
 
-        return new FileInfo(srcFileInfo.getParent(), dstFile.getName());
+        return new PathInfoFile(srcPathInfo.getParent(), dstFile.getName());
     }
 
-    public static FileInfo copyFile(FileInfo srcFileInfo, FileInfo dstDirectoryInfo) throws Exception {
-        String srcPath = srcFileInfo.getAbsolutePath();
+    public static PathInfoFile copyFile(PathInfoFile srcPathInfo, PathInfoDirectory dstDirectoryInfo)
+            throws Exception {
+        String srcPath = srcPathInfo.getAbsolutePath();
         String dstPath = dstDirectoryInfo.getAbsolutePath();
         File dstFile = copyFile(srcPath, dstPath);
 
-        return new FileInfo(dstDirectoryInfo, dstFile.getName());
+        return new PathInfoFile(dstDirectoryInfo, dstFile.getName());
     }
 
     private static File copyFile(String srcPath) throws Exception {
@@ -62,11 +64,12 @@ public final class StorageHandler {
         return dstFile;
     }
 
-    public static synchronized File getUniqueFile(String originalName, String dstDirectory) throws Exception {
+    public static synchronized File getUniqueFile(String originalName, String dstDirectory)
+            throws Exception {
         int extensionStartIndex = originalName.lastIndexOf(".");
 
         int appendixStartIndex = originalName.lastIndexOf(FILE_NAME_APPENDIX);
-        if(appendixStartIndex == -1) {
+        if (appendixStartIndex == -1) {
             appendixStartIndex = extensionStartIndex;
         }
 
@@ -75,10 +78,11 @@ public final class StorageHandler {
 
         int appendix = 0;
 
-        while(appendix < Integer.MAX_VALUE) {
-            String dstFileName = fileName + FILE_NAME_APPENDIX + String.valueOf(appendix) + extension;
+        while (appendix < Integer.MAX_VALUE) {
+            String dstFileName = fileName + FILE_NAME_APPENDIX + String.valueOf(appendix) +
+                    extension;
             File dstFile = new File(dstDirectory, dstFileName);
-            if(!dstFile.exists()) {
+            if (!dstFile.exists()) {
                 return dstFile;
             }
             appendix++;
@@ -94,15 +98,17 @@ public final class StorageHandler {
         try {
             ic.transferTo(0, ic.size(), oc);
         } finally {
-            if (ic != null)
+            if (ic != null) {
                 ic.close();
-            if (oc != null)
+            }
+            if (oc != null) {
                 oc.close();
+            }
         }
     }
 
-    public static void deleteFile(FileInfo srcFileInfo) throws IOException {
-        deleteFile(srcFileInfo.getAbsolutePath());
+    public static void deleteFile(PathInfo srcPathInfo) throws IOException {
+        deleteFile(srcPathInfo.getAbsolutePath());
     }
 
     private static void deleteFile(String srcPath) throws IOException {
