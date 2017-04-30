@@ -42,8 +42,6 @@ public class LookInfo implements Serializable {
         fileName = pathInfo.getRelativePath();
 
         createThumbnail();
-
-        // createCroppedThumbnail();
     }
 
     public void initializeAfterDeserialize(PathInfoDirectory parent) {
@@ -93,8 +91,6 @@ public class LookInfo implements Serializable {
 
     public Drawable getRoundedDrawable() {
         if (mThumbnailDrawable == null) {
-            // Bitmap thumbnail = getThumbnail();
-
             Bitmap thumbnail = getThumbnail();
 
             mThumbnailDrawable = RoundedBitmapDrawableFactory.create(Resources.getSystem(), thumbnail);
