@@ -1,6 +1,5 @@
 package org.catroid.catrobat.newui.ui.adapter;
 
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +15,8 @@ import org.catroid.catrobat.newui.R;
 
 import java.util.List;
 
-public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener {
+public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener, RecyclerViewMultiSelectionManagerDelegate<T> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public RecyclerViewAdapter mAdapter;
-
         public View mItemView;
         public TextView mNameView;
         public TextView mDetailsView;
@@ -53,18 +50,6 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
             });
         }
 
-        public boolean mIsSelected;
-        public void updateImageSwitcher(boolean shouldAnimate) {
-
-            if (shouldAnimate) {
-                enableAnimations();
-            } else {
-                disableAnimations();
-            }
-
-            setImageSwitcherImage(mIsSelected);
-
-        }
 
         private void enableAnimations() {
             mImageSwitcher.setOutAnimation(collapseAnimation);
@@ -77,16 +62,12 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         }
 
 
-        public void updateBackground() {
-            if (mIsSelected) {
+        public void updateBackground(boolean isSelected) {
+            if (isSelected) {
                 mItemView.setBackgroundColor(SELECTED_ITEM_BACKGROUND_COLOR);
             } else {
                 mItemView.setBackgroundColor(0x00000000);
             }
-        }
-
-        private void setImageSwitcherImage(boolean isSelected) {
-            mAdapter.updateThumbnail(mAdapter.getItemAtPosition(getAdapterPosition()), this, isSelected);
         }
 
     }
@@ -104,6 +85,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     public RecyclerViewAdapter(List<T> listItems, int itemLayout) {
         mListItems = listItems;
         mItemLayoutId = itemLayout;
+        mMultiSelectionManager.setDelegate(this);
     }
 
     @Override
@@ -122,23 +104,24 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         boolean isSelected = mMultiSelectionManager.getIsSelected(item);
 
         holder.itemView.setOnLongClickListener(this);
-        holder.mAdapter = this;
-        holder.mIsSelected = isSelected;
 
         boolean shouldAnimate = shouldAnimateItem(item);
 
         if (shouldAnimate) {
             resetItemToAnimate();
+
+            holder.enableAnimations();
+        } else {
+            holder.disableAnimations();
         }
 
-        bindDataToViewHolder(item, holder);
+        bindDataToViewHolder(item, holder, isSelected);
 
-        holder.updateBackground();
-        holder.updateImageSwitcher(shouldAnimate);
+        holder.updateBackground(isSelected);
+
     }
 
-    public abstract void bindDataToViewHolder(T item, ViewHolder holder);
-    public abstract void updateThumbnail(T item, ViewHolder holder, boolean isSelected);
+    public abstract void bindDataToViewHolder(T item, ViewHolder holder, boolean isSelected);
 
     public void setDelegate(RecyclerViewAdapterDelegate del) {
         delegate = del;
@@ -162,7 +145,6 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
             setItemToAnimate(item);
 
             notifyItemChanged(position);
-            notifySelectionChanged();
 
             return true;
         }
@@ -216,14 +198,8 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     public void clearSelection() {
         mMultiSelectionManager.clearSelection();
         notifyDataSetChanged();
-        notifySelectionChanged();
     }
 
-    private void notifySelectionChanged() {
-        if (delegate != null) {
-            delegate.onSelectionChanged(this);
-        }
-    }
 
     private void setItemToAnimate(T item) {
         mItemToAnimate = item;
@@ -235,5 +211,16 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
     private void resetItemToAnimate() {
         mItemToAnimate = null;
+    }
+
+
+    public void onSelectionChanged(RecyclerViewMultiSelectionManager multiSelectionManager) {
+        notifySelectionChanged();
+    }
+
+    private void notifySelectionChanged() {
+        if (delegate != null) {
+            delegate.onSelectionChanged(this);
+        }
     }
 }

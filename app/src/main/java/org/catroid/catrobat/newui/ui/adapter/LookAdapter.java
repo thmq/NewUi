@@ -10,19 +10,15 @@ public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
     }
 
     @Override
-    public void bindDataToViewHolder(LookInfo item, ViewHolder holder) {
+    public void bindDataToViewHolder(LookInfo item, ViewHolder holder, boolean isSelected) {
         holder.mNameView.setText(item.getName());
         holder.mDetailsView.setText("");
-    }
 
-    @Override
-    public void updateThumbnail(LookInfo item, ViewHolder holder, boolean isSelected) {
         if (isSelected) {
             holder.mImageSwitcher.setImageResource(CHECK_MARK_IMAGE_RESOURCE);
         } else {
             holder.mImageSwitcher.setImageDrawable(item.getRoundedDrawable());
         }
     }
-
 
 }

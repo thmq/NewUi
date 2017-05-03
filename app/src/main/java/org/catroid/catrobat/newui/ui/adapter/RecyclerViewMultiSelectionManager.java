@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class RecyclerViewMultiSelectionManager<T> {
     private Set<T> mSelectedItems;
+    private RecyclerViewMultiSelectionManagerDelegate mDelegate;
 
     public RecyclerViewMultiSelectionManager() {
         mSelectedItems = new HashSet<T>();
@@ -18,10 +19,22 @@ public class RecyclerViewMultiSelectionManager<T> {
 
     public void setSelected(T item, boolean selected) {
         if (selected) {
-            mSelectedItems.add(item);
+            if (!mSelectedItems.contains(item)) {
+                mSelectedItems.add(item);
+                notifySelectionChanged();
+            }
+
         } else {
-            mSelectedItems.remove(item);
+            if (mSelectedItems.contains(item)) {
+                mSelectedItems.remove(item);
+                notifySelectionChanged();
+            }
         }
+    }
+
+
+    public void setDelegate(RecyclerViewMultiSelectionManagerDelegate delegate) {
+        mDelegate = delegate;
     }
 
     public boolean getIsSelected(T item) {
@@ -30,6 +43,7 @@ public class RecyclerViewMultiSelectionManager<T> {
 
     public void clearSelection() {
         mSelectedItems.clear();
+        notifySelectionChanged();
     }
 
     public boolean isSelectable(T item) {
@@ -42,5 +56,11 @@ public class RecyclerViewMultiSelectionManager<T> {
 
     public void removeItem(T item) {
         setSelected(item, false);
+    }
+
+    private void notifySelectionChanged() {
+        if (mDelegate != null) {
+            mDelegate.onSelectionChanged(this);
+        }
     }
 }
