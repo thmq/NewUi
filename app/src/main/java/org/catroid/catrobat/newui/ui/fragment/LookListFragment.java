@@ -13,6 +13,7 @@ import org.catroid.catrobat.newui.io.StorageHandler;
 import org.catroid.catrobat.newui.ui.adapter.LookAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryFactory;
+import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryManager;
 import org.catroid.catrobat.newui.utils.Utils;
 
 import java.io.File;
@@ -38,7 +39,9 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     public void onStart() {
         super.onStart();
 
-        SpriteViewFeatureDiscoveryFactory.createAddFeatureDiscoverySequence(this).start();
+        if (shouldPresentFeatureDiscovery()) {
+            SpriteViewFeatureDiscoveryManager.create(this).start();
+        }
     }
 
     @Override
@@ -112,5 +115,9 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         }
 
         return new PathInfoFile(Utils.getImageDirectory(), file.getName());
+    }
+
+    private boolean shouldPresentFeatureDiscovery() {
+        return true;
     }
 }

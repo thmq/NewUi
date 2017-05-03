@@ -103,6 +103,7 @@ public abstract class InputDialog extends AppCompatDialogFragment {
         }
     }
 
+
     protected TextWatcher getInputTextWatcher(final Button positiveButton) {
         return new TextWatcher() {
             @Override

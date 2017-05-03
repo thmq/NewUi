@@ -22,8 +22,8 @@ import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.dialog.RenameItemDialog;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapterDelegate;
-import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseRecyclerListFragment<T> extends Fragment
@@ -97,9 +97,12 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
         }
     };
 
+    private List<BaseRecyclerListFragmentObserver> mObservers = new ArrayList<>();
+
     public static Fragment newInstance(int sectionNumber) {
         return null;
     }
+
 
     public abstract int getTabNameResource();
 
@@ -232,6 +235,10 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
 
         if (item != null) {
             mRecyclerViewAdapter.addItem(item);
+
+            for (BaseRecyclerListFragmentObserver observer : mObservers) {
+                observer.onNewItemAdded(this, item);
+            }
         }
     }
 
@@ -260,4 +267,11 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
         }
     }
 
+    public void addObserver(BaseRecyclerListFragmentObserver observer) {
+        mObservers.add(observer);
+    }
+
+    public void removeObserver(BaseRecyclerListFragmentObserver observer) {
+        mObservers.remove(observer);
+    }
 }
