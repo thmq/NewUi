@@ -11,6 +11,7 @@ import org.catroid.catrobat.newui.ui.adapter.SoundAdapter;
 import org.catroid.catrobat.newui.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
@@ -54,6 +55,18 @@ public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
     }
 
     @Override
+    public boolean isNameValid(String itemName) {
+        return (Utils.isItemNameUnique(itemName, mRecyclerViewAdapter.getItems()) && itemName != null);
+    }
+
+    @Override
+    public void renameItem(String itemName) {
+        List<SoundInfo> item = mRecyclerViewAdapter.getSelectedItems();
+        item.get(0).setName(itemName);
+        mRecyclerViewAdapter.clearSelection();
+    }
+
+    @Override
     protected SoundInfo createNewItem(String itemName) {
         String uniqueSoundName = Utils.getUniqueSoundName(itemName,
                 mRecyclerViewAdapter.getItems());
@@ -61,10 +74,5 @@ public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
         SoundInfo soundInfo = new SoundInfo(uniqueSoundName, null);
 
         return soundInfo;
-    }
-
-    @Override
-    protected void renameItem(SoundInfo item, String itemName) {
-        item.setName(itemName);
     }
 }

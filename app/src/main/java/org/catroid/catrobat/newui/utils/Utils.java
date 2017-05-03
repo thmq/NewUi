@@ -5,9 +5,13 @@ import org.catroid.catrobat.newui.data.LookInfo;
 import org.catroid.catrobat.newui.data.SoundInfo;
 import org.catroid.catrobat.newui.io.PathInfoDirectory;
 import org.catroid.catrobat.newui.io.StorageHandler;
+import org.catroid.catrobat.newui.ui.fragment.LookListFragment;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public final class Utils {
@@ -48,5 +52,25 @@ public final class Utils {
             suffix++;
         }
         return newName;
+    }
+
+    public static boolean isItemNameUnique(String itemName, List scope) {
+        Set<String> nameSet = new HashSet<>();
+        if(scope.size() > 0) {
+            if (scope.get(0) instanceof LookInfo) {
+                for (LookInfo item : (List<LookInfo>) scope) {
+                    nameSet.add(item.getName());
+                }
+            }
+            if (scope.get(0) instanceof SoundInfo) {
+                for (SoundInfo item : (List<SoundInfo>) scope) {
+                    nameSet.add(item.getName());
+                }
+            }
+        }
+        if (nameSet.contains(itemName)) {
+            return false;
+        }
+        return true;
     }
 }

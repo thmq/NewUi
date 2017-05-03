@@ -7,7 +7,9 @@ import android.util.Log;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.LookInfo;
+import org.catroid.catrobat.newui.data.SoundInfo;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
+import org.catroid.catrobat.newui.dialog.RenameItemDialog;
 import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
 import org.catroid.catrobat.newui.ui.adapter.LookAdapter;
@@ -19,9 +21,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
-        implements NewItemDialog.NewItemInterface {
+        implements RenameItemDialog.RenameItemInterface, NewItemDialog.NewItemInterface
+{
     public static final String TAG = LookListFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number_look_list";
 
@@ -55,7 +59,6 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     protected LookInfo copyItem(LookInfo item) throws Exception {
         String name = Utils.getUniqueLookName(item.getName(), mRecyclerViewAdapter.getItems());
         PathInfoFile pathInfo = StorageHandler.copyFile(item.getPathInfo());
-
         return new LookInfo(name, pathInfo);
     }
 
@@ -65,9 +68,17 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     }
 
     @Override
-    protected void renameItem(LookInfo item, String itemName) {
-        item.setName(itemName);
+    public boolean isNameValid(String itemName){
+        return (Utils.isItemNameUnique(itemName, mRecyclerViewAdapter.getItems()) && itemName != null);
     }
+
+    @Override
+    public void renameItem(String itemName) {
+        List<LookInfo> item = mRecyclerViewAdapter.getSelectedItems();
+        item.get(0).setName(itemName);
+        mRecyclerViewAdapter.clearSelection();
+    }
+
 
     @Override
     protected LookInfo createNewItem(String itemName) {
