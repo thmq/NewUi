@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import org.catroid.catrobat.newui.R;
+import org.catroid.catrobat.newui.utils.Utils;
 
 public class RenameItemDialog extends InputDialog {
 

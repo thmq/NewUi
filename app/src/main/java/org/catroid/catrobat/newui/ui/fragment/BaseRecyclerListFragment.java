@@ -18,11 +18,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.catroid.catrobat.newui.R;
+import org.catroid.catrobat.newui.data.LookInfo;
+import org.catroid.catrobat.newui.data.SoundInfo;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.dialog.RenameItemDialog;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapterDelegate;
 import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryFactory;
+import org.catroid.catrobat.newui.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -247,18 +250,12 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
     public void renameItem(String itemName) {
         List<T> selectedItems = mRecyclerViewAdapter.getSelectedItems();
 
-
         if (selectedItems.size() == 1) {
             T item = mRecyclerViewAdapter.getSelectedItems().get(0);
-
-            renameItem(item, itemName);
-
             mRecyclerViewAdapter.itemChanged(item);
             mRecyclerViewAdapter.clearSelection();
         }
     }
-
-    protected abstract void renameItem(T item, String itemName);
 
     protected abstract T createNewItem(String itemName);
 
