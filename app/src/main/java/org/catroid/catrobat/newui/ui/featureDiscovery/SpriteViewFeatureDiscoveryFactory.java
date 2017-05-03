@@ -14,6 +14,7 @@ import org.catroid.catrobat.newui.ui.fragment.LookListFragment;
 
 public class SpriteViewFeatureDiscoveryFactory {
     public static TapTarget createLooksTapTarget(AppCompatActivity activity) {
+
         TabLayout tabLayoutView = (TabLayout) activity.findViewById(R.id.tab_layout);
 
         View target = ((ViewGroup) tabLayoutView.getChildAt(0)).getChildAt(0);
