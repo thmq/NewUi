@@ -135,17 +135,22 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
     }
 
     private void showItemRenameDialog() {
+        T item = mRecyclerViewAdapter.getSelectedItems().get(0);
+        
         RenameItemDialog dialog = RenameItemDialog.newInstance(
                 R.string.dialog_rename_item,
                 R.string.dialog_item_name_label,
                 R.string.dialog_rename_primary_action,
                 R.string.cancel,
-                false
+                false,
+                getItemName(item)
         );
 
         dialog.setRenameItemInterface(this);
         dialog.show(getFragmentManager(), dialog.getTag());
     }
+
+    protected abstract String getItemName(T item);
 
     private void copyItems(List<T> items) {
         for (T item : items) {
