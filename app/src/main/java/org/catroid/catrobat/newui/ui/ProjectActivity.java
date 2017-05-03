@@ -18,6 +18,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import org.catroid.catrobat.newui.R;
+import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.ProjectItem;
 import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
@@ -48,7 +49,7 @@ public class ProjectActivity extends AppCompatActivity {
 
         mWebView = (WebView) findViewById(R.id.webview);
         try {
-            if (!(WebViewManager.loadFromURL(mWebView, "https://www.catrobat.org/", this))) {
+            if (!(WebViewManager.loadFromURL(mWebView, Constants.PROJECT_NEWS_URL, this))) {
                 Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show();
             } else {
                 DisplayMetrics mDisplayMetrics = new DisplayMetrics();
@@ -64,8 +65,10 @@ public class ProjectActivity extends AppCompatActivity {
             Toast.makeText(this, "NOT connected !!!", Toast.LENGTH_LONG).show();
         }
 
-        mProjectViewAdapter = new ProjectViewAdapter(this, R.layout.project_item, mProjectItems,
-                getSizeForGridViewImages());
+
+        Constants.PROJECT_IMAGE_SIZE = getSizeForGridViewImages();
+
+        mProjectViewAdapter = new ProjectViewAdapter(this, R.layout.project_item, mProjectItems);
 
         mGridView = (GridView) findViewById(R.id.project_gridview);
         mGridView.setAdapter(mProjectViewAdapter);
@@ -73,7 +76,7 @@ public class ProjectActivity extends AppCompatActivity {
         // Fill in Test-Data
         for (int i = 0; i < 12; i++) {
             String text = "Item " + i;
-            if(addNewProjectItem(R.drawable.blue_test_pic, getSizeForGridViewImages(), text))
+            if(addNewProjectItem(R.drawable.blue_test_pic, text))
             {
                 mProjectViewAdapter.notifyDataSetChanged();
             }
@@ -112,13 +115,13 @@ public class ProjectActivity extends AppCompatActivity {
         return (int) dp;
     }
 
-    private Boolean addNewProjectItem(int res_id, int image_size, String project_info) {
+    private Boolean addNewProjectItem(int res_id, String project_info) {
 
         try {
             Bitmap image = BitmapFactory.decodeResource(this.getResources(),
                     res_id);
-            Bitmap.createScaledBitmap(image, image_size,
-                    image_size, false);
+            Bitmap.createScaledBitmap(image, Constants.PROJECT_IMAGE_SIZE,
+                    Constants.PROJECT_IMAGE_SIZE, false);
 
             mProjectItems.add(mProjectItems.size(), new ProjectItem(image, project_info));
         }

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.catroid.catrobat.newui.R;
+import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.ProjectItem;
 
 import java.util.ArrayList;
@@ -18,15 +19,13 @@ import java.util.ArrayList;
 public class ProjectViewAdapter extends ArrayAdapter {
 
     private ArrayList<ProjectItem> objects;
-    private int image_view_size;
 
     public ProjectViewAdapter(Context context,
                               int textViewResourceId,
-                              ArrayList<ProjectItem> objects, int image_view_size) {
+                              ArrayList<ProjectItem> objects) {
         super(context, textViewResourceId, objects);
 
         this.objects = objects;
-        this.image_view_size = image_view_size;
     }
 
 
@@ -48,13 +47,13 @@ public class ProjectViewAdapter extends ArrayAdapter {
             TextView txtView = (TextView) v.findViewById(R.id.project_title_view);
 
             if (imgView != null) {
-                imgView.getLayoutParams().height = image_view_size;
-                imgView.getLayoutParams().width = image_view_size;
+                imgView.getLayoutParams().height = Constants.PROJECT_IMAGE_SIZE;
+                imgView.getLayoutParams().width = Constants.PROJECT_IMAGE_SIZE;
                 imgView.setImageBitmap(tmp.getThumbnail());
             }
 
             if (txtView != null) {
-                txtView.setWidth(image_view_size);
+                txtView.setWidth(Constants.PROJECT_IMAGE_SIZE);
                 txtView.setBackgroundColor(Color.BLACK);
                 txtView.getBackground().setAlpha(123);
                 txtView.setText(tmp.getInfoText());
