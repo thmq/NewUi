@@ -5,14 +5,12 @@ import android.graphics.Bitmap;
 public class ProjectItem {
 
     private static final transient int THUMBNAIL_SIZE = 200;
-    private int id;
     private String infoText;
     private Bitmap thumbnail;
 
-    public ProjectItem(int id, Bitmap thumbnail, String infoText) {
+    public ProjectItem(Bitmap thumbnail, String infoText) {
         this.thumbnail = thumbnail;
         this.infoText = infoText;
-        this.id = id;
     }
 
     public String getInfoText() {
@@ -31,7 +29,4 @@ public class ProjectItem {
         this.thumbnail = thumbnail;
     }
 
-    public int getId() {
-        return id;
-    }
 }
