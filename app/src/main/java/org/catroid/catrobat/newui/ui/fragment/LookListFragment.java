@@ -13,12 +13,14 @@ import org.catroid.catrobat.newui.io.StorageHandler;
 import org.catroid.catrobat.newui.ui.adapter.LookAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryFactory;
+import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryManager;
 import org.catroid.catrobat.newui.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         implements NewItemDialog.NewItemInterface {
@@ -38,7 +40,9 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     public void onStart() {
         super.onStart();
 
-        SpriteViewFeatureDiscoveryFactory.createAddFeatureDiscoverySequence(this).start();
+        if (shouldPresentFeatureDiscovery()) {
+            SpriteViewFeatureDiscoveryManager.create(this).start();
+        }
     }
 
     @Override
@@ -48,7 +52,14 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
 
     @Override
     public RecyclerViewAdapter<LookInfo> createAdapter() {
-        return new LookAdapter(new ArrayList<LookInfo>(), R.layout.list_item);
+        //TODO change again
+        List<LookInfo> lookInfoList = new ArrayList<LookInfo>();
+        for(int i = 0; i < 3; i++) {
+            lookInfoList.add( new LookInfo("Item " + i, createImage()));
+        }
+
+        return new LookAdapter(lookInfoList, R.layout.list_item);
+
     }
 
     @Override
@@ -84,7 +95,7 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         String dir = Utils.getImageDirectory().getAbsolutePath();
         File file;
         try {
-            file = StorageHandler.getUniqueFile("look.png", dir);
+            file = StorageHandler.getUniqueFile("bg_260.png", dir);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -112,5 +123,9 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         }
 
         return new PathInfoFile(Utils.getImageDirectory(), file.getName());
+    }
+
+    private boolean shouldPresentFeatureDiscovery() {
+        return true;
     }
 }

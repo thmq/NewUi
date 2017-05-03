@@ -13,38 +13,8 @@ import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.ui.fragment.LookListFragment;
 
 public class SpriteViewFeatureDiscoveryFactory {
+    public static TapTarget createLooksTapTarget(AppCompatActivity activity) {
 
-    public static TapTargetSequence createAddFeatureDiscoverySequence(final LookListFragment fragment) {
-        AppCompatActivity activity = (AppCompatActivity) fragment.getActivity();
-
-        final TapTarget addTarget = createFABTapTarget(activity);
-
-        return new TapTargetSequence(activity).targets(
-                addTarget
-        ).listener(
-                new TapTargetSequence.Listener() {
-                    @Override
-                    public void onSequenceFinish() {
-                        // Yay
-                    }
-
-                    @Override
-                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
-                        if (lastTarget == addTarget) {
-                            fragment.onAddButtonClicked();
-                        }
-                    }
-
-                    @Override
-                    public void onSequenceCanceled(TapTarget lastTarget) {
-                        // should not be possible!
-                    }
-                }
-        );
-    }
-
-
-    private static TapTarget createLooksTapTarget(AppCompatActivity activity) {
         TabLayout tabLayoutView = (TabLayout) activity.findViewById(R.id.tab_layout);
 
         View target = ((ViewGroup) tabLayoutView.getChildAt(0)).getChildAt(0);
@@ -64,7 +34,7 @@ public class SpriteViewFeatureDiscoveryFactory {
                 .targetRadius(80);
     }
 
-    private static TapTarget createFABTapTarget(AppCompatActivity activity) {
+    public static TapTarget createFABTapTarget(AppCompatActivity activity) {
         return TapTarget.forView(activity.findViewById(R.id.fab), "Adding an Item", "To add an item press the \"+\" button")
                         .outerCircleColor(R.color.colorPrimary)
                         .outerCircleAlpha(0.96f)

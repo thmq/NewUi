@@ -8,22 +8,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.Toast;
-
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.dialog.RenameItemDialog;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapterDelegate;
-import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryFactory;
+import org.catroid.catrobat.newui.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseRecyclerListFragment<T> extends Fragment
@@ -97,9 +91,12 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
         }
     };
 
+    private List<BaseRecyclerListFragmentObserver> mObservers = new ArrayList<>();
+
     public static Fragment newInstance(int sectionNumber) {
         return null;
     }
+
 
     public abstract int getTabNameResource();
 
@@ -220,10 +217,10 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
     @Override
     public boolean isNameValid(String itemName) {
         if (itemName != null) {
-            return itemName.length() > 0;
-        } else {
-            return false;
+            if (itemName.length() > 0 && Utils.isItemNameUnique(itemName, mRecyclerViewAdapter.getItems()))
+                return true;
         }
+        return false;
     }
 
     @Override
@@ -232,6 +229,10 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
 
         if (item != null) {
             mRecyclerViewAdapter.addItem(item);
+
+            for (BaseRecyclerListFragmentObserver observer : mObservers) {
+                observer.onNewItemAdded(this, item);
+            }
         }
     }
 
@@ -246,6 +247,7 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
             renameItem(item, itemName);
 
             mRecyclerViewAdapter.itemChanged(item);
+            mRecyclerViewAdapter.clearSelection();
         }
     }
 
@@ -260,4 +262,11 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
         }
     }
 
+    public void addObserver(BaseRecyclerListFragmentObserver observer) {
+        mObservers.add(observer);
+    }
+
+    public void removeObserver(BaseRecyclerListFragmentObserver observer) {
+        mObservers.remove(observer);
+    }
 }
