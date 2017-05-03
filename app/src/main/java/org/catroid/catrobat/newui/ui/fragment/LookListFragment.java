@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         implements NewItemDialog.NewItemInterface {
@@ -51,7 +52,14 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
 
     @Override
     public RecyclerViewAdapter<LookInfo> createAdapter() {
-        return new LookAdapter(new ArrayList<LookInfo>(), R.layout.list_item);
+        //TODO change again
+        List<LookInfo> lookInfoList = new ArrayList<LookInfo>();
+        for(int i = 0; i < 3; i++) {
+            lookInfoList.add( new LookInfo("Item " + i, createImage()));
+        }
+
+        return new LookAdapter(lookInfoList, R.layout.list_item);
+
     }
 
     @Override
@@ -87,7 +95,7 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         String dir = Utils.getImageDirectory().getAbsolutePath();
         File file;
         try {
-            file = StorageHandler.getUniqueFile("look.png", dir);
+            file = StorageHandler.getUniqueFile("bg_260.png", dir);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
