@@ -1,8 +1,10 @@
 package org.catroid.catrobat.newui.ui;
 
 import android.Manifest;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -107,30 +109,7 @@ public class ProjectActivity extends AppCompatActivity {
 
 
         setSwipeThresholdForWebView();
-        onSwipeTouchListener = new OnSwipeTouchListener() {
-
-            @Override
-            public void onSwipeRight() {
-                Toast.makeText(getApplicationContext(), "SWIPE Right", Toast.LENGTH_SHORT).show();
-                Animation out_animation = AnimationUtils.loadAnimation(getApplicationContext(),
-                        R.anim.out_animation);
-                mWebView.setVisibility(GONE);
-            }
-
-            @Override
-            public void onSwipeLeft() {
-                Toast.makeText(getApplicationContext(), "SWIPE Left", Toast.LENGTH_SHORT).show();
-                Animation out_animation = AnimationUtils.loadAnimation(getApplicationContext(),
-                        R.anim.out_animation);
-                mWebView.setVisibility(GONE);
-            }
-
-            @Override
-            public void onClick() {
-                Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT).show();
-            }
-        };
-
+        onSwipeTouchListener = setUpSwipeListener();
         mWebView.setOnTouchListener(onSwipeTouchListener);
 
     }
@@ -188,6 +167,34 @@ public class ProjectActivity extends AppCompatActivity {
             Constants.SWIPE_THRESHOLD = 300;
             Constants.SWIPE_VELOCITY_THRESHOLD = 300;
         }
+    }
+
+    private OnSwipeTouchListener setUpSwipeListener() {
+        OnSwipeTouchListener touchListener = new OnSwipeTouchListener() {
+
+            @Override
+            public void onSwipeRight() {
+                Animation out_animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.out_animation);
+                mWebView.setVisibility(GONE);
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                Animation out_animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.out_animation);
+                mWebView.setVisibility(GONE);
+            }
+
+            @Override
+            public void onClick() {
+                Intent httpIntent = new Intent(Intent.ACTION_VIEW);
+                httpIntent.setData(Uri.parse(Constants.PROJECT_FULL_NEWS_URL));
+                startActivity(httpIntent);
+            }
+        };
+
+        return touchListener;
     }
 
 }
