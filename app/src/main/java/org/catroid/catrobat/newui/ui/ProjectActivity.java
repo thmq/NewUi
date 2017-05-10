@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -20,10 +22,13 @@ import android.widget.Toast;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.ProjectItem;
+import org.catroid.catrobat.newui.ui.adapter.OnSwipeTouchListener;
 import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
 
 import java.util.ArrayList;
+
+import static android.view.View.GONE;
 
 public class ProjectActivity extends AppCompatActivity {
 
@@ -31,6 +36,8 @@ public class ProjectActivity extends AppCompatActivity {
     private GridView mGridView;
     private ProjectViewAdapter mProjectViewAdapter;
     private ArrayList<ProjectItem> mProjectItems = new ArrayList<>();
+    private OnSwipeTouchListener onSwipeTouchListener;
+    private Boolean flinged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +67,7 @@ public class ProjectActivity extends AppCompatActivity {
 
             }
         } catch (Exception exception) {
-            mWebView.setVisibility(View.GONE);
+            mWebView.setVisibility(GONE);
             mWebView.getLayoutParams().height = 0;
             Toast.makeText(this, "NOT connected !!!", Toast.LENGTH_LONG).show();
         }
@@ -95,6 +102,31 @@ public class ProjectActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
+
+
+        setSwipeThresholdForWebView();
+        onSwipeTouchListener = new OnSwipeTouchListener() {
+
+            @Override
+            public void onSwipeRight() {
+                Toast.makeText(getApplicationContext(), "SWIPE Right", Toast.LENGTH_SHORT).show();
+                mWebView.setVisibility(GONE);
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                Toast.makeText(getApplicationContext(), "SWIPE Left", Toast.LENGTH_SHORT).show();
+                mWebView.setVisibility(GONE);
+            }
+
+            @Override
+            public void onClick() {
+                Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        mWebView.setOnTouchListener(onSwipeTouchListener);
+
     }
 
     @Override
@@ -132,6 +164,24 @@ public class ProjectActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private void setSwipeThresholdForWebView() {
+
+        try {
+            DisplayMetrics mDisplayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
+
+            double window_width = mDisplayMetrics.widthPixels * 0.5;
+
+            Constants.SWIPE_THRESHOLD = (int) window_width;
+            Constants.SWIPE_VELOCITY_THRESHOLD = (int) window_width;
+        }
+        catch (Exception ex) {
+            Log.wtf("DISPLAY METRICS ERROR", ex.getMessage());
+            Constants.SWIPE_THRESHOLD = 300;
+            Constants.SWIPE_VELOCITY_THRESHOLD = 300;
+        }
     }
 
 }
