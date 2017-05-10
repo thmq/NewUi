@@ -1,5 +1,6 @@
 package org.catroid.catrobat.newui.ui.featureDiscovery;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import com.getkeepsafe.taptargetview.TapTarget;

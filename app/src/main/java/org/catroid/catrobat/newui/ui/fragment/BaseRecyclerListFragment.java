@@ -1,6 +1,7 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.dialog.RenameItemDialog;
+import org.catroid.catrobat.newui.ui.AddItemActivity;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapterDelegate;
 import org.catroid.catrobat.newui.utils.Utils;
@@ -118,7 +120,9 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
     public abstract RecyclerViewAdapter<T> createAdapter();
 
     public void onAddButtonClicked() {
-        showNewItemDialog();
+        Intent intent = new Intent(getContext(), AddItemActivity.class);
+        startActivity(intent);
+        //showNewItemDialog();
     }
 
     private void showNewItemDialog() {

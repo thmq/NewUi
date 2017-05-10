@@ -10,6 +10,7 @@
 
     <string name="title_activity_recycle_view">RecycleViewActivity</string>
     <string name="title_activity_list_view">ListViewActivity</string>
+    <string name="title_activity_add_item">AddItemActivity</string>
 
     <!-- General Dialog Strings -->
     <string name="dialog_new_name">new name:</string>
@@ -42,5 +43,13 @@
     <!-- Tab Names-->
     <string name="tab_name_looks">Looks</string>
     <string name="tab_name_sounds">Sounds</string>
+    
+    <string name="dialog_select_image_placeholder1">Placeholder1</string>
+    <string name="dialog_select_image_placeholder2">Placeholder2</string>
+    <string name="dialog_select_image_gallery">Gallery</string>
+    <string name="dialog_select_image_camera">Camera</string>
+    <string name="dialog_select_image_title">Select image source</string>
+
+
 
 </resources>

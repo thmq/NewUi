@@ -35,6 +35,11 @@
             android:name=".ui.SpriteActivity"
             android:label="@string/title_activity_recycle_view"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.AddItemActivity"
+            android:label="@string/title_activity_add_item"
+            android:screenOrientation="portrait"/>
+
 
     </application>
 
