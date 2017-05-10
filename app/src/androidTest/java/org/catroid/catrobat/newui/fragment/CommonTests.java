@@ -7,6 +7,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static java.lang.Thread.sleep;
 import static org.catroid.catrobat.newui.fragment.Utils.addNewItemNamed;
 import static org.catroid.catrobat.newui.fragment.Utils.checkItemNamedExists;
 import static org.catroid.catrobat.newui.fragment.Utils.checkItemNamedNotExists;
@@ -30,7 +31,7 @@ public class CommonTests {
         checkItemNamedExists("item 1 1");
     }
 
-    public static void testCopyItems() {
+    public static void testCopyPasteItems() {
         addNewItemNamed("item one");
         addNewItemNamed("item two");
         addNewItemNamed("item three");
@@ -39,6 +40,10 @@ public class CommonTests {
         selectItemNamed("item two");
 
         onView(withId(R.id.btnCopy)).perform(click());
+
+        // TODO: On some devices a spinnlock is needed to make this test work - ask Thomas why!
+
+        onView(withId(R.id.btnPaste)).perform(click());
 
         // originals
         checkItemNamedExists("item one");

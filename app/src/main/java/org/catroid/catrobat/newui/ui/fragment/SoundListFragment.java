@@ -3,6 +3,7 @@ package org.catroid.catrobat.newui.ui.fragment;
 import android.os.Bundle;
 
 import org.catroid.catrobat.newui.R;
+import org.catroid.catrobat.newui.copypaste.Clipboard;
 import org.catroid.catrobat.newui.data.SoundInfo;
 import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
@@ -41,6 +42,11 @@ public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
     @Override
     protected String getItemName(SoundInfo item) {
         return item.getName();
+    }
+
+    @Override
+    protected Clipboard.ItemType getItemType() {
+        return Clipboard.ItemType.SOUND;
     }
 
     @Override

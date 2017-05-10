@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
-import org.catroid.catrobat.newui.data.ProjectItem;
+import org.catroid.catrobat.newui.data.Project;
 import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
 
@@ -30,7 +30,7 @@ public class ProjectActivity extends AppCompatActivity {
     private WebView mWebView;
     private GridView mGridView;
     private ProjectViewAdapter mProjectViewAdapter;
-    private ArrayList<ProjectItem> mProjectItems = new ArrayList<>();
+    private ArrayList<Project> mProjectItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +123,7 @@ public class ProjectActivity extends AppCompatActivity {
             Bitmap.createScaledBitmap(image, Constants.PROJECT_IMAGE_SIZE,
                     Constants.PROJECT_IMAGE_SIZE, false);
 
-            mProjectItems.add(mProjectItems.size(), new ProjectItem(image, project_info));
+            mProjectItems.add(mProjectItems.size(), new Project(image, project_info));
         }
         catch (Exception ex)
         {

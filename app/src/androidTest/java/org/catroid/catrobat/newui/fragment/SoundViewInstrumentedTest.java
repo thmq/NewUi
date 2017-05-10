@@ -30,8 +30,8 @@ public class SoundViewInstrumentedTest {
     }
 
     @Test
-    public void testCopyItems() {
-        CommonTests.testCopyItems();
+    public void testCopyPasteItems() {
+        CommonTests.testCopyPasteItems();
     }
 
     @Test

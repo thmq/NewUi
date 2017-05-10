@@ -3,13 +3,14 @@ package org.catroid.catrobat.newui.data;
 import android.media.MediaMetadataRetriever;
 
 import org.catroid.catrobat.newui.R;
+import org.catroid.catrobat.newui.copypaste.CopyPasteable;
 import org.catroid.catrobat.newui.io.PathInfoDirectory;
 import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
 
 import java.io.Serializable;
 
-public class SoundInfo implements Serializable {
+public class SoundInfo implements Serializable, CopyPasteable {
 
     //TODO: uncomment after XStream integration
     //@XStreamAsAttribute
@@ -73,5 +74,29 @@ public class SoundInfo implements Serializable {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(pathInfo.getAbsolutePath());
         duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+    }
+
+
+    @Override
+    public SoundInfo clone() throws CloneNotSupportedException {
+        SoundInfo clonedSoundInfo = (SoundInfo) super.clone();
+
+        return clonedSoundInfo;
+    }
+
+    @Override
+    public void prepareForClipboard() throws Exception {
+        PathInfoFile originalPathInfo = pathInfo;
+
+        // Update Path info
+        pathInfo = PathInfoFile.getUniqueTmpFilePath(originalPathInfo);
+
+        // Copy image to tmp folder
+        StorageHandler.copyFile(originalPathInfo, pathInfo);
+    }
+
+    @Override
+    public void cleanupFromClipboard() throws Exception {
+        StorageHandler.deleteFile(pathInfo);
     }
 }
