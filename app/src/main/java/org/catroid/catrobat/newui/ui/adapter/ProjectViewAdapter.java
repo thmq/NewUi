@@ -20,8 +20,7 @@ public class ProjectViewAdapter extends ArrayAdapter {
 
     private ArrayList<ProjectItem> objects;
 
-    public ProjectViewAdapter(Context context,
-                              int textViewResourceId,
+    public ProjectViewAdapter(Context context, int textViewResourceId,
                               ArrayList<ProjectItem> objects) {
         super(context, textViewResourceId, objects);
 
