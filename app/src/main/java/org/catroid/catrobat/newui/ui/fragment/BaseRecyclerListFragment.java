@@ -274,8 +274,10 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
     @Override
     public boolean isNameValid(String itemName) {
         if (itemName != null) {
-            if (itemName.length() > 0 && Utils.isItemNameUnique(itemName, mRecyclerViewAdapter.getItems()))
+            if (itemName.length() > 0 &&
+                    Utils.isItemNameUnique(itemName, mRecyclerViewAdapter.getItems())) {
                 return true;
+            }
         }
         return false;
     }

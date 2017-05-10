@@ -97,7 +97,9 @@ public class LookInfo implements Serializable, CopyPasteable {
         if (mThumbnailDrawable == null) {
             Bitmap thumbnail = getThumbnail();
 
-            mThumbnailDrawable = RoundedBitmapDrawableFactory.create(Resources.getSystem(), thumbnail);
+            mThumbnailDrawable = RoundedBitmapDrawableFactory.create(Resources.getSystem(),
+                    thumbnail);
+
             mThumbnailDrawable.setCircular(true);
         }
 

@@ -33,8 +33,10 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
             mDetailsView = (TextView) itemView.findViewById(R.id.details_view);
             mImageSwitcher = (ImageSwitcher) itemView.findViewById(R.id.slide_trans_imageswitcher);
 
-            collapseAnimation = AnimationUtils.loadAnimation(mItemView.getContext(), R.anim.in_animation);
-            expandAnimation = AnimationUtils.loadAnimation(mItemView.getContext(), R.anim.out_animation);
+            collapseAnimation = AnimationUtils.loadAnimation(mItemView.getContext(),
+                    R.anim.in_animation);
+            expandAnimation = AnimationUtils.loadAnimation(mItemView.getContext(),
+                    R.anim.out_animation);
             expandAnimation.setStartOffset(collapseAnimation.getDuration());
 
             mImageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
@@ -43,7 +45,9 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
                     ImageView mImageView = new ImageView(itemView.getContext());
 
                     mImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                    mImageView.setLayoutParams(new ImageSwitcher.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    mImageView.setLayoutParams(new ImageSwitcher
+                            .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT));
 
                     return mImageView;
                 }

@@ -9,15 +9,17 @@ import java.util.List;
 
 public class Project{
 
-    private static final transient int THUMBNAIL_SIZE = 200;
     private String infoText;
+    private String description;
     private Bitmap thumbnail;
+    private Boolean favorite;
 
     private List<Scene> mScenes = new ArrayList<>();
 
     public Project(Bitmap thumbnail, String infoText) {
         this.thumbnail = thumbnail;
         this.infoText = infoText;
+        this.favorite = false;
     }
 
     public String getInfoText() {
@@ -44,4 +46,19 @@ public class Project{
         return mScenes;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
+    }
 }

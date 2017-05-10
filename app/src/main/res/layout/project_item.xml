@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/project_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:animateLayoutChanges="true">
 
     <ImageView
         android:id="@+id/project_image_view"
@@ -14,13 +16,22 @@
     <TextView
         android:id="@+id/project_title_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
+        android:paddingTop="10dp"
         android:paddingLeft="16dp"
         android:textColor="@color/white"
         android:text="TEST 123"
         android:textSize="@dimen/list_item_header"/>
+
+    <ImageView
+        android:id="@+id/favorite_project_image_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:padding="2dp" />
 
 
 

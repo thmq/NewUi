@@ -55,8 +55,9 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     public RecyclerViewAdapter<LookInfo> createAdapter() {
         //TODO change again
         List<LookInfo> lookInfoList = new ArrayList<LookInfo>();
-        for(int i = 0; i < 0; i++) {
-            lookInfoList.add( new LookInfo("Item " + i, createImage()));
+
+        for (int i = 0; i < 3; i++) {
+            lookInfoList.add(new LookInfo("Item " + i, createImage()));
         }
 
         return new LookAdapter(lookInfoList, R.layout.list_item);
