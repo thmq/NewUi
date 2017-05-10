@@ -4,13 +4,15 @@ import android.graphics.Bitmap;
 
 public class ProjectItem {
 
-    private static final transient int THUMBNAIL_SIZE = 200;
     private String infoText;
+    private String description;
     private Bitmap thumbnail;
+    private Boolean favorite;
 
     public ProjectItem(Bitmap thumbnail, String infoText) {
         this.thumbnail = thumbnail;
         this.infoText = infoText;
+        this.favorite = false;
     }
 
     public String getInfoText() {
@@ -29,4 +31,19 @@ public class ProjectItem {
         this.thumbnail = thumbnail;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
+    }
 }

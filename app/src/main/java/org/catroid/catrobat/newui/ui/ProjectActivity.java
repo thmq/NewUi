@@ -1,8 +1,10 @@
 package org.catroid.catrobat.newui.ui;
 
 import android.Manifest;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -13,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -20,10 +24,13 @@ import android.widget.Toast;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.ProjectItem;
+import org.catroid.catrobat.newui.ui.adapter.OnSwipeTouchListener;
 import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
 
 import java.util.ArrayList;
+
+import static android.view.View.GONE;
 
 public class ProjectActivity extends AppCompatActivity {
 
@@ -31,6 +38,8 @@ public class ProjectActivity extends AppCompatActivity {
     private GridView mGridView;
     private ProjectViewAdapter mProjectViewAdapter;
     private ArrayList<ProjectItem> mProjectItems = new ArrayList<>();
+    private OnSwipeTouchListener onSwipeTouchListener;
+    private Boolean flinged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +69,7 @@ public class ProjectActivity extends AppCompatActivity {
 
             }
         } catch (Exception exception) {
-            mWebView.setVisibility(View.GONE);
+            mWebView.setVisibility(GONE);
             mWebView.getLayoutParams().height = 0;
             Toast.makeText(this, "NOT connected !!!", Toast.LENGTH_LONG).show();
         }
@@ -76,12 +85,9 @@ public class ProjectActivity extends AppCompatActivity {
         // Fill in Test-Data
         for (int i = 0; i < 12; i++) {
             String text = "Item " + i;
-            if(addNewProjectItem(R.drawable.blue_test_pic, text))
-            {
+            if (addNewProjectItem(R.drawable.blue_test_pic, text)) {
                 mProjectViewAdapter.notifyDataSetChanged();
-            }
-            else
-            {
+            } else {
                 Toast.makeText(this, "Could not add File: " + text, Toast.LENGTH_LONG).show();
             }
         }
@@ -95,6 +101,12 @@ public class ProjectActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
+
+
+        setSwipeThresholdForWebView();
+        onSwipeTouchListener = setUpSwipeListener();
+        mWebView.setOnTouchListener(onSwipeTouchListener);
+
     }
 
     @Override
@@ -104,8 +116,7 @@ public class ProjectActivity extends AppCompatActivity {
         return true;
     }
 
-    private int getSizeForGridViewImages()
-    {
+    private int getSizeForGridViewImages() {
         DisplayMetrics mDisplayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
 
@@ -115,23 +126,66 @@ public class ProjectActivity extends AppCompatActivity {
         return (int) dp;
     }
 
-    private Boolean addNewProjectItem(int res_id, String project_info) {
+    private Boolean addNewProjectItem(int resID, String projectInfo) {
 
         try {
             Bitmap image = BitmapFactory.decodeResource(this.getResources(),
-                    res_id);
+                    resID);
             Bitmap.createScaledBitmap(image, Constants.PROJECT_IMAGE_SIZE,
                     Constants.PROJECT_IMAGE_SIZE, false);
 
-            mProjectItems.add(mProjectItems.size(), new ProjectItem(image, project_info));
-        }
-        catch (Exception ex)
-        {
+            mProjectItems.add(mProjectItems.size(), new ProjectItem(image, projectInfo));
+        } catch (Exception ex) {
             Log.wtf("ADD NEW PROJECT ", ex.getMessage());
             return false;
         }
 
         return true;
+    }
+
+    private void setSwipeThresholdForWebView() {
+
+        try {
+            DisplayMetrics mDisplayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
+
+            double windowWidth = mDisplayMetrics.widthPixels * 0.5;
+
+            Constants.SWIPE_THRESHOLD = (int) windowWidth;
+            Constants.SWIPE_VELOCITY_THRESHOLD = (int) windowWidth;
+        } catch (Exception ex) {
+            Log.wtf("DISPLAY METRICS ERROR", ex.getMessage());
+            Constants.SWIPE_THRESHOLD = 300;
+            Constants.SWIPE_VELOCITY_THRESHOLD = 300;
+        }
+    }
+
+    private OnSwipeTouchListener setUpSwipeListener() {
+        OnSwipeTouchListener touchListener = new OnSwipeTouchListener() {
+
+            @Override
+            public void onSwipeRight() {
+                Animation outAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.out_animation);
+                mWebView.setVisibility(GONE);
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                Animation outAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.out_animation);
+                mWebView.setVisibility(GONE);
+            }
+
+            @Override
+            public void onClick() {
+                Intent httpIntent = new Intent(Intent.ACTION_VIEW);
+                httpIntent.setData(Uri.parse(Constants.PROJECT_FULL_NEWS_URL));
+                startActivity(httpIntent);
+            }
+        };
+
+        return touchListener;
     }
 
 }
