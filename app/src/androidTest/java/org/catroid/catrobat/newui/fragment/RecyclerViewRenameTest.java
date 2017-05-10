@@ -5,16 +5,22 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.text.InputType;
-import org.catroid.catrobat.newui.R;
+
 import org.catroid.catrobat.newui.ui.SpriteActivity;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.*;
+import static android.support.test.espresso.action.ViewActions.clearText;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.*;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withInputType;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -24,6 +30,10 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 public class RecyclerViewRenameTest {
+    @Rule
+    public ActivityTestRule<SpriteActivity> activityRule =
+            new ActivityTestRule<>(SpriteActivity.class);
+
     @Test
     public void useAppContext() throws Exception {
         // Context of the app under test.
@@ -31,12 +41,9 @@ public class RecyclerViewRenameTest {
 
         assertEquals("org.catroid.catrobat.newui", appContext.getPackageName());
     }
-    @Rule
-    public ActivityTestRule<SpriteActivity> activityRule = new ActivityTestRule<>(SpriteActivity.class);
 
     @Test
-    public void testCorrectRenaming()
-    {
+    public void testCorrectRenaming() {
         onView(withText(R.string.title_activity_recycle_view)).perform(click());
         // create new item
         onView(withId(R.id.fab)).perform(click());
@@ -56,9 +63,9 @@ public class RecyclerViewRenameTest {
 
         onView(withText("Test")).check(matches(isDisplayed()));
     }
+
     @Test
-    public void testIncorrectRenaming()
-    {
+    public void testIncorrectRenaming() {
         onView(withText(R.string.title_activity_recycle_view)).perform(click());
         // create new item
         onView(withId(R.id.fab)).perform(click());

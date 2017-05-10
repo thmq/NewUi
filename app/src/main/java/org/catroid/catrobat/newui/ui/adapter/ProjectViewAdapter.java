@@ -2,12 +2,12 @@ package org.catroid.catrobat.newui.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.catroid.catrobat.newui.R;
@@ -18,48 +18,69 @@ import java.util.ArrayList;
 
 public class ProjectViewAdapter extends ArrayAdapter {
 
+    protected LayoutInflater inflater;
     private ArrayList<ProjectItem> objects;
 
-    public ProjectViewAdapter(Context context,
-                              int textViewResourceId,
+    public ProjectViewAdapter(Context context, int textViewResourceId,
                               ArrayList<ProjectItem> objects) {
         super(context, textViewResourceId, objects);
 
         this.objects = objects;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View v = convertView;
+        View projectView = convertView;
+        final ListItemViewHolder viewHolder;
+        final ProjectItem tmp = objects.get(position);
 
-        if (v == null) {
-            LayoutInflater inflater = (LayoutInflater) getContext()
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            v = inflater.inflate(R.layout.project_item, null);
+        if (projectView == null) {
+            projectView = inflater.inflate(R.layout.project_item, null);
+            viewHolder = new ListItemViewHolder(projectView);
+            projectView.setTag(viewHolder);
+        } else {
+            viewHolder = (ListItemViewHolder) projectView.getTag();
         }
 
-        ProjectItem tmp = objects.get(position);
+        viewHolder.imgView.getLayoutParams().height = Constants.PROJECT_IMAGE_SIZE;
+        viewHolder.imgView.getLayoutParams().width = Constants.PROJECT_IMAGE_SIZE;
+        viewHolder.imgView.setImageBitmap(tmp.getThumbnail());
 
-        if (tmp != null) {
-            ImageView imgView = (ImageView) v.findViewById(R.id.project_image_view);
-            TextView txtView = (TextView) v.findViewById(R.id.project_title_view);
+        viewHolder.txtView.setWidth(Constants.PROJECT_IMAGE_SIZE);
+        viewHolder.txtView.setBackgroundColor(Color.BLACK);
+        viewHolder.txtView.getBackground().setAlpha(123);
+        viewHolder.txtView.setText(tmp.getInfoText());
 
-            if (imgView != null) {
-                imgView.getLayoutParams().height = Constants.PROJECT_IMAGE_SIZE;
-                imgView.getLayoutParams().width = Constants.PROJECT_IMAGE_SIZE;
-                imgView.setImageBitmap(tmp.getThumbnail());
-            }
-
-            if (txtView != null) {
-                txtView.setWidth(Constants.PROJECT_IMAGE_SIZE);
-                txtView.setBackgroundColor(Color.BLACK);
-                txtView.getBackground().setAlpha(123);
-                txtView.setText(tmp.getInfoText());
-            }
+        if (tmp.getFavorite()) {
+            viewHolder.favoriteView.setImageResource(R.drawable.favorite_white_selected);
+        } else {
+            viewHolder.favoriteView.setImageResource(R.drawable.favorite_white_empty);
         }
 
-        return v;
+        viewHolder.favoriteView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                tmp.setFavorite(!tmp.getFavorite());
+                notifyDataSetChanged();
+            }
+        });
+
+        return projectView;
+    }
+
+    protected class ListItemViewHolder {
+        protected RelativeLayout background;
+        protected TextView txtView;
+        protected ImageView imgView;
+        protected ImageView favoriteView;
+
+        public ListItemViewHolder(View projectView) {
+            this.background = (RelativeLayout) projectView.findViewById(R.id.project_background);
+            this.imgView = (ImageView) projectView.findViewById(R.id.project_image_view);
+            this.txtView = (TextView) projectView.findViewById(R.id.project_title_view);
+            this.favoriteView = (ImageView) projectView
+                    .findViewById(R.id.favorite_project_image_view);
+        }
     }
 }

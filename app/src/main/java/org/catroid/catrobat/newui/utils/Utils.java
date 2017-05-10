@@ -52,7 +52,7 @@ public final class Utils {
 
     public static boolean isItemNameUnique(String itemName, List scope) {
         Set<String> nameSet = new HashSet<>();
-        if(scope.size() > 0) {
+        if (scope.size() > 0) {
             if (scope.get(0) instanceof LookInfo) {
                 for (LookInfo item : (List<LookInfo>) scope) {
                     nameSet.add(item.getName());

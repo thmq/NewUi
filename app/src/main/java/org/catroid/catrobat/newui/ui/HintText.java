@@ -25,9 +25,9 @@ public class HintText {
         View parent = (View) destItem.getParent();
 
         try {
-            int index = ((ViewGroup)parent).indexOfChild(destItem);
-            ((LinearLayoutCompat)parent).addView(view, index + 1);
-        } catch ( Exception e ) {
+            int index = ((ViewGroup) parent).indexOfChild(destItem);
+            ((LinearLayoutCompat) parent).addView(view, index + 1);
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
