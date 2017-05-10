@@ -93,7 +93,9 @@ public class LookInfo implements Serializable {
         if (mThumbnailDrawable == null) {
             Bitmap thumbnail = getThumbnail();
 
-            mThumbnailDrawable = RoundedBitmapDrawableFactory.create(Resources.getSystem(), thumbnail);
+            mThumbnailDrawable = RoundedBitmapDrawableFactory.create(Resources.getSystem(),
+                    thumbnail);
+
             mThumbnailDrawable.setCircular(true);
         }
 

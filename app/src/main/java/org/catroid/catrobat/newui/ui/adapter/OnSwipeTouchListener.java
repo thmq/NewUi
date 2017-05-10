@@ -26,27 +26,25 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
         }
 
         @Override
-        public boolean onFling(MotionEvent event_1, MotionEvent event_2, float velocity_x,
-                               float velocity_y) {
+        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityOfX,
+                               float velocityOfY) {
 
             boolean result = false;
             try {
-                float diff_y = event_2.getY() - event_1.getY();
-                float diff_x = event_2.getX() - event_1.getX();
+                float diffOfY = event2.getY() - event1.getY();
+                float diffOfX = event2.getX() - event1.getX();
 
-                if(Math.abs(diff_x) > Math.abs(diff_y)) {
-                    if(Math.abs(diff_x) > Constants.SWIPE_THRESHOLD &&
-                            Math.abs(velocity_x) > Constants.SWIPE_VELOCITY_THRESHOLD) {
-                        if(diff_x > 0) {
+                if (Math.abs(diffOfX) > Math.abs(diffOfY)) {
+                    if (Math.abs(diffOfX) > Constants.SWIPE_THRESHOLD &&
+                            Math.abs(velocityOfX) > Constants.SWIPE_VELOCITY_THRESHOLD) {
+                        if (diffOfX > 0) {
                             onSwipeRight();
-                        }
-                        else {
+                        } else {
                             onSwipeLeft();
                         }
                     }
                 }
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Log.wtf("ERROR AT SWIPE ACTION:", ex.getMessage());
             }
 

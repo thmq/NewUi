@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -87,12 +85,9 @@ public class ProjectActivity extends AppCompatActivity {
         // Fill in Test-Data
         for (int i = 0; i < 12; i++) {
             String text = "Item " + i;
-            if(addNewProjectItem(R.drawable.blue_test_pic, text))
-            {
+            if (addNewProjectItem(R.drawable.blue_test_pic, text)) {
                 mProjectViewAdapter.notifyDataSetChanged();
-            }
-            else
-            {
+            } else {
                 Toast.makeText(this, "Could not add File: " + text, Toast.LENGTH_LONG).show();
             }
         }
@@ -121,8 +116,7 @@ public class ProjectActivity extends AppCompatActivity {
         return true;
     }
 
-    private int getSizeForGridViewImages()
-    {
+    private int getSizeForGridViewImages() {
         DisplayMetrics mDisplayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
 
@@ -132,18 +126,16 @@ public class ProjectActivity extends AppCompatActivity {
         return (int) dp;
     }
 
-    private Boolean addNewProjectItem(int res_id, String project_info) {
+    private Boolean addNewProjectItem(int resID, String projectInfo) {
 
         try {
             Bitmap image = BitmapFactory.decodeResource(this.getResources(),
-                    res_id);
+                    resID);
             Bitmap.createScaledBitmap(image, Constants.PROJECT_IMAGE_SIZE,
                     Constants.PROJECT_IMAGE_SIZE, false);
 
-            mProjectItems.add(mProjectItems.size(), new ProjectItem(image, project_info));
-        }
-        catch (Exception ex)
-        {
+            mProjectItems.add(mProjectItems.size(), new ProjectItem(image, projectInfo));
+        } catch (Exception ex) {
             Log.wtf("ADD NEW PROJECT ", ex.getMessage());
             return false;
         }
@@ -157,12 +149,11 @@ public class ProjectActivity extends AppCompatActivity {
             DisplayMetrics mDisplayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
 
-            double window_width = mDisplayMetrics.widthPixels * 0.5;
+            double windowWidth = mDisplayMetrics.widthPixels * 0.5;
 
-            Constants.SWIPE_THRESHOLD = (int) window_width;
-            Constants.SWIPE_VELOCITY_THRESHOLD = (int) window_width;
-        }
-        catch (Exception ex) {
+            Constants.SWIPE_THRESHOLD = (int) windowWidth;
+            Constants.SWIPE_VELOCITY_THRESHOLD = (int) windowWidth;
+        } catch (Exception ex) {
             Log.wtf("DISPLAY METRICS ERROR", ex.getMessage());
             Constants.SWIPE_THRESHOLD = 300;
             Constants.SWIPE_VELOCITY_THRESHOLD = 300;
@@ -174,14 +165,14 @@ public class ProjectActivity extends AppCompatActivity {
 
             @Override
             public void onSwipeRight() {
-                Animation out_animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                Animation outAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
                         R.anim.out_animation);
                 mWebView.setVisibility(GONE);
             }
 
             @Override
             public void onSwipeLeft() {
-                Animation out_animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                Animation outAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
                         R.anim.out_animation);
                 mWebView.setVisibility(GONE);
             }
