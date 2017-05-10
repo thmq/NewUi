@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_content_area"
         android:layout_marginRight="@dimen/margin_content_area"
+        android:selectAllOnFocus="true"
         android:inputType="text" />
 
 </LinearLayout>

@@ -37,6 +37,10 @@ public class RenameItemDialog extends InputDialog {
     protected boolean handlePositiveButtonClick() {
         String name = input.getText().toString().trim();
 
+        if (name.equals(getArguments().getString(INITIAL_INPUT_VALUE))) {
+            return true;
+        }
+
         if (renameItemInterface.isNameValid(name)) {
             renameItemInterface.renameItem(name);
             return true;
