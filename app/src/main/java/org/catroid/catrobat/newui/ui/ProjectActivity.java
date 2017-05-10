@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -110,12 +112,16 @@ public class ProjectActivity extends AppCompatActivity {
             @Override
             public void onSwipeRight() {
                 Toast.makeText(getApplicationContext(), "SWIPE Right", Toast.LENGTH_SHORT).show();
+                Animation out_animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.out_animation);
                 mWebView.setVisibility(GONE);
             }
 
             @Override
             public void onSwipeLeft() {
                 Toast.makeText(getApplicationContext(), "SWIPE Left", Toast.LENGTH_SHORT).show();
+                Animation out_animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.out_animation);
                 mWebView.setVisibility(GONE);
             }
 
