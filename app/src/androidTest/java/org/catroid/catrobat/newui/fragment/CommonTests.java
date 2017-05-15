@@ -7,7 +7,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static java.lang.Thread.sleep;
 import static org.catroid.catrobat.newui.fragment.Utils.addNewItemNamed;
 import static org.catroid.catrobat.newui.fragment.Utils.checkItemNamedExists;
 import static org.catroid.catrobat.newui.fragment.Utils.checkItemNamedNotExists;
