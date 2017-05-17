@@ -154,7 +154,7 @@ public class AddItemActivity extends AppCompatActivity {
         return true;
     }
 
- /*   public interface AddItemInterface extends Serializable {
+ /*public interface AddItemInterface extends Serializable {
         boolean isNameValid(String itemName);
         void addNewItem(String itemName);
     } */
