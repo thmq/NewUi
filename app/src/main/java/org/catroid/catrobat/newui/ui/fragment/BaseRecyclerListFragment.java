@@ -1,7 +1,10 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
+import android.app.LauncherActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,11 +13,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.*;
 import android.widget.Toast;
 import org.catroid.catrobat.newui.R;
+import org.catroid.catrobat.newui.data.ItemInfo;
+import org.catroid.catrobat.newui.data.LookInfo;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.dialog.RenameItemDialog;
+import org.catroid.catrobat.newui.io.PathInfoFile;
+import org.catroid.catrobat.newui.io.StorageHandler;
 import org.catroid.catrobat.newui.ui.AddItemActivity;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapterDelegate;
@@ -24,13 +32,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 public abstract class BaseRecyclerListFragment<T> extends Fragment
         implements RecyclerViewAdapterDelegate<T>, NewItemDialog.NewItemInterface,
         RenameItemDialog.RenameItemInterface, Serializable {
 
     public static final String TAG = BaseRecyclerListFragment.class.getSimpleName();
+    public static final int ADD_NEW_ITEM_REQUEST = 1;
 
-    protected AddNewItemInterface mAddNewItemInterface;
     protected ActionMode mActionMode;
     protected RecyclerView mRecyclerView;
     protected MenuItem mEditButton;
@@ -123,13 +133,29 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
     public abstract RecyclerViewAdapter<T> createAdapter();
 
     public void onAddButtonClicked() {
-        mAddNewItemInterface = new AddNewItemInterface();
         Intent intent = new Intent(getContext(), AddItemActivity.class);
-        Bundle b = new Bundle();
-        b.putSerializable("interface", mAddNewItemInterface);
-        intent.putExtras(b);
-        startActivity(intent);
-        //showNewItemDialog();
+
+        ArrayList<String> names = new ArrayList<>();
+        for(ItemInfo i : (ArrayList<ItemInfo>)mRecyclerViewAdapter.getItems()) {
+            names.add(i.getName());
+        }
+
+        intent.putExtra("names_list", names);
+        startActivityForResult(intent, ADD_NEW_ITEM_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ADD_NEW_ITEM_REQUEST && resultCode == RESULT_OK) {
+            String name = data.getStringExtra("name");
+            byte[] byteArray = data.getByteArrayExtra("image");
+            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
+            PathInfoFile pathInfoFile = StorageHandler.createImage(bitmap, name);
+            T item = createNewItem(name, pathInfoFile);
+            addToList(item);
+        }
     }
 
     private void showNewItemDialog() {
@@ -160,6 +186,8 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
         dialog.setRenameItemInterface(this);
         dialog.show(getFragmentManager(), dialog.getTag());
     }
+
+    protected abstract void addToList(T item);
 
     protected abstract String getItemName(T item);
 
@@ -258,7 +286,6 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
     public void renameItem(String itemName) {
         List<T> selectedItems = mRecyclerViewAdapter.getSelectedItems();
 
-
         if (selectedItems.size() == 1) {
             T item = mRecyclerViewAdapter.getSelectedItems().get(0);
 
@@ -270,6 +297,8 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
     }
 
     protected abstract void renameItem(T item, String itemName);
+
+    protected abstract T createNewItem(String itemName, PathInfoFile pathInfoFile);
 
     protected abstract T createNewItem(String itemName);
 
@@ -286,33 +315,5 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
 
     public void removeObserver(BaseRecyclerListFragmentObserver observer) {
         mObservers.remove(observer);
-    }
-
-    /*public class InterfaceObject {
-        private Context context;
-        private AddNewItemInterface addNewItemInterface;
-
-        public InterfaceObject(Context context, AddNewItemInterface addNewItemInterface) {
-            this.context = context;
-            this.addNewItemInterface =  addNewItemInterface;
-        }
-
-    }
-    public interface AddNewItemInterface extends Serializable {
-
-        public boolean isNameValid(String itemName);
-
-        public void addNewItem(String itemName);
-    } */
-
-    public class AddNewItemInterface implements Serializable {
-
-        public boolean isNameValid(String itemName) {
-            return BaseRecyclerListFragment.this.isNameValid(itemName);
-        }
-
-        public void addNewItem(String itemName) {
-            BaseRecyclerListFragment.this.addNewItem(itemName);
-        }
     }
 }

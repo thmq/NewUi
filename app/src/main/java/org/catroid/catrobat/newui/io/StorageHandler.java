@@ -154,7 +154,6 @@ public final class StorageHandler {
         }
     }
 
-
     public static PathInfoFile createImage(Bitmap bitmap, String itemName) {
         if(bitmap == null) {
             return null;

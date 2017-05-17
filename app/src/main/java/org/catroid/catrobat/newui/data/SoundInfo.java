@@ -9,17 +9,16 @@ import org.catroid.catrobat.newui.io.StorageHandler;
 
 import java.io.Serializable;
 
-public class SoundInfo implements Serializable {
+public class SoundInfo extends ItemInfo implements Serializable {
 
     //TODO: uncomment after XStream integration
     //@XStreamAsAttribute
-    private String name;
     private String fileName;
     private transient PathInfoFile pathInfo;
     private String duration;
 
     public SoundInfo(String name, PathInfoFile pathInfo) {
-        this.name = name;
+        super(name);
         this.pathInfo = pathInfo;
 
         //TODO what if the pathInfo's relative path is not the filename alone?
@@ -30,7 +29,7 @@ public class SoundInfo implements Serializable {
     }
 
     public SoundInfo(SoundInfo srcSoundInfo) throws Exception {
-        name = srcSoundInfo.getName();
+        setName(srcSoundInfo.getName());
         duration = srcSoundInfo.getDuration();
         pathInfo = StorageHandler.copyFile(srcSoundInfo.getPathInfo());
         //TODO what if the pathInfo's relative path is not the filename alone?
@@ -39,14 +38,6 @@ public class SoundInfo implements Serializable {
 
     public void initializeAfterDeserialize(PathInfoDirectory parent) {
         pathInfo = new PathInfoFile(parent, fileName);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public PathInfoFile getPathInfo() {

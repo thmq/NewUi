@@ -1,7 +1,9 @@
 package org.catroid.catrobat.newui.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -21,11 +23,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import org.catroid.catrobat.newui.R;
-import org.catroid.catrobat.newui.io.StorageHandler;
-import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragment;
-import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragment.AddNewItemInterface;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 public class AddItemActivity extends AppCompatActivity {
@@ -33,7 +34,7 @@ public class AddItemActivity extends AppCompatActivity {
     EditText itemName;
     Button createBtn;
     Boolean firstRun = false;
-    AddNewItemInterface addItemInterface;
+    ArrayList<String> names;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +47,7 @@ public class AddItemActivity extends AppCompatActivity {
         addImage = (ImageView) findViewById(R.id.addItemImage);
         createBtn = (Button) findViewById(R.id.createItemBtn);
         itemName = (EditText) findViewById(R.id.lookitemNameEdit);
-        try {
-            Bundle b = getIntent().getExtras();
-            addItemInterface = (AddNewItemInterface) b.getSerializable("interface");
-        } catch(ClassCastException ex) {
-            ex.printStackTrace();
-        }
+        names = getIntent().getStringArrayListExtra("names_list");
         firstRun = true;
 
         addImage.setOnClickListener(new View.OnClickListener() {
@@ -95,20 +91,38 @@ public class AddItemActivity extends AppCompatActivity {
                     String name = itemName.getText().toString();
                     Bitmap bitmap = ((BitmapDrawable) addImage.getDrawable()).getBitmap();
 
-                    if(addItemInterface.isNameValid(name) && bitmap != null) {
-                        StorageHandler.createImage(bitmap, name);
-                        addItemInterface.addNewItem(name);
+
+                    if(isNameValid(name) && bitmap != null) {
+                        Intent result = new Intent();
+                        result.putExtra("name", name);
+
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] byteArrayBitmap = stream.toByteArray();
+                        result.putExtra("image", byteArrayBitmap);
+
+                        setResult(Activity.RESULT_OK, result);
+                        finish();
                     } else {
                         itemName.setError(getString(R.string.error_invalid_item_name));
                     }
 
                 } catch(Exception e) {
                     e.printStackTrace();
-                    itemName.setError(getString(R.string.error_invalid_item_name));
+                    //TODO
+                    //itemName.setError(getString(R.string.error_invalid_item_name));
                 }
             }
         });
     }
+
+    private boolean isNameValid(String name) {
+        if (name == null || name.equals("") || names.contains(name)) {
+                return false;
+        }
+        return true;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
@@ -153,9 +167,4 @@ public class AddItemActivity extends AppCompatActivity {
         inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
-
- /*public interface AddItemInterface extends Serializable {
-        boolean isNameValid(String itemName);
-        void addNewItem(String itemName);
-    } */
 }

@@ -65,6 +65,11 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     }
 
     @Override
+    protected void addToList(LookInfo item) {
+        mRecyclerViewAdapter.addItem(item);
+    }
+
+    @Override
     protected String getItemName(LookInfo item) {
         return item.getName();
     }
@@ -87,6 +92,7 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         item.setName(itemName);
     }
 
+
     @Override
     protected LookInfo createNewItem(String itemName) {
         String uniqueLookName = Utils.getUniqueLookName(itemName, mRecyclerViewAdapter.getItems());
@@ -94,7 +100,6 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         PathInfoFile pathInfo = createImage();
         return new LookInfo(uniqueLookName, pathInfo);
     }
-
 
     private PathInfoFile createImage() {
         StorageHandler.setupDirectoryStructure();
@@ -130,6 +135,12 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         }
 
         return new PathInfoFile(Utils.getImageDirectory(), file.getName());
+    }
+
+    @Override
+    protected LookInfo createNewItem(String itemName, PathInfoFile pathInfoFile) {
+        String uniqueLookName = Utils.getUniqueLookName(itemName, mRecyclerViewAdapter.getItems());
+        return new LookInfo(uniqueLookName, pathInfoFile);
     }
 
     private boolean shouldPresentFeatureDiscovery() {
