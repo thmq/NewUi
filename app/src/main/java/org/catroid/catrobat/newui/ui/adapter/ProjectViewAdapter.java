@@ -12,17 +12,17 @@ import android.widget.TextView;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
-import org.catroid.catrobat.newui.data.ProjectItem;
+import org.catroid.catrobat.newui.data.Project;
 
 import java.util.ArrayList;
 
 public class ProjectViewAdapter extends ArrayAdapter {
 
     protected LayoutInflater inflater;
-    private ArrayList<ProjectItem> objects;
+    private ArrayList<Project> objects;
 
     public ProjectViewAdapter(Context context, int textViewResourceId,
-                              ArrayList<ProjectItem> objects) {
+                              ArrayList<Project> objects) {
         super(context, textViewResourceId, objects);
 
         this.objects = objects;
@@ -33,7 +33,7 @@ public class ProjectViewAdapter extends ArrayAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View projectView = convertView;
         final ListItemViewHolder viewHolder;
-        final ProjectItem tmp = objects.get(position);
+        final Project tmp = objects.get(position);
 
 
         if (projectView == null) {
@@ -43,6 +43,7 @@ public class ProjectViewAdapter extends ArrayAdapter {
         } else {
             viewHolder = (ListItemViewHolder) projectView.getTag();
         }
+
 
         viewHolder.imgView.getLayoutParams().height = Constants.PROJECT_IMAGE_SIZE;
         viewHolder.imgView.getLayoutParams().width = Constants.PROJECT_IMAGE_SIZE;

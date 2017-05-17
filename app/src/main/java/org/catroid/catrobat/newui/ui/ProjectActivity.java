@@ -23,7 +23,8 @@ import android.widget.Toast;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
-import org.catroid.catrobat.newui.data.ProjectItem;
+import org.catroid.catrobat.newui.data.Project;
+
 import org.catroid.catrobat.newui.ui.adapter.OnSwipeTouchListener;
 import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
@@ -37,9 +38,10 @@ public class ProjectActivity extends AppCompatActivity {
     private WebView mWebView;
     private GridView mGridView;
     private ProjectViewAdapter mProjectViewAdapter;
-    private ArrayList<ProjectItem> mProjectItems = new ArrayList<>();
+    private ArrayList<Project> mProjects = new ArrayList<>();
     private OnSwipeTouchListener onSwipeTouchListener;
     private Boolean flinged;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +79,7 @@ public class ProjectActivity extends AppCompatActivity {
 
         Constants.PROJECT_IMAGE_SIZE = getSizeForGridViewImages();
 
-        mProjectViewAdapter = new ProjectViewAdapter(this, R.layout.project_item, mProjectItems);
+        mProjectViewAdapter = new ProjectViewAdapter(this, R.layout.project_item, mProjects);
 
         mGridView = (GridView) findViewById(R.id.project_gridview);
         mGridView.setAdapter(mProjectViewAdapter);
@@ -85,7 +87,7 @@ public class ProjectActivity extends AppCompatActivity {
         // Fill in Test-Data
         for (int i = 0; i < 12; i++) {
             String text = "Item " + i;
-            if (addNewProjectItem(R.drawable.blue_test_pic, text)) {
+            if (addNewProject(R.drawable.blue_test_pic, text)) {
                 mProjectViewAdapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(this, "Could not add File: " + text, Toast.LENGTH_LONG).show();
@@ -126,7 +128,7 @@ public class ProjectActivity extends AppCompatActivity {
         return (int) dp;
     }
 
-    private Boolean addNewProjectItem(int resID, String projectInfo) {
+    private Boolean addNewProject(int resID, String projectInfo) {
 
         try {
             Bitmap image = BitmapFactory.decodeResource(this.getResources(),
@@ -134,7 +136,7 @@ public class ProjectActivity extends AppCompatActivity {
             Bitmap.createScaledBitmap(image, Constants.PROJECT_IMAGE_SIZE,
                     Constants.PROJECT_IMAGE_SIZE, false);
 
-            mProjectItems.add(mProjectItems.size(), new ProjectItem(image, projectInfo));
+            mProjects.add(mProjects.size(), new Project(image, projectInfo));
         } catch (Exception ex) {
             Log.wtf("ADD NEW PROJECT ", ex.getMessage());
             return false;

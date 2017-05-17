@@ -8,9 +8,19 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
-import android.view.*;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
+
 import org.catroid.catrobat.newui.R;
+import org.catroid.catrobat.newui.copypaste.Clipboard;
+import org.catroid.catrobat.newui.copypaste.CopyPasteable;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.dialog.RenameItemDialog;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
@@ -20,7 +30,7 @@ import org.catroid.catrobat.newui.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseRecyclerListFragment<T> extends Fragment
+public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends Fragment
         implements RecyclerViewAdapterDelegate<T>, NewItemDialog.NewItemInterface,
         RenameItemDialog.RenameItemInterface {
 
@@ -64,7 +74,10 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
                 case R.id.btnCopy:
                     copyItems(mRecyclerViewAdapter.getSelectedItems());
                     mRecyclerViewAdapter.clearSelection();
+                    getActivity().invalidateOptionsMenu();
+
                     return true;
+
                 case R.id.btnDelete:
                     try {
                         removeItems(mRecyclerViewAdapter.getSelectedItems());
@@ -97,12 +110,12 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
         return null;
     }
 
-
     public abstract int getTabNameResource();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
 
         mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recycler_view,
                 container, false);
@@ -113,6 +126,36 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         return mRecyclerView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.recycler_view_menu, menu);
+        boolean enabled = Clipboard.getInstance().containsItemsOfType(getItemType());
+
+        menu.getItem(0).setEnabled(enabled);
+        menu.getItem(0).setVisible(enabled);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btnPaste:
+                pasteItems();
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public abstract RecyclerViewAdapter<T> createAdapter();
@@ -152,19 +195,38 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
 
     protected abstract String getItemName(T item);
 
-    private void copyItems(List<T> items) {
-        for (T item : items) {
-            try {
-                T newItem = copyItem(item);
+    private boolean copyItems(List<T> items) {
+        boolean success;
 
-                if (newItem != null) {
-                    mRecyclerViewAdapter.addItem(newItem);
+        try {
+            Clipboard.getInstance().storeItemsForType((List<CopyPasteable>) items, getItemType());
+            success = true;
+        } catch (Exception e) {
+            Log.d(TAG, e.getMessage());
+            e.printStackTrace();
+            success = false;
+        }
+
+        return success;
+    }
+
+    private void pasteItems() {
+        List<T> items = (List<T>) Clipboard.getInstance().getItemsForType(getItemType());
+
+        if (items != null) {
+            for (T item : items) {
+                try {
+                    T copiedItem = copyItem(item);
+                    mRecyclerViewAdapter.addItem(copiedItem);
+                } catch (Exception e) {
+                    Log.d(TAG, e.getMessage());
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
+
+    protected abstract Clipboard.ItemType getItemType();
 
     protected abstract T copyItem(T item) throws Exception;
 

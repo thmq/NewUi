@@ -8,6 +8,7 @@ import org.catroid.catrobat.newui.io.StorageHandler;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 public final class Utils {
@@ -20,6 +21,11 @@ public final class Utils {
     public static PathInfoDirectory getSoundDirectory() {
         StorageHandler.setupDirectoryStructure();
         return new PathInfoDirectory(StorageHandler.ROOT_DIRECTORY, StorageHandler.SOUND_FOLDER);
+    }
+
+    public static PathInfoDirectory getTmpDirectory() {
+        StorageHandler.setupDirectoryStructure();
+        return new PathInfoDirectory(StorageHandler.ROOT_DIRECTORY, StorageHandler.TMP_FOLDER);
     }
 
     public static String getUniqueLookName(String name, List<LookInfo> scope) {
@@ -69,5 +75,4 @@ public final class Utils {
         }
         return true;
     }
-
 }
