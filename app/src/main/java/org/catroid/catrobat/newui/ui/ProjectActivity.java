@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -39,7 +40,6 @@ public class ProjectActivity extends AppCompatActivity {
     private ProjectViewAdapter mProjectViewAdapter;
     private ArrayList<ProjectItem> mProjectItems = new ArrayList<>();
     private OnSwipeTouchListener onSwipeTouchListener;
-    private Boolean flinged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,7 @@ public class ProjectActivity extends AppCompatActivity {
 
         // Fill in Test-Data
         for (int i = 0; i < 12; i++) {
-            String text = "Item " + i;
+            String text = "Project " + i;
             if (addNewProjectItem(R.drawable.blue_test_pic, text)) {
                 mProjectViewAdapter.notifyDataSetChanged();
             } else {
@@ -106,6 +106,8 @@ public class ProjectActivity extends AppCompatActivity {
         setSwipeThresholdForWebView();
         onSwipeTouchListener = setUpSwipeListener();
         mWebView.setOnTouchListener(onSwipeTouchListener);
+
+
 
     }
 

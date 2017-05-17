@@ -8,14 +8,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id = "@+id/linear_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:paddingBottom="@dimen/bottom_navigation_height">
 
     <include layout="@layout/tabbed_app_bar" />
 
@@ -40,20 +40,39 @@
         android:horizontalSpacing="10dp"
         android:stretchMode="columnWidth"
         android:gravity="center"
+
         />
 
 </LinearLayout>
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_alignBottom="@+id/linear_layout"
-        android:layout_alignRight="@+id/linear_layout"
-        app:layout_anchor="@+id/linear_layout"
-        app:layout_anchorGravity="bottom|right|end"
-        app:srcCompat="@drawable/ic_add_circle_white_24dp" />
+
+
+    <android.support.design.widget.BottomNavigationView android:id="@+id/bottom_navigation"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_navigation_height"
+        android:layout_gravity="bottom"
+        android:fitsSystemWindows="true"
+        android:layout_alignParentBottom="true"
+        app:itemBackground="@color/white"
+        app:menu="@menu/menu_bottom_navigation"
+        />
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/ic_add_circle_white_24dp"
+            android:layout_above="@id/bottom_navigation"
+            android:layout_alignRight="@id/bottom_navigation"
+            />
+
+
+
+
 
 </RelativeLayout>

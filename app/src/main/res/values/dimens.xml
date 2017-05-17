@@ -5,6 +5,8 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <!-- Padding for bottom navigation view -->
+    <dimen name="bottom_navigation_height">56dp</dimen>
     <!-- ListItem dimens -->
     <dimen name="list_item_header">22dp</dimen>
     <dimen name="list_item_image_size">70dp</dimen>

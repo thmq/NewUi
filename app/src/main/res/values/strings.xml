@@ -43,4 +43,8 @@
     <string name="tab_name_looks">Looks</string>
     <string name="tab_name_sounds">Sounds</string>
 
+    <string name="bottom_nav_favorites">Favorites</string>
+    <string name="bottom_nav_recent">Recent</string>
+    <string name="bottom_nav_all">All</string>
+
 </resources>
