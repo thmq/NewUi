@@ -51,6 +51,11 @@ public class BaseRecyclerListFragmentTest {
         }
 
         @Override
+        protected String getItemName(TestItem item) {
+            return null;
+        }
+
+        @Override
         protected TestItem copyItem(TestItem item) throws Exception {
             return null;
         }

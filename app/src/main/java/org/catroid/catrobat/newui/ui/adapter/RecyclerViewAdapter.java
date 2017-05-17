@@ -13,9 +13,10 @@ import android.widget.ViewSwitcher;
 
 import org.catroid.catrobat.newui.R;
 
+import java.io.Serializable;
 import java.util.List;
 
-public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener, RecyclerViewMultiSelectionManagerDelegate<T> {
+public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener, RecyclerViewMultiSelectionManagerDelegate<T>{
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View mItemView;
         public TextView mNameView;

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.*;
 import android.widget.Toast;
@@ -19,15 +20,17 @@ import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapterDelegate;
 import org.catroid.catrobat.newui.utils.Utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseRecyclerListFragment<T> extends Fragment
         implements RecyclerViewAdapterDelegate<T>, NewItemDialog.NewItemInterface,
-        RenameItemDialog.RenameItemInterface {
+        RenameItemDialog.RenameItemInterface, Serializable {
 
     public static final String TAG = BaseRecyclerListFragment.class.getSimpleName();
 
+    protected AddNewItemInterface mAddNewItemInterface;
     protected ActionMode mActionMode;
     protected RecyclerView mRecyclerView;
     protected MenuItem mEditButton;
@@ -120,7 +123,11 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
     public abstract RecyclerViewAdapter<T> createAdapter();
 
     public void onAddButtonClicked() {
+        mAddNewItemInterface = new AddNewItemInterface();
         Intent intent = new Intent(getContext(), AddItemActivity.class);
+        Bundle b = new Bundle();
+        b.putSerializable("interface", mAddNewItemInterface);
+        intent.putExtras(b);
         startActivity(intent);
         //showNewItemDialog();
     }
@@ -279,5 +286,33 @@ public abstract class BaseRecyclerListFragment<T> extends Fragment
 
     public void removeObserver(BaseRecyclerListFragmentObserver observer) {
         mObservers.remove(observer);
+    }
+
+    /*public class InterfaceObject {
+        private Context context;
+        private AddNewItemInterface addNewItemInterface;
+
+        public InterfaceObject(Context context, AddNewItemInterface addNewItemInterface) {
+            this.context = context;
+            this.addNewItemInterface =  addNewItemInterface;
+        }
+
+    }
+    public interface AddNewItemInterface extends Serializable {
+
+        public boolean isNameValid(String itemName);
+
+        public void addNewItem(String itemName);
+    } */
+
+    public class AddNewItemInterface implements Serializable {
+
+        public boolean isNameValid(String itemName) {
+            return BaseRecyclerListFragment.this.isNameValid(itemName);
+        }
+
+        public void addNewItem(String itemName) {
+            BaseRecyclerListFragment.this.addNewItem(itemName);
+        }
     }
 }

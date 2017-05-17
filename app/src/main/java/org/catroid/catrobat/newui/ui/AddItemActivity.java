@@ -1,46 +1,40 @@
 package org.catroid.catrobat.newui.ui;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.media.Image;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.BoolRes;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import org.catroid.catrobat.newui.R;
-import org.catroid.catrobat.newui.dialog.InputDialog;
+import org.catroid.catrobat.newui.io.StorageHandler;
+import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragment;
+import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragment.AddNewItemInterface;
 
-import static android.R.attr.dial;
-import static android.R.attr.width;
+import java.io.Serializable;
 
 
 public class AddItemActivity extends AppCompatActivity {
     ImageView addImage;
     EditText itemName;
+    Button createBtn;
     Boolean firstRun = false;
+    AddNewItemInterface addItemInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +44,14 @@ public class AddItemActivity extends AppCompatActivity {
         toolbar.setTitle(R.string.title_activity_add_item);
 
         addImage = (ImageView) findViewById(R.id.addItemImage);
+        createBtn = (Button) findViewById(R.id.createItemBtn);
         itemName = (EditText) findViewById(R.id.lookitemNameEdit);
+        try {
+            Bundle b = getIntent().getExtras();
+            addItemInterface = (AddNewItemInterface) b.getSerializable("interface");
+        } catch(ClassCastException ex) {
+            ex.printStackTrace();
+        }
         firstRun = true;
 
         addImage.setOnClickListener(new View.OnClickListener() {
@@ -84,13 +85,27 @@ public class AddItemActivity extends AppCompatActivity {
                     }
                 });
                 dialog.show();
-                /*Intent intent = new Intent();
-                intent.setType("image/*"); //set type for files (image type)
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2); //PICK_FROM_GALLERY is final int variable
-*/
+            }
+        });
 
+        createBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    String name = itemName.getText().toString();
+                    Bitmap bitmap = ((BitmapDrawable) addImage.getDrawable()).getBitmap();
 
+                    if(addItemInterface.isNameValid(name) && bitmap != null) {
+                        StorageHandler.createImage(bitmap, name);
+                        addItemInterface.addNewItem(name);
+                    } else {
+                        itemName.setError(getString(R.string.error_invalid_item_name));
+                    }
+
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    itemName.setError(getString(R.string.error_invalid_item_name));
+                }
             }
         });
     }
@@ -99,9 +114,8 @@ public class AddItemActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         switch(requestCode) {
-            case 0:
+            case 0: //Camera
                 if(resultCode == RESULT_OK){
-
                     Bitmap photo = (Bitmap) imageReturnedIntent.getExtras().get("data");
                     addImage.setImageBitmap(photo);
                     //Uri selectedImage = imageReturnedIntent.getData();
@@ -140,4 +154,8 @@ public class AddItemActivity extends AppCompatActivity {
         return true;
     }
 
+ /*   public interface AddItemInterface extends Serializable {
+        boolean isNameValid(String itemName);
+        void addNewItem(String itemName);
+    } */
 }
