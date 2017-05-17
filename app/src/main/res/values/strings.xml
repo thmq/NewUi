@@ -44,6 +44,7 @@
     <!-- Tab Names-->
     <string name="tab_name_looks">Looks</string>
     <string name="tab_name_sounds">Sounds</string>
+    <string name="title_activity_scene">SceneActivity</string>
 
     <!-- Look Bricks -->
     <string name="brick_set_x">Set X:</string>

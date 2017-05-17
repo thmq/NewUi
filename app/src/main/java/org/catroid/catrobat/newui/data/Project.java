@@ -1,14 +1,18 @@
 package org.catroid.catrobat.newui.data;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 
-import org.catroid.catrobat.newui.copypaste.CopyPasteable;
+import org.catroid.catrobat.newui.db.brigde.PersistableRecord;
+import org.catroid.catrobat.newui.db.util.DataContract;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Project{
+public class Project implements PersistableRecord {
 
+    private long mId;
     private String infoText;
     private String description;
     private Bitmap thumbnail;
@@ -16,10 +20,22 @@ public class Project{
 
     private List<Scene> mScenes = new ArrayList<>();
 
+    public Project() {
+        // TODO: Maybe use complete signature constructors only - to prevent user errors
+    }
+
     public Project(Bitmap thumbnail, String infoText) {
         this.thumbnail = thumbnail;
         this.infoText = infoText;
         this.favorite = false;
+    }
+
+    public long getId() {
+        return mId;
+    }
+
+    public void setId(long id) {
+        mId = id;
     }
 
     public String getInfoText() {

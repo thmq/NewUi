@@ -106,10 +106,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
     private List<BaseRecyclerListFragmentObserver> mObservers = new ArrayList<>();
 
-    public static Fragment newInstance(int sectionNumber) {
-        return null;
-    }
-
+    // TODO: Refactor to interface
     public abstract int getTabNameResource();
 
     @Override

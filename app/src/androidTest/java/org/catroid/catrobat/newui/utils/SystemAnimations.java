@@ -60,11 +60,11 @@ public class SystemAnimations {
 
     private void setSystemAnimationsScale(float animationScale) {
         try {
-            Class<?> windowManagerStubClazz = Class.forName("android.view.IWindowManager$Stub");
+            Class<?> windowManagerStubClazz = Class.forName("android.mView.IWindowManager$Stub");
             Method asInterface = windowManagerStubClazz.getDeclaredMethod("asInterface", IBinder.class);
             Class<?> serviceManagerClazz = Class.forName("android.os.ServiceManager");
             Method getService = serviceManagerClazz.getDeclaredMethod("getService", String.class);
-            Class<?> windowManagerClazz = Class.forName("android.view.IWindowManager");
+            Class<?> windowManagerClazz = Class.forName("android.mView.IWindowManager");
             Method setAnimationScales = windowManagerClazz.getDeclaredMethod("setAnimationScales", float[].class);
             Method getAnimationScales = windowManagerClazz.getDeclaredMethod("getAnimationScales");
 

@@ -1,4 +1,4 @@
-package org.catroid.catrobat.newui.ui;
+package org.catroid.catrobat.newui.ui.activity;
 
 import android.Manifest;
 import android.os.Bundle;
