@@ -36,10 +36,7 @@ public class ScriptListFragment extends ListFragment implements TabFragment {
     }
 
     private void createAdapter() {
-        List<BaseBrick> bricks = new ArrayList<>();
-        SetXBrick setXBrick = new SetXBrick();
-        bricks.add(setXBrick);
-        adapter = new BrickAdapter(getContext(), R.layout.list_item , bricks);
+        adapter = new BrickAdapter(getContext(), R.layout.list_item);
         setListAdapter(adapter);
     }
 

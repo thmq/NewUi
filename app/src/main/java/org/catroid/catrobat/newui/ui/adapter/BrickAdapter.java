@@ -15,6 +15,11 @@ public class BrickAdapter extends ArrayAdapter<BaseBrick> {
 
     private LayoutInflater inflater;
 
+    public BrickAdapter(Context context, int resource) {
+        super(context, resource);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
     public BrickAdapter(Context context, int resource, List<BaseBrick> objects) {
         super(context, resource, objects);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
