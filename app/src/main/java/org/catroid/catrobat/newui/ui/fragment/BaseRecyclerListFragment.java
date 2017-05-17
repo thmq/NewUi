@@ -9,8 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.*;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
+
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.copypaste.Clipboard;
 import org.catroid.catrobat.newui.copypaste.CopyPasteable;
@@ -68,6 +75,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
                     copyItems(mRecyclerViewAdapter.getSelectedItems());
                     mRecyclerViewAdapter.clearSelection();
                     getActivity().invalidateOptionsMenu();
+
                     return true;
 
                 case R.id.btnDelete:
@@ -132,16 +140,18 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.recycler_view_menu, menu);
+        boolean enabled = Clipboard.getInstance().containsItemsOfType(getItemType());
 
-        menu.getItem(0).setVisible(Clipboard.getInstance().hasItemsForType(getItemType()));
+        menu.getItem(0).setEnabled(enabled);
+        menu.getItem(0).setVisible(enabled);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.btnPaste:
                 pasteItems();
+
                 return true;
         }
 

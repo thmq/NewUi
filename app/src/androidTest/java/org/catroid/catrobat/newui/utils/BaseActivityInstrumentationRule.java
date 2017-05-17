@@ -25,6 +25,7 @@ package org.catroid.catrobat.newui.utils;
 import android.app.Activity;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
+import android.util.Log;
 
 
 public class BaseActivityInstrumentationRule<T extends Activity> extends ActivityTestRule<T> {

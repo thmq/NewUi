@@ -16,14 +16,14 @@ public class SoundInfo implements Serializable, CopyPasteable {
     //@XStreamAsAttribute
     private String name;
     private String fileName;
-    private transient PathInfoFile pathInfo;
+    private transient PathInfoFile mPathInfo;
     private String duration;
 
     public SoundInfo(String name, PathInfoFile pathInfo) {
         this.name = name;
-        this.pathInfo = pathInfo;
+        this.mPathInfo = pathInfo;
 
-        //TODO what if the pathInfo's relative path is not the filename alone?
+        //TODO what if the mPathInfo's relative path is not the filename alone?
         if (pathInfo != null) {
             fileName = pathInfo.getAbsolutePath();
             getDurationFromFile();
@@ -33,13 +33,13 @@ public class SoundInfo implements Serializable, CopyPasteable {
     public SoundInfo(SoundInfo srcSoundInfo) throws Exception {
         name = srcSoundInfo.getName();
         duration = srcSoundInfo.getDuration();
-        pathInfo = StorageHandler.copyFile(srcSoundInfo.getPathInfo());
-        //TODO what if the pathInfo's relative path is not the filename alone?
-        fileName = pathInfo.getAbsolutePath();
+        mPathInfo = StorageHandler.copyFile(srcSoundInfo.getPathInfo());
+        //TODO what if the mPathInfo's relative path is not the filename alone?
+        fileName = mPathInfo.getAbsolutePath();
     }
 
     public void initializeAfterDeserialize(PathInfoDirectory parent) {
-        pathInfo = new PathInfoFile(parent, fileName);
+        mPathInfo = new PathInfoFile(parent, fileName);
     }
 
     public String getName() {
@@ -51,13 +51,17 @@ public class SoundInfo implements Serializable, CopyPasteable {
     }
 
     public PathInfoFile getPathInfo() {
-        return pathInfo;
+        return mPathInfo;
     }
 
     public void setPathInfo(PathInfoFile pathInfo) {
-        this.pathInfo = pathInfo;
+        this.mPathInfo = pathInfo;
     }
 
+    public void setAndCopyToPathInfo(PathInfoFile pathInfo) throws Exception {
+        StorageHandler.copyFile(mPathInfo, pathInfo);
+        setPathInfo(mPathInfo);
+    }
     public int getThumbnailResource() {
         return R.drawable.ic_insert_photo_black_24dp;
     }
@@ -67,12 +71,12 @@ public class SoundInfo implements Serializable, CopyPasteable {
     }
 
     public void deleteFile() throws Exception {
-        StorageHandler.deleteFile(pathInfo);
+        StorageHandler.deleteFile(mPathInfo);
     }
 
     private void getDurationFromFile() {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(pathInfo.getAbsolutePath());
+        retriever.setDataSource(mPathInfo.getAbsolutePath());
         duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
     }
 
@@ -86,17 +90,13 @@ public class SoundInfo implements Serializable, CopyPasteable {
 
     @Override
     public void prepareForClipboard() throws Exception {
-        PathInfoFile originalPathInfo = pathInfo;
-
-        // Update Path info
-        pathInfo = PathInfoFile.getUniqueTmpFilePath(originalPathInfo);
-
-        // Copy image to tmp folder
-        StorageHandler.copyFile(originalPathInfo, pathInfo);
+        if (mPathInfo != null) {
+            setAndCopyToPathInfo(PathInfoFile.getUniqueTmpFilePath(mPathInfo));
+        }
     }
 
     @Override
     public void cleanupFromClipboard() throws Exception {
-        StorageHandler.deleteFile(pathInfo);
+        StorageHandler.deleteFile(mPathInfo);
     }
 }

@@ -46,7 +46,7 @@ public class Clipboard {
         }
     }
 
-    public boolean hasItemsForType(ItemType type) {
+    public boolean containsItemsOfType(ItemType type) {
         return mItemType == type && mItems.size() > 0;
     }
 

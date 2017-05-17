@@ -1,12 +1,6 @@
 package org.catroid.catrobat.newui.fragment;
 
-import android.view.View;
-import android.widget.EditText;
-
 import org.catroid.catrobat.newui.R;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
@@ -22,8 +16,6 @@ import static org.catroid.catrobat.newui.fragment.Utils.selectItemNamed;
 import static org.catroid.catrobat.newui.fragment.Utils.withError;
 
 public class CommonTests {
-
-
     public static void testAddNewItem() {
         addNewItemNamed("new item");
 
@@ -50,7 +42,12 @@ public class CommonTests {
 
         onView(withId(R.id.btnCopy)).perform(click());
 
-        // TODO: On some devices a spinnlock is needed to make this test work - ask Thomas why!
+        // Approved by Testing Thomas!
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         onView(withId(R.id.btnPaste)).perform(click());
 
@@ -58,6 +55,8 @@ public class CommonTests {
         checkItemNamedExists("item one");
         checkItemNamedExists("item two");
         checkItemNamedExists("item three");
+
+
 
         // copies
         checkItemNamedExists("item one 1");
