@@ -6,7 +6,8 @@
     android:id="@+id/relativelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:animateLayoutChanges="true">
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id = "@+id/linear_layout"
@@ -14,8 +15,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:animateLayoutChanges="true"
-    android:paddingBottom="@dimen/bottom_navigation_height">
+    android:animateLayoutChanges="true">
 
     <include layout="@layout/tabbed_app_bar" />
 
@@ -52,7 +52,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_navigation_height"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:fitsSystemWindows="true"
         android:layout_alignParentBottom="true"
@@ -68,8 +68,8 @@
             android:layout_margin="@dimen/fab_margin"
             app:srcCompat="@drawable/ic_add_circle_white_24dp"
             android:layout_above="@id/bottom_navigation"
-            android:layout_alignRight="@id/bottom_navigation"
-            />
+            android:layout_alignRight="@id/bottom_navigation" />
+
 
 
 

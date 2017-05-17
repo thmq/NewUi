@@ -1,6 +1,7 @@
 package org.catroid.catrobat.newui.ui;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,16 +17,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.webkit.WebView;
+import android.widget.AbsListView;
 import android.widget.GridView;
 import android.widget.Toast;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.ProjectItem;
-import org.catroid.catrobat.newui.ui.adapter.OnSwipeTouchListener;
+import org.catroid.catrobat.newui.ui.listener.OnSwipeTouchListener;
 import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
 
@@ -36,10 +39,14 @@ import static android.view.View.GONE;
 public class ProjectActivity extends AppCompatActivity {
 
     private WebView mWebView;
+    private BottomNavigationView mBottomNavigationView;
     private GridView mGridView;
     private ProjectViewAdapter mProjectViewAdapter;
     private ArrayList<ProjectItem> mProjectItems = new ArrayList<>();
     private OnSwipeTouchListener onSwipeTouchListener;
+    private int myLastVisiblePos;
+    private FloatingActionButton fab;
+    private ViewGroup.MarginLayoutParams params;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +99,7 @@ public class ProjectActivity extends AppCompatActivity {
             }
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,13 +109,45 @@ public class ProjectActivity extends AppCompatActivity {
             }
         });
 
+        myLastVisiblePos = mGridView.getFirstVisiblePosition();
+        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        params = (ViewGroup.MarginLayoutParams) fab.getLayoutParams();
+
+        mGridView.setOnScrollListener( new AbsListView.OnScrollListener() {
+
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                // Auto-generated method stub
+                int currentFirstVisPos = view.getFirstVisiblePosition();
+                if(currentFirstVisPos > myLastVisiblePos) {
+                    //scroll down
+                    if(mWebView.getVisibility() != View.GONE) {
+                        mWebView.setVisibility(GONE);
+                    }
+                    mBottomNavigationView.setVisibility(View.INVISIBLE);
+
+                    ObjectAnimator mObjectAnimator = ObjectAnimator.ofFloat(fab, "translationY", getResources().getDimension(R.dimen.bottom_navigation_height));
+                    mObjectAnimator.setDuration(300);
+                    mObjectAnimator.start();
+
+                }
+                if(currentFirstVisPos < myLastVisiblePos) {
+                    //scroll up
+                    ObjectAnimator mObjectAnimator = ObjectAnimator.ofFloat(fab, "translationY", (-0.05f)*getResources().getDimension(R.dimen.bottom_navigation_height));
+                    mObjectAnimator.setDuration(300);
+                    mObjectAnimator.start();
+
+                    mBottomNavigationView.setVisibility(View.VISIBLE);
+                }
+                myLastVisiblePos = currentFirstVisPos;
+            }
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) { }
+        });
 
         setSwipeThresholdForWebView();
         onSwipeTouchListener = setUpSwipeListener();
         mWebView.setOnTouchListener(onSwipeTouchListener);
-
-
-
     }
 
     @Override
@@ -167,15 +206,11 @@ public class ProjectActivity extends AppCompatActivity {
 
             @Override
             public void onSwipeRight() {
-                Animation outAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
-                        R.anim.out_animation);
                 mWebView.setVisibility(GONE);
             }
 
             @Override
             public void onSwipeLeft() {
-                Animation outAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
-                        R.anim.out_animation);
                 mWebView.setVisibility(GONE);
             }
 

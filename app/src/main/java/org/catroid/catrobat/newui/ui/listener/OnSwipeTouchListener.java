@@ -1,4 +1,4 @@
-package org.catroid.catrobat.newui.ui.adapter;
+package org.catroid.catrobat.newui.ui.listener;
 
 import android.util.Log;
 import android.view.GestureDetector;
