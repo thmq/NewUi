@@ -1,5 +1,7 @@
 package org.catroid.catrobat.newui;
 
+import android.annotation.SuppressLint;
+
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragment;
 import org.junit.Test;
@@ -39,6 +41,7 @@ public class BaseRecyclerListFragmentTest {
         }
     }
 
+    @SuppressLint("ValidFragment")
     public class TestFragment extends BaseRecyclerListFragment<TestItem> {
         @Override
         public int getTabNameResource() {
@@ -48,6 +51,11 @@ public class BaseRecyclerListFragmentTest {
         @Override
         public RecyclerViewAdapter<TestItem> createAdapter() {
             return new TestAdapter(new ArrayList<TestItem>(), 0);
+        }
+
+        @Override
+        protected String getItemName(TestItem item) {
+            return item.mName;
         }
 
         @Override

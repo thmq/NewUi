@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetSequence;
 
 import org.catroid.catrobat.newui.R;
-import org.catroid.catrobat.newui.ui.fragment.LookListFragment;
 
 public class SpriteViewFeatureDiscoveryFactory {
     public static TapTarget createLooksTapTarget(AppCompatActivity activity) {

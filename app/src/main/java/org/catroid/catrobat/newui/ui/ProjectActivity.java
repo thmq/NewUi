@@ -24,7 +24,6 @@ import android.widget.Toast;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.Project;
-
 import org.catroid.catrobat.newui.ui.adapter.OnSwipeTouchListener;
 import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;

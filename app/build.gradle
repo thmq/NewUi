@@ -46,6 +46,10 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.9.1'
 
+
+    def gdxVersion = '1.6.2'
+    compile 'com.badlogicgames.gdx:gdx:' + gdxVersion
+
     testCompile 'junit:junit:4.12'
 
     checkstyle 'com.puppycrawl.tools:checkstyle:7.6.1'
