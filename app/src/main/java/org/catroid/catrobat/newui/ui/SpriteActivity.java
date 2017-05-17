@@ -30,8 +30,6 @@ public class SpriteActivity extends AppCompatActivity {
 
         mSpriteViewPagerAdapter = new SpriteViewPagerAdapter(this);
 
-        final AppCompatActivity activity = this;
-
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSpriteViewPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {

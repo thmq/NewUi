@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends Fragment
-        implements RecyclerViewAdapterDelegate<T>, NewItemDialog.NewItemInterface,
+        implements TabFragment, RecyclerViewAdapterDelegate<T>, NewItemDialog.NewItemInterface,
         RenameItemDialog.RenameItemInterface {
 
     public static final String TAG = BaseRecyclerListFragment.class.getSimpleName();

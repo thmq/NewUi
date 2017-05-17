@@ -2,12 +2,10 @@ package org.catroid.catrobat.newui.data;
 
 import android.graphics.Bitmap;
 
-import org.catroid.catrobat.newui.copypaste.CopyPasteable;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Project{
+public class Project {
 
     private String infoText;
     private String description;

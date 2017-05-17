@@ -24,6 +24,7 @@ import java.util.List;
 
 public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         implements NewItemDialog.NewItemInterface {
+
     public static final String TAG = LookListFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number_look_list";
 

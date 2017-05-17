@@ -16,6 +16,7 @@ import org.catroid.catrobat.newui.R;
 import java.util.List;
 
 public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener, RecyclerViewMultiSelectionManagerDelegate<T> {
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View mItemView;
         public TextView mNameView;
@@ -95,10 +96,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(mItemLayoutId, parent, false);
-
-        ViewHolder holder = new ViewHolder(view);
-
-        return holder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -204,7 +202,6 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         notifyDataSetChanged();
     }
 
-
     private void setItemToAnimate(T item) {
         mItemToAnimate = item;
     }
@@ -216,7 +213,6 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     private void resetItemToAnimate() {
         mItemToAnimate = null;
     }
-
 
     public void onSelectionChanged(RecyclerViewMultiSelectionManager multiSelectionManager) {
         notifySelectionChanged();

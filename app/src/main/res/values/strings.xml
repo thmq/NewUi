@@ -41,8 +41,11 @@
     <string name="unknown_duration">unknown</string>
     <string name="sound_duration_label">Duration</string>
 
-    <!-- Tab Names-->
+    <!-- Tab Names -->
     <string name="tab_name_looks">Looks</string>
     <string name="tab_name_sounds">Sounds</string>
+    <string name="tab_name_scripts">Scripts</string>
 
+    <!-- Bricks -->
+    <string name="brick_set_x">Set x to </string>
 </resources>
