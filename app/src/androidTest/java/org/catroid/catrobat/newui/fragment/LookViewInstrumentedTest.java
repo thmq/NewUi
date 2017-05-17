@@ -4,14 +4,15 @@ import android.support.test.rule.ActivityTestRule;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.ui.SpriteActivity;
+import org.catroid.catrobat.newui.utils.BaseActivityInstrumentationRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class LooksViewInstrumentedTest {
+public class LookViewInstrumentedTest {
     @Rule
     public ActivityTestRule<SpriteActivity> activityRule =
-            new ActivityTestRule<>(SpriteActivity.class);
+            new BaseActivityInstrumentationRule<>(SpriteActivity.class);
 
     @Before
     public void navigateToTab() {
@@ -22,7 +23,6 @@ public class LooksViewInstrumentedTest {
     public void testAddNewItem() {
         CommonTests.testAddNewItem();
     }
-
 
     @Test
     public void testAddMultipleItems() {
@@ -42,6 +42,11 @@ public class LooksViewInstrumentedTest {
     @Test
     public void testEditItems() {
         CommonTests.testEditItems();
+    }
+
+    @Test
+    public void testIncorrectRenaming() {
+        CommonTests.testIncorrectRenaming();
     }
 
 }

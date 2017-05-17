@@ -13,7 +13,6 @@ import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
 import org.catroid.catrobat.newui.ui.adapter.LookAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
-import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryFactory;
 import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryManager;
 import org.catroid.catrobat.newui.utils.Utils;
 
@@ -56,7 +55,7 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         //TODO change again
         List<LookInfo> lookInfoList = new ArrayList<LookInfo>();
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 0; i++) {
             lookInfoList.add(new LookInfo("Item " + i, createImage()));
         }
 
