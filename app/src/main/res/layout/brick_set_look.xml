@@ -11,8 +11,8 @@
         android:text="@string/brick_set_x">
     </TextView >
 
-    <Spinner
-        android:id="@+id/spinner"
+    <TextView
+        android:id="@+id/set_look"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="false"

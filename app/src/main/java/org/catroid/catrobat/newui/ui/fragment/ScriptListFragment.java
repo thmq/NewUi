@@ -7,12 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.catroid.catrobat.newui.R;
-import org.catroid.catrobat.newui.data.bricks.BaseBrick;
-import org.catroid.catrobat.newui.data.bricks.SetXBrick;
 import org.catroid.catrobat.newui.ui.adapter.BrickAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ScriptListFragment extends ListFragment implements TabFragment {
 

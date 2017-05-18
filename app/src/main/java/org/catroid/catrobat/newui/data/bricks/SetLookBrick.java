@@ -18,7 +18,7 @@ public class SetLookBrick extends BaseBrick {
 
     @Override
     protected void setBrickFields() {
-        //NO brick fields
+
     }
 
     @Override
