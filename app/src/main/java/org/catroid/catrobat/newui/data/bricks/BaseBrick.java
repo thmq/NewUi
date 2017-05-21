@@ -12,7 +12,6 @@ public abstract class BaseBrick implements Brick, View.OnClickListener {
 
     protected transient int layoutId;
     protected transient View brickView;
-    protected transient boolean isSelected = false;
     protected Map<Integer, BrickField> brickFields = new HashMap();
 
     public BaseBrick() {
@@ -27,21 +26,13 @@ public abstract class BaseBrick implements Brick, View.OnClickListener {
         return brickView;
     }
 
-    public boolean isSelected() {
-        return isSelected;
-    }
-
     public void setBrickView(View brickView) {
         this.brickView = brickView;
     }
 
-    public void setSelected(boolean selected) {
-        isSelected = selected;
-    }
-
     protected abstract void setBrickFields();
 
-    public void setOnClickListeners() {
+    public void setBrickFieldListeners() {
         for (Integer viewId : brickFields.keySet()) {
             brickView.findViewById(viewId).setOnClickListener(this);
         }

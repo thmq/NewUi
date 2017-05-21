@@ -3,18 +3,21 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:background="@color/colorAccent"
               android:minHeight="60dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:text="@string/brick_set_x">
     </TextView >
 
     <TextView
         android:id="@+id/set_x"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical">
     </TextView>
 
 </LinearLayout>

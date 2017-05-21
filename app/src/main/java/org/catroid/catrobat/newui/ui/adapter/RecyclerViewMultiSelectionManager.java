@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Set;
 
 public class RecyclerViewMultiSelectionManager<T> {
+
     private Set<T> mSelectedItems;
     private RecyclerViewMultiSelectionManagerDelegate mDelegate;
 
     public RecyclerViewMultiSelectionManager() {
-        mSelectedItems = new HashSet<T>();
+        mSelectedItems = new HashSet<>();
     }
 
     public List<T> getSelectedItems() {
