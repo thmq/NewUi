@@ -69,15 +69,12 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
             switch (item.getItemId()) {
                 case R.id.btnEdit:
                     showItemRenameDialog();
-
                     return true;
                 case R.id.btnCopy:
                     copyItems(mRecyclerViewAdapter.getSelectedItems());
                     mRecyclerViewAdapter.clearSelection();
                     getActivity().invalidateOptionsMenu();
-
                     return true;
-
                 case R.id.btnDelete:
                     try {
                         removeItems(mRecyclerViewAdapter.getSelectedItems());
@@ -85,10 +82,8 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
                         Context context = getActivity().getApplicationContext();
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-
                     mRecyclerViewAdapter.clearSelection();
                     return true;
-
                 default:
                     return false;
             }
@@ -306,7 +301,6 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
     @Override
     public void renameItem(String itemName) {
         List<T> selectedItems = mRecyclerViewAdapter.getSelectedItems();
-
 
         if (selectedItems.size() == 1) {
             T item = mRecyclerViewAdapter.getSelectedItems().get(0);

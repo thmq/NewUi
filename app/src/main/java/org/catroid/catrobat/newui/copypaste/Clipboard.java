@@ -10,7 +10,8 @@ public class Clipboard {
         SCENE,
         SPRITE,
         LOOK,
-        SOUND
+        SOUND,
+        SCRIPT
     }
 
     private static Clipboard instance;

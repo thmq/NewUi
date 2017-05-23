@@ -11,6 +11,7 @@ import com.getkeepsafe.taptargetview.TapTarget;
 import org.catroid.catrobat.newui.R;
 
 public class SpriteViewFeatureDiscoveryFactory {
+
     public static TapTarget createLooksTapTarget(AppCompatActivity activity) {
 
         TabLayout tabLayoutView = (TabLayout) activity.findViewById(R.id.tab_layout);
@@ -33,7 +34,8 @@ public class SpriteViewFeatureDiscoveryFactory {
     }
 
     public static TapTarget createFABTapTarget(AppCompatActivity activity) {
-        return TapTarget.forView(activity.findViewById(R.id.fab), "Adding an Item", "To add an item press the \"+\" button")
+        return TapTarget.forView(activity.findViewById(R.id.fab), "Adding an Item", "To add an item " +
+                "press the \"+\" button")
                         .outerCircleColor(R.color.colorPrimary)
                         .outerCircleAlpha(0.96f)
                         .targetCircleColor(R.color.colorAccent)

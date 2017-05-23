@@ -29,6 +29,7 @@ import android.util.Log;
 
 
 public class BaseActivityInstrumentationRule<T extends Activity> extends ActivityTestRule<T> {
+
 	private SystemAnimations systemAnimations;
 
 	public BaseActivityInstrumentationRule(Class<T> activityClass, boolean initialTouchMode, boolean launchActivity) {

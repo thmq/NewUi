@@ -116,7 +116,6 @@ public class LookInfo implements Serializable, CopyPasteable {
     @Override
     public void prepareForClipboard() throws Exception {
         setAndCopyToPathInfo(PathInfoFile.getUniqueTmpFilePath(mPathInfo));
-
         createThumbnail();
     }
 

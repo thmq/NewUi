@@ -8,9 +8,8 @@ import android.widget.ArrayAdapter;
 
 import org.catroid.catrobat.newui.data.bricks.BaseBrick;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class BrickAdapter extends ArrayAdapter<BaseBrick> {
 
@@ -18,7 +17,7 @@ public class BrickAdapter extends ArrayAdapter<BaseBrick> {
     public static final int ALPHA_GREYED = 100;
 
     private LayoutInflater inflater;
-    private Set<BaseBrick> selectedBricks = new HashSet<>();
+    private List<BaseBrick> selectedBricks = new ArrayList<>();
     private SelectionListener selectionListener;
     private DragAndDropListener dragAndDropListener;
 
@@ -63,7 +62,11 @@ public class BrickAdapter extends ArrayAdapter<BaseBrick> {
         return brick.getBrickView();
     }
 
-    public Set<BaseBrick> getSelectedBricks() {
+    public void addItem(BaseBrick brick) {
+        add(brick);
+    }
+
+    public List<BaseBrick> getSelectedBricks() {
         return selectedBricks;
     }
 
@@ -77,6 +80,7 @@ public class BrickAdapter extends ArrayAdapter<BaseBrick> {
 
     public void clearSelection() {
         selectedBricks.clear();
+        selectionListener.onSelectionChanged();
         notifyDataSetChanged();
     }
 

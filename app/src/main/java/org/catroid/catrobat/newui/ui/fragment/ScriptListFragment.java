@@ -6,6 +6,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,17 +15,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.catroid.catrobat.newui.R;
+import org.catroid.catrobat.newui.copypaste.Clipboard;
+import org.catroid.catrobat.newui.copypaste.CopyPasteable;
 import org.catroid.catrobat.newui.data.bricks.BaseBrick;
 import org.catroid.catrobat.newui.data.bricks.SetXBrick;
 import org.catroid.catrobat.newui.ui.adapter.BrickAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class ScriptListFragment extends ListFragment implements TabFragment,
         BrickAdapter.SelectionListener {
 
+    public static final String TAG = ScriptListFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number_script_list";
 
     private BrickAdapter adapter;
@@ -51,8 +54,9 @@ public class ScriptListFragment extends ListFragment implements TabFragment,
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.btnCopy:
-                    copyItems(adapter.getSelectedBricks());
+                    copyItems((List<CopyPasteable>) (List<?>) adapter.getSelectedBricks());
                     adapter.clearSelection();
+                    getActivity().invalidateOptionsMenu();
                     return true;
                 case R.id.btnDelete:
                     removeItems();
@@ -83,6 +87,7 @@ public class ScriptListFragment extends ListFragment implements TabFragment,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View scriptListFragment = inflater.inflate(R.layout.fragment_list_view, container, false);
+        setHasOptionsMenu(true);
         createAdapter();
         return scriptListFragment;
     }
@@ -99,13 +104,75 @@ public class ScriptListFragment extends ListFragment implements TabFragment,
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.recycler_view_menu, menu);
+        boolean enabled = Clipboard.getInstance().containsItemsOfType(getItemType());
+
+        menu.getItem(0).setEnabled(enabled);
+        menu.getItem(0).setVisible(enabled);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btnPaste:
+                pasteItems();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public int getTabNameResource() {
         return R.string.tab_name_scripts;
     }
 
-    private boolean copyItems(Set<BaseBrick> selectedBricks) {
-        //TODO: add to copypasteable
-        return true;
+    public Clipboard.ItemType getItemType() {
+        return Clipboard.ItemType.SCRIPT;
+    }
+
+    private boolean copyItems(List<CopyPasteable> selectedBricks) {
+        boolean success;
+
+        try {
+            Clipboard.getInstance().storeItemsForType(selectedBricks, getItemType());
+            success = true;
+        } catch (Exception e) {
+            Log.d(TAG, e.getMessage());
+            e.printStackTrace();
+            success = false;
+        }
+
+        return success;
+    }
+
+    private void pasteItems() {
+        List<BaseBrick> bricks = (List<BaseBrick>) (List<?>) Clipboard.getInstance().getItemsForType(getItemType());
+
+        if (bricks != null) {
+            for (BaseBrick item : bricks) {
+                try {
+                    BaseBrick copiedItem = copyItem(item);
+                    adapter.addItem(copiedItem);
+                } catch (Exception e) {
+                    Log.d(TAG, e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private BaseBrick copyItem(BaseBrick brick) throws Exception {
+        return brick.clone();
     }
 
     private void removeItems() {
@@ -118,7 +185,7 @@ public class ScriptListFragment extends ListFragment implements TabFragment,
 
     @Override
     public void onSelectionChanged() {
-        Set<BaseBrick> selectedItems = adapter.getSelectedBricks();
+        List<BaseBrick> selectedItems = adapter.getSelectedBricks();
 
         if (selectedItems.isEmpty()) {
             if (actionMode != null) {
