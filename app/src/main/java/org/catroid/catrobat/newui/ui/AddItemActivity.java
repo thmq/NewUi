@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class AddItemActivity extends AppCompatActivity {
     ImageView addImage;
     EditText itemName;
-    Button createBtn;
+    Button btnCreate;
     Boolean firstRun = false;
     ArrayList<String> names;
     Boolean bitmapSet = false;
@@ -39,13 +39,13 @@ public class AddItemActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_lookitem);
+        setContentView(R.layout.activity_add_item);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_activity_add_item);
 
         addImage = (ImageView) findViewById(R.id.addItemImage);
-        createBtn = (Button) findViewById(R.id.createItemBtn);
+        btnCreate = (Button) findViewById(R.id.btnCreateItem);
         itemName = (EditText) findViewById(R.id.addItemNameTxt);
         names = getIntent().getStringArrayListExtra("names_list");
         firstRun = true;
@@ -87,6 +87,7 @@ public class AddItemActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         addImage.setImageResource(R.drawable.blue_square);
                         bitmapSet = true;
+                        btnCreate.setEnabled(true);
                         dialog.dismiss();
                     }
                 });
@@ -108,7 +109,7 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
 
-        createBtn.setOnClickListener(new View.OnClickListener() {
+        btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -182,6 +183,10 @@ public class AddItemActivity extends AppCompatActivity {
                     }
                 }
                 break;
+        }
+        if(bitmapSet)
+        {
+            btnCreate.setEnabled(true);
         }
     }
 
