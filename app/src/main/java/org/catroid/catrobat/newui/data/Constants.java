@@ -7,4 +7,5 @@ public class Constants {
     public static int PROJECT_IMAGE_SIZE = 0;
     public static int SWIPE_THRESHOLD = 300;
     public static int SWIPE_VELOCITY_THRESHOLD = 300;
+    public static int SCROLL_ACTION_MIN_THRESHOLD = 10;
 }

@@ -2,8 +2,6 @@ package org.catroid.catrobat.newui.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +13,8 @@ import android.widget.TextView;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.ProjectItem;
-import org.catroid.catrobat.newui.ui.comparator.AlphabeticProjectComparator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
 public class ProjectViewAdapter extends ArrayAdapter {
