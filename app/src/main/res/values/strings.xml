@@ -45,4 +45,8 @@
     <string name="tab_name_looks">Looks</string>
     <string name="tab_name_sounds">Sounds</string>
 
+    <!-- Look Bricks -->
+    <string name="brick_set_x">Set X:</string>
+    <string name="brick_set_look">Switch to look</string>
+
 </resources>

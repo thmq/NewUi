@@ -5,6 +5,7 @@ import org.catroid.catrobat.newui.data.LookInfo;
 import java.util.List;
 
 public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
+
     public LookAdapter(List<LookInfo> lookInfos, int listItem) {
         super(lookInfos, listItem);
     }
