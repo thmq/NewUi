@@ -15,14 +15,13 @@ import org.catroid.catrobat.newui.io.StorageHandler;
 
 import java.io.Serializable;
 
-public class LookInfo implements Serializable, CopyPasteable {
+public class LookInfo extends ItemInfo implements Serializable, CopyPasteable {
 
     private static final transient int THUMBNAIL_WIDTH = 80;
     private static final transient int THUMBNAIL_HEIGHT = 80;
 
     //TODO: uncomment after XStream integration
     //@XStreamAsAttribute
-    private String name;
     private String fileName;
     private transient PathInfoFile mPathInfo;
     private transient int width;
@@ -31,7 +30,7 @@ public class LookInfo implements Serializable, CopyPasteable {
     private RoundedBitmapDrawable mThumbnailDrawable;
 
     public LookInfo(String name, PathInfoFile pathInfo) {
-        this.name = name;
+        super(name);
         this.mPathInfo = pathInfo;
         //TODO what if the pathInfo's relative path is not the filename alone?
         fileName = pathInfo.getRelativePath();
@@ -41,14 +40,6 @@ public class LookInfo implements Serializable, CopyPasteable {
 
     public void initializeAfterDeserialize(PathInfoDirectory parent) {
         mPathInfo = new PathInfoFile(parent, fileName);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public PathInfoFile getPathInfo() {

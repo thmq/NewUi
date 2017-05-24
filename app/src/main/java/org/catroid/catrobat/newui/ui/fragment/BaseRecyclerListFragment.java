@@ -1,6 +1,9 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -21,20 +24,28 @@ import android.widget.Toast;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.copypaste.Clipboard;
 import org.catroid.catrobat.newui.copypaste.CopyPasteable;
+import org.catroid.catrobat.newui.data.ItemInfo;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.dialog.RenameItemDialog;
+import org.catroid.catrobat.newui.io.PathInfoFile;
+import org.catroid.catrobat.newui.io.StorageHandler;
+import org.catroid.catrobat.newui.ui.AddItemActivity;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapterDelegate;
 import org.catroid.catrobat.newui.utils.Utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends Fragment
         implements RecyclerViewAdapterDelegate<T>, NewItemDialog.NewItemInterface,
-        RenameItemDialog.RenameItemInterface {
+        RenameItemDialog.RenameItemInterface, Serializable {
 
     public static final String TAG = BaseRecyclerListFragment.class.getSimpleName();
+    public static final int ADD_NEW_ITEM_REQUEST = 1;
 
     protected ActionMode mActionMode;
     protected RecyclerView mRecyclerView;
@@ -159,7 +170,28 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
     public abstract RecyclerViewAdapter<T> createAdapter();
 
     public void onAddButtonClicked() {
-        showNewItemDialog();
+        ArrayList<String> names = new ArrayList<>();
+        for(T i : mRecyclerViewAdapter.getItems()) {
+            names.add(getItemName(i));
+        }
+
+        Intent intent = new Intent(getContext(), AddItemActivity.class);
+        intent.putExtra("names_list", names);
+        startActivityForResult(intent, ADD_NEW_ITEM_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ADD_NEW_ITEM_REQUEST && resultCode == RESULT_OK) {
+            String name = data.getStringExtra("name");
+            byte[] byteArray = data.getByteArrayExtra("image");
+            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
+            PathInfoFile pathInfoFile = StorageHandler.createImage(bitmap, name);
+            T item = createNewItem(name, pathInfoFile);
+            addToList(item);
+        }
     }
 
     private void showNewItemDialog() {
@@ -190,6 +222,8 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
         dialog.setRenameItemInterface(this);
         dialog.show(getFragmentManager(), dialog.getTag());
     }
+
+    protected abstract void addToList(T item);
 
     protected abstract String getItemName(T item);
 
@@ -318,6 +352,8 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
     }
 
     protected abstract void renameItem(T item, String itemName);
+
+    protected abstract T createNewItem(String itemName, PathInfoFile pathInfoFile);
 
     protected abstract T createNewItem(String itemName);
 

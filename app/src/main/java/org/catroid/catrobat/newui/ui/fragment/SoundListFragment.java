@@ -19,6 +19,17 @@ public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
     public static final String TAG = SoundListFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number_sound_list";
 
+    @Override
+    protected void addToList(SoundInfo item) {
+        mRecyclerViewAdapter.addItem(item);
+    }
+
+    @Override
+    protected SoundInfo createNewItem(String itemName, PathInfoFile pathInfoFile) {
+        //TODO
+        return null;
+    }
+
     public static BaseRecyclerListFragment newInstance(int sectionNumber) {
         BaseRecyclerListFragment fragment = new SoundListFragment();
 

@@ -1,5 +1,6 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import org.catroid.catrobat.newui.data.LookInfo;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
+import org.catroid.catrobat.newui.ui.AddItemActivity;
 import org.catroid.catrobat.newui.ui.adapter.LookAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryManager;
@@ -19,11 +21,12 @@ import org.catroid.catrobat.newui.utils.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
-        implements NewItemDialog.NewItemInterface {
+        implements NewItemDialog.NewItemInterface{
     public static final String TAG = LookListFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number_look_list";
 
@@ -64,6 +67,11 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     }
 
     @Override
+    protected void addToList(LookInfo item) {
+        mRecyclerViewAdapter.addItem(item);
+    }
+
+    @Override
     protected String getItemName(LookInfo item) {
         return item.getName();
     }
@@ -91,6 +99,7 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         item.setName(itemName);
     }
 
+
     @Override
     protected LookInfo createNewItem(String itemName) {
         String uniqueLookName = Utils.getUniqueLookName(itemName, mRecyclerViewAdapter.getItems());
@@ -98,7 +107,6 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         PathInfoFile pathInfo = createImage();
         return new LookInfo(uniqueLookName, pathInfo);
     }
-
 
     private PathInfoFile createImage() {
         StorageHandler.setupDirectoryStructure();
@@ -134,6 +142,12 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
         }
 
         return new PathInfoFile(Utils.getImageDirectory(), file.getName());
+    }
+
+    @Override
+    protected LookInfo createNewItem(String itemName, PathInfoFile pathInfoFile) {
+        String uniqueLookName = Utils.getUniqueLookName(itemName, mRecyclerViewAdapter.getItems());
+        return new LookInfo(uniqueLookName, pathInfoFile);
     }
 
     private boolean shouldPresentFeatureDiscovery() {

@@ -13,21 +13,20 @@ import android.widget.ViewSwitcher;
 
 import org.catroid.catrobat.newui.R;
 
+import java.io.Serializable;
 import java.util.List;
 
-public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener, RecyclerViewMultiSelectionManagerDelegate<T> {
+public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener, RecyclerViewMultiSelectionManagerDelegate<T>{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public View mItemView;
+        public TextView mNameView;
+        public TextView mDetailsView;
+        public ImageSwitcher mImageSwitcher;
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+        public Animation collapseAnimation;
+        public Animation expandAnimation;
 
-        View mItemView;
-        TextView mNameView;
-        TextView mDetailsView;
-        ImageSwitcher mImageSwitcher;
-
-        Animation collapseAnimation;
-        Animation expandAnimation;
-
-        ViewHolder(final View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
 
             mItemView = itemView;
@@ -97,7 +96,10 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(mItemLayoutId, parent, false);
-        return new ViewHolder(view);
+
+        ViewHolder holder = new ViewHolder(view);
+
+        return holder;
     }
 
     @Override
@@ -105,18 +107,23 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         T item = mListItems.get(position);
 
         boolean isSelected = mMultiSelectionManager.getIsSelected(item);
+
         holder.itemView.setOnLongClickListener(this);
+
         boolean shouldAnimate = shouldAnimateItem(item);
 
         if (shouldAnimate) {
             resetItemToAnimate();
+
             holder.enableAnimations();
         } else {
             holder.disableAnimations();
         }
 
         bindDataToViewHolder(item, holder, isSelected);
+
         holder.updateBackground(isSelected);
+
     }
 
     public abstract void bindDataToViewHolder(T item, ViewHolder holder, boolean isSelected);
@@ -139,8 +146,11 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
         if (mMultiSelectionManager.isSelectable(item)) {
             mMultiSelectionManager.toggleSelected(item);
+
             setItemToAnimate(item);
+
             notifyItemChanged(position);
+
             return true;
         }
 
@@ -153,6 +163,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
     public void addItem(T item) {
         mListItems.add(item);
+
         int pos = mListItems.indexOf(item);
         notifyItemInserted(pos);
     }
