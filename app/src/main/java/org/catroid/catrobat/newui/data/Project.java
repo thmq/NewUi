@@ -2,14 +2,21 @@ package org.catroid.catrobat.newui.data;
 
 import android.graphics.Bitmap;
 
-public class ProjectItem {
+import org.catroid.catrobat.newui.copypaste.CopyPasteable;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Project{
 
     private String infoText;
     private String description;
     private Bitmap thumbnail;
     private Boolean favorite;
 
-    public ProjectItem(Bitmap thumbnail, String infoText) {
+    private List<Scene> mScenes = new ArrayList<>();
+
+    public Project(Bitmap thumbnail, String infoText) {
         this.thumbnail = thumbnail;
         this.infoText = infoText;
         this.favorite = false;
@@ -29,6 +36,14 @@ public class ProjectItem {
 
     public void setThumbnail(Bitmap thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public void setScenes(List<Scene> scenes) {
+        mScenes = scenes;
+    }
+
+    public List<Scene> getScenes() {
+        return mScenes;
     }
 
     public String getDescription() {

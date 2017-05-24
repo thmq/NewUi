@@ -1,5 +1,7 @@
 package org.catroid.catrobat.newui.io;
 
+import org.catroid.catrobat.newui.utils.Utils;
+
 import java.io.File;
 
 public abstract class PathInfo {

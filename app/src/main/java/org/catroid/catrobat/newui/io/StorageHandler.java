@@ -21,10 +21,12 @@ public final class StorageHandler {
             + File.separator + "NewUi";
     public static final String IMAGE_FOLDER = "images";
     public static final String SOUND_FOLDER = "sounds";
+    public static final String TMP_FOLDER = "tmp";
 
     public static final PathInfoDirectory ROOT_DIRECTORY = new PathInfoDirectory(ROOT);
 
     private static final String FILE_NAME_APPENDIX = "_#";
+
 
     public static void exportBitmapToFile(Bitmap bitmap, File file) throws IOException {
         FileOutputStream os = new FileOutputStream(file);
@@ -48,6 +50,24 @@ public final class StorageHandler {
         File dstFile = copyFile(srcPath, dstPath);
 
         return new PathInfoFile(dstDirectoryInfo, dstFile.getName());
+    }
+
+    public static File copyFile(PathInfoFile sourceFileInfo, PathInfoFile dstFileInfo) throws Exception {
+        File srcFile = new File(sourceFileInfo.getAbsolutePath());
+        File dstFile = new File(dstFileInfo.getAbsolutePath());
+
+        if (!srcFile.exists()) {
+            throw new Exception("Source file not found: " + sourceFileInfo.getAbsolutePath());
+        }
+
+        if (dstFile.exists()) {
+            throw new Exception("Destination file already exists: " + dstFileInfo.getAbsolutePath());
+        }
+
+
+        copyFile(srcFile, dstFile);
+
+        return dstFile;
     }
 
     private static File copyFile(String srcPath) throws Exception {
@@ -91,7 +111,7 @@ public final class StorageHandler {
             appendix++;
         }
 
-        throw new Exception("Could not find a unique file name.");
+        throw new Exception("Could not find a unique file name in " + dstDirectory + ".");
     }
 
     private static void copyFile(File srcFile, File dstFile) throws IOException {
@@ -133,6 +153,7 @@ public final class StorageHandler {
         mkDir(ROOT);
         mkDir(ROOT, IMAGE_FOLDER);
         mkDir(ROOT, SOUND_FOLDER);
+        mkDir(ROOT, TMP_FOLDER);
     }
 
     private static void mkDir(String name) {
