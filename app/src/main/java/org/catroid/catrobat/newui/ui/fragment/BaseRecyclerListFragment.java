@@ -196,9 +196,9 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
     private void showNewItemDialog() {
         NewItemDialog dialog = NewItemDialog.newInstance(
-                R.string.dialog_create_item,
+                R.string.dialog_new_name,
                 R.string.dialog_item_name_label,
-                R.string.dialog_create_item_primary_action,
+                R.string.create_item_primary_action,
                 R.string.cancel,
                 false
         );
