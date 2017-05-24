@@ -7,16 +7,19 @@
         android:icon="@drawable/favorite_black"
         android:title="@string/bottom_nav_favorites"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/bottom_action_recent"
-        android:enabled="true"
-        android:icon="@drawable/recent_projects"
-        android:title="@string/bottom_nav_recent"
-        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/bottom_action_all"
         android:enabled="true"
         android:icon="@drawable/list_all_1"
         android:title="@string/bottom_nav_all"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/bottom_action_recent"
+        android:enabled="true"
+        android:icon="@drawable/recent_projects"
+        android:title="@string/bottom_nav_recent"
+        app:showAsAction="ifRoom" />
+
 </menu>

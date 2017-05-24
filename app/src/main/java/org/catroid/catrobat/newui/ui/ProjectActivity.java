@@ -7,15 +7,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -28,11 +31,16 @@ import android.widget.Toast;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.ProjectItem;
+import org.catroid.catrobat.newui.ui.comparator.AlphabeticProjectComparator;
+import org.catroid.catrobat.newui.ui.comparator.RecentProjectComparator;
 import org.catroid.catrobat.newui.ui.listener.OnSwipeTouchListener;
 import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
 import static android.view.View.GONE;
 
@@ -43,6 +51,7 @@ public class ProjectActivity extends AppCompatActivity {
     private GridView mGridView;
     private ProjectViewAdapter mProjectViewAdapter;
     private ArrayList<ProjectItem> mProjectItems = new ArrayList<>();
+    private ArrayList<ProjectItem> mDisplayedProjects = new ArrayList<>();
     private OnSwipeTouchListener onSwipeTouchListener;
     private int myLastVisiblePos;
     private FloatingActionButton fab;
@@ -63,41 +72,48 @@ public class ProjectActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(ProjectActivity.this, new String[]
                 {Manifest.permission.ACCESS_NETWORK_STATE}, 1);
 
+        mGridView = (GridView) findViewById(R.id.project_gridview);
         mWebView = (WebView) findViewById(R.id.webview);
+
         try {
             if (!(WebViewManager.loadFromURL(mWebView, Constants.PROJECT_NEWS_URL, this))) {
-                Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "No Internet Connection!", Toast.LENGTH_SHORT).show();
             } else {
                 DisplayMetrics mDisplayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
 
                 mWebView.getLayoutParams().height = mDisplayMetrics.heightPixels / 4;
-
-
             }
         } catch (Exception exception) {
             mWebView.setVisibility(GONE);
             mWebView.getLayoutParams().height = 0;
-            Toast.makeText(this, "NOT connected !!!", Toast.LENGTH_LONG).show();
         }
 
 
         Constants.PROJECT_IMAGE_SIZE = getSizeForGridViewImages();
 
-        mProjectViewAdapter = new ProjectViewAdapter(this, R.layout.project_item, mProjectItems);
-
-        mGridView = (GridView) findViewById(R.id.project_gridview);
-        mGridView.setAdapter(mProjectViewAdapter);
-
         // Fill in Test-Data
         for (int i = 0; i < 12; i++) {
-            String text = "Project " + i;
+
+            String text = "";
+
+            if(i % 4 == 0) text = "B ";
+            if(i % 4 == 1) text = "C ";
+            if(i % 4 == 2) text = "D ";
+            if(i % 4 == 3) text = "A ";
+
+            text += "Project " + i;
             if (addNewProjectItem(R.drawable.blue_test_pic, text)) {
-                mProjectViewAdapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(this, "Could not add File: " + text, Toast.LENGTH_LONG).show();
             }
         }
+
+
+        //mDisplayedProjects = sortAlphabetic(mProjectItems);
+        mDisplayedProjects = (ArrayList<ProjectItem>) mProjectItems.clone();
+        mProjectViewAdapter = new ProjectViewAdapter(this, R.layout.project_item, mDisplayedProjects);
+        mGridView.setAdapter(mProjectViewAdapter);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -106,13 +122,57 @@ public class ProjectActivity extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(), "Replace with Action",
                         Toast.LENGTH_LONG).show();
+
+                for(int i = 0; i < mProjectItems.size(); i++) {
+                    Log.wtf("mProjectItems ", mProjectItems.get(i).getTitle()
+                            + " Favorite: " + mProjectItems.get(i).getFavorite()
+                            + " Last Access: " + mProjectItems.get(i).getLastAccess().toString());
+                }
+
+                for(int i = 0; i < mDisplayedProjects.size(); i++) {
+                    Log.wtf("displayedProjects ", mDisplayedProjects.get(i).getTitle()
+                            + " Favorite: " + mDisplayedProjects.get(i).getFavorite()
+                    + " Last Access: " + mDisplayedProjects.get(i).getLastAccess().toString());
+                }
             }
         });
 
-        myLastVisiblePos = mGridView.getFirstVisiblePosition();
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        params = (ViewGroup.MarginLayoutParams) fab.getLayoutParams();
+        mBottomNavigationView.getMenu().getItem(1).setChecked(true);
 
+        mBottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch(item.getItemId()) {
+                    case R.id.bottom_action_recent:
+                        mDisplayedProjects.clear();
+                        mDisplayedProjects.addAll(sortRecent(mProjectItems));
+                        mProjectViewAdapter.notifyDataSetChanged();
+                        break;
+                    case R.id.bottom_action_favorites:
+                        mDisplayedProjects.clear();
+                        mDisplayedProjects.addAll(sortFavorite(mProjectItems));
+                        mProjectViewAdapter.notifyDataSetChanged();
+                        break;
+                    default:
+                        mDisplayedProjects.clear();
+                        mDisplayedProjects.addAll(sortAlphabetic(mProjectItems));
+                        mProjectViewAdapter.notifyDataSetChanged();
+                        break;
+                }
+
+                return true;
+            }
+        });
+
+
+        myLastVisiblePos = mGridView.getFirstVisiblePosition();
+
+
+        params = (ViewGroup.MarginLayoutParams) fab.getLayoutParams();
         mGridView.setOnScrollListener( new AbsListView.OnScrollListener() {
 
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -223,6 +283,36 @@ public class ProjectActivity extends AppCompatActivity {
         };
 
         return touchListener;
+    }
+
+
+    private ArrayList<ProjectItem> sortAlphabetic(ArrayList<ProjectItem> sortList) {
+
+        Log.wtf("Starting ", "Alphapetic Sort ...");
+        Collections.sort(sortList, new AlphabeticProjectComparator());
+        return sortList;
+    }
+
+    private ArrayList<ProjectItem> sortRecent(ArrayList<ProjectItem> sortList) {
+
+        Log.wtf("Starting ", "Alphapetic Sort ...");
+        Collections.sort(sortList, new RecentProjectComparator());
+        return sortList;
+    }
+
+    private ArrayList<ProjectItem> sortFavorite(ArrayList<ProjectItem> sortList) {
+
+        Log.wtf("Starting ", "Favorite Sort ...");
+
+        ArrayList<ProjectItem> favoriteList = new ArrayList<>();
+        for(int i = 0; i < sortList.size(); i++) {
+
+            if(sortList.get(i).getFavorite()) {
+                favoriteList.add(sortList.get(i));
+            }
+        }
+
+        return sortAlphabetic(favoriteList);
     }
 
 }

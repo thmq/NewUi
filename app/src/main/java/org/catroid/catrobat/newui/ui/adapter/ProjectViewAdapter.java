@@ -2,6 +2,8 @@ package org.catroid.catrobat.newui.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,11 @@ import android.widget.TextView;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.ProjectItem;
+import org.catroid.catrobat.newui.ui.comparator.AlphabeticProjectComparator;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
 public class ProjectViewAdapter extends ArrayAdapter {
 
@@ -51,7 +56,7 @@ public class ProjectViewAdapter extends ArrayAdapter {
         viewHolder.txtView.setWidth(Constants.PROJECT_IMAGE_SIZE);
         viewHolder.txtView.setBackgroundColor(Color.BLACK);
         viewHolder.txtView.getBackground().setAlpha(123);
-        viewHolder.txtView.setText(tmp.getInfoText());
+        viewHolder.txtView.setText(tmp.getTitle());
 
         if (tmp.getFavorite()) {
             viewHolder.favoriteView.setImageResource(R.drawable.favorite_white_selected);
@@ -63,6 +68,20 @@ public class ProjectViewAdapter extends ArrayAdapter {
             public void onClick(View v) {
                 tmp.setFavorite(!tmp.getFavorite());
                 notifyDataSetChanged();
+            }
+        });
+
+        viewHolder.imgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tmp.setLastAccess(new Date());
+            }
+        });
+
+        viewHolder.txtView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tmp.setLastAccess(new Date());
             }
         });
 
@@ -82,5 +101,8 @@ public class ProjectViewAdapter extends ArrayAdapter {
             this.favoriteView = (ImageView) projectView
                     .findViewById(R.id.favorite_project_image_view);
         }
+
+
     }
+
 }
