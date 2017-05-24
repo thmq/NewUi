@@ -77,4 +77,8 @@ public class Project implements PersistableRecord {
     public void setFavorite(Boolean favorite) {
         this.favorite = favorite;
     }
+
+    public String getName() {
+        return infoText;
+    }
 }

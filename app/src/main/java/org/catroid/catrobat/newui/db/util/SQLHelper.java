@@ -47,4 +47,8 @@ public class SQLHelper {
     public static String dropTableIfExists(String tableName) {
         return "DROP TABLE IF EXISTS " + escapeTable(tableName) + ";";
     }
+
+    public static String integerColumnDefinition(String columnName) {
+        return escapeColumn(columnName) + " INTEGER";
+    }
 }

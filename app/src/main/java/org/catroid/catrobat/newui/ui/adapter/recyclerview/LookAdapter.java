@@ -1,4 +1,4 @@
-package org.catroid.catrobat.newui.ui.adapter;
+package org.catroid.catrobat.newui.ui.adapter.recyclerview;
 
 import org.catroid.catrobat.newui.data.LookInfo;
 

@@ -40,13 +40,7 @@ public class ProjectBridge extends DatabaseBridge<Project> {
 
     @Override
     protected String[] getProjection() {
-        return new String[] {
-                DataContract.ProjectEntry._ID,
-                DataContract.ProjectEntry.COLUMN_NAME,
-                DataContract.ProjectEntry.COLUMN_INFO_TEXT,
-                DataContract.ProjectEntry.COLUMN_DESCRIPTION,
-                DataContract.ProjectEntry.COLUMN_FAVORITE
-        };
+        return DataContract.ProjectEntry.getFullProjection();
     }
 
     @Override

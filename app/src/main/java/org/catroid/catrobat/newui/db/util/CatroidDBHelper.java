@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import org.catroid.catrobat.newui.db.util.DataContract.ProjectEntry;
+import org.catroid.catrobat.newui.db.util.DataContract.SceneEntry;
+
 
 public class CatroidDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "catroid.sqlite3";
@@ -19,10 +21,14 @@ public class CatroidDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String createProjectsTableSQL = createProjectsTable();
-
         Log.d(TAG, "Creating Projects... ");
         Log.d(TAG, createProjectsTableSQL);
         sqLiteDatabase.execSQL(createProjectsTableSQL);
+
+        String createScenesTableSQL = createScenesTable();
+        Log.d(TAG, "Creating Scenes... ");
+        Log.d(TAG, createScenesTableSQL);
+        sqLiteDatabase.execSQL(createScenesTableSQL);
     }
 
     @Override
@@ -40,6 +46,14 @@ public class CatroidDBHelper extends SQLiteOpenHelper {
                 SQLHelper.stringColumnDefinition(ProjectEntry.COLUMN_INFO_TEXT),
                 SQLHelper.stringColumnDefinition(ProjectEntry.COLUMN_DESCRIPTION),
                 SQLHelper.booleanColumnDefinition(ProjectEntry.COLUMN_FAVORITE)
+        });
+    }
+
+    private String createScenesTable() {
+        return SQLHelper.createTableDefinition(SceneEntry.TABLE_NAME, new String[]{
+                SQLHelper.idColumnDefinition(SceneEntry._ID),
+                SQLHelper.integerColumnDefinition(SceneEntry.COLUMN_PROJECT_ID),
+                SQLHelper.stringColumnDefinition(SceneEntry.COLUMN_NAME)
         });
     }
 

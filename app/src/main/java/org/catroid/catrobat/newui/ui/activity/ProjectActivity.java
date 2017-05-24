@@ -2,19 +2,11 @@ package org.catroid.catrobat.newui.ui.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -39,7 +31,6 @@ import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapterDelegate;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static android.view.View.GONE;
 
@@ -207,8 +198,8 @@ public class ProjectActivity extends AppCompatActivity implements ProjectViewAda
     public void onProjectClick(ProjectViewAdapter adapter, Project project) {
         Intent scenesActivityIntent = new Intent(this, SceneActivity.class);
 
-        scenesActivityIntent.putExtra(SceneActivity.PROJECT_URI_KEY, DataContract.ProjectEntry.getProjectUri(project).toString());
-
+        scenesActivityIntent.putExtra(SceneActivity.PROJECT_ID_KEY, project.getId());
+        scenesActivityIntent.putExtra(SceneActivity.PROJECT_NAME_KEY, project.getName());
         startActivity(scenesActivityIntent);
     }
 }

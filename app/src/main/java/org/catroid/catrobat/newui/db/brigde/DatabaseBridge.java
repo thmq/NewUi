@@ -10,8 +10,8 @@ import android.provider.BaseColumns;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import org.catroid.catrobat.newui.db.fetchrequest.FetchRequest;
 import org.catroid.catrobat.newui.db.util.DataContract;
-import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +53,11 @@ public abstract class DatabaseBridge<T extends PersistableRecord> {
         return items;
     }
 
+
+    public List<T> findAll(FetchRequest fetchRequest) {
+        return findAll(fetchRequest.getSelection(), fetchRequest.getSelectionArgs(), fetchRequest.getSortOrder());
+    }
+
     private Cursor getFindAllCursor(@Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         return getContentResolver().query(getCollectionUri(), getProjection(), selection, selectionArgs, sortOrder);
     }
@@ -91,6 +96,7 @@ public abstract class DatabaseBridge<T extends PersistableRecord> {
     }
 
     public long insert(T item) {
+        Log.d("DBBridge", getCollectionUri().toString());
         Uri itemUri = getContentResolver().insert(getCollectionUri(), serializeForDatabase(item));
 
         long id = Long.valueOf(itemUri.getLastPathSegment());
@@ -116,7 +122,7 @@ public abstract class DatabaseBridge<T extends PersistableRecord> {
         return removedRecordsCount > 0;
     }
 
-    protected Context getContext() {
+    public Context getContext() {
         return mContext;
     }
 
@@ -125,10 +131,11 @@ public abstract class DatabaseBridge<T extends PersistableRecord> {
     }
 
     public void registerContentObserver(ContentObserver observer) {
-        getContentResolver().registerContentObserver(DataContract.ProjectEntry.PROJECT_URI, true, observer);
+        getContentResolver().registerContentObserver(getCollectionUri(), true, observer);
     }
 
     public void unregisterContentObserver(ContentObserver observer) {
         getContentResolver().unregisterContentObserver(observer);
     }
+
 }

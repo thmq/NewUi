@@ -23,8 +23,8 @@ import org.catroid.catrobat.newui.copypaste.Clipboard;
 import org.catroid.catrobat.newui.copypaste.CopyPasteable;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.dialog.RenameItemDialog;
-import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
-import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapterDelegate;
+import org.catroid.catrobat.newui.ui.adapter.recyclerview.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.adapter.recyclerview.RecyclerViewAdapterDelegate;
 import org.catroid.catrobat.newui.utils.Utils;
 
 import java.util.ArrayList;
@@ -117,10 +117,6 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
         mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recycler_view,
                 container, false);
 
-        mRecyclerViewAdapter = createAdapter();
-        mRecyclerViewAdapter.setDelegate(this);
-
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         return mRecyclerView;
     }
@@ -128,7 +124,20 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
     @Override
     public void onStart() {
         super.onStart();
+
+        mRecyclerViewAdapter = createAdapter();
+        mRecyclerViewAdapter.setDelegate(this);
+
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+
+
         getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRecyclerViewAdapter.cleanup();
     }
 
     @Override
@@ -174,7 +183,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
     private void showItemRenameDialog() {
         T item = mRecyclerViewAdapter.getSelectedItems().get(0);
-        
+
         RenameItemDialog dialog = RenameItemDialog.newInstance(
                 R.string.dialog_rename_item,
                 R.string.dialog_item_name_label,

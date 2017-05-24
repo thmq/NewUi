@@ -46,10 +46,9 @@
 
         <provider
             android:authorities="org.catroid.catrobat.newui"
-            android:name="org.catroid.catrobat.newui.db.contentprovider.ProjectContentProvider"
+            android:name="org.catroid.catrobat.newui.db.contentprovider.CatroidContentProvider"
             android:exported="false"
             />
-
     </application>
 
 </manifest>

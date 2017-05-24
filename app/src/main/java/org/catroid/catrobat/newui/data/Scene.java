@@ -1,31 +1,24 @@
 package org.catroid.catrobat.newui.data;
 
 import org.catroid.catrobat.newui.copypaste.CopyPasteable;
+import org.catroid.catrobat.newui.db.brigde.PersistableRecord;
+import org.catroid.catrobat.newui.db.brigde.ProjectBridge;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Scene implements Serializable, CopyPasteable {
+public class Scene implements Serializable, CopyPasteable, PersistableRecord {
 
     public static final String TAG = Scene.class.getSimpleName();
     private static final long serialVersionUID = 1L;
     //TODO: uncomment after XStream integration
     //@XStreamAsAttribute
     private String mName;
-    private List<Sprite> mSprites;
+    private long mId;
+    private long mProjectId;
 
-    public String getName() {
-        return mName;
-    }
-
-    public void setSprites(List<Sprite> sprites) {
-        mSprites = sprites;
-    }
-
-    public List<Sprite> getSprites() {
-        return mSprites;
-    }
+    private List<Sprite> mSprites = new ArrayList<>();
 
     @Override
     public boolean equals(Object object) {
@@ -68,5 +61,31 @@ public class Scene implements Serializable, CopyPasteable {
         clonedScene.mSprites = sprites;
 
         return clonedScene;
+    }
+
+    @Override
+    public long getId() {
+        return mId;
+    }
+
+    @Override
+    public void setId(long id) {
+        mId = id;
+    }
+
+    public long getProjectId() {
+        return mProjectId;
+    }
+
+    public void setProjectId(long mProjectId) {
+        this.mProjectId = mProjectId;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String mName) {
+        this.mName = mName;
     }
 }
