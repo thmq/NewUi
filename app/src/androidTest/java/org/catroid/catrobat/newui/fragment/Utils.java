@@ -23,8 +23,10 @@ public class Utils {
 
     static void addNewItemNamed(String name) {
         onView(ViewMatchers.withId(R.id.fab)).perform(click());
-        onView(withId(R.id.input)).perform(typeText(name));
-        onView(withText(R.string.dialog_create_item_primary_action)).perform(click());
+        onView(withId(R.id.addItemNameTxt)).perform(typeText(name));
+        onView(withId(R.id.addItemImage)).perform(click());
+        onView(withId(R.id.option_set_default_picture)).perform(click());
+        onView(withText(R.string.create_item_primary_action)).perform(click());
     }
 
     static void checkItemNamedExists(String name) {

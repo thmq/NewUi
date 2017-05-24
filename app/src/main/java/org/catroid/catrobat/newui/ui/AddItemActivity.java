@@ -3,7 +3,6 @@ package org.catroid.catrobat.newui.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -13,6 +12,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +25,6 @@ import android.widget.LinearLayout;
 import org.catroid.catrobat.newui.R;
 
 import java.io.ByteArrayOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -46,7 +45,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         addImage = (ImageView) findViewById(R.id.addItemImage);
         createBtn = (Button) findViewById(R.id.createItemBtn);
-        itemName = (EditText) findViewById(R.id.lookitemNameEdit);
+        itemName = (EditText) findViewById(R.id.addItemNameTxt);
         names = getIntent().getStringArrayListExtra("names_list");
         firstRun = true;
 
@@ -80,7 +79,28 @@ public class AddItemActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
+
+                LinearLayout defaultOption = (LinearLayout) layout.findViewById(R.id.option_set_default_picture);
+                defaultOption.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addImage.setImageResource(R.drawable.blue_square);
+                        dialog.dismiss();
+                    }
+                });
+
                 dialog.show();
+            }
+        });
+
+        itemName.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                String name = itemName.getText().toString();
+                if(!isNameValid(name)) {
+                    itemName.setError(getString(R.string.error_invalid_item_name));
+                }
+                return true;
             }
         });
 
@@ -91,6 +111,9 @@ public class AddItemActivity extends AppCompatActivity {
                     String name = itemName.getText().toString();
                     Bitmap bitmap = ((BitmapDrawable) addImage.getDrawable()).getBitmap();
 
+                    if(name.isEmpty()) {
+
+                    }
 
                     if(isNameValid(name) && bitmap != null) {
                         Intent result = new Intent();
