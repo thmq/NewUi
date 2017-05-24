@@ -10,6 +10,8 @@
         <item name="windowActionModeOverlay">true</item>
         <!-- ContextualActionBar Style -->
         <item name="android:actionModeBackground">@color/colorActionMode</item>
+        <!-- editText -->
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
     </style>
 
     <style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -19,5 +21,9 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="EditTextStyle" parent="@android:style/Widget.EditText">
+        <item name="textColor">@color/colorAccent</item>
+    </style>
 
 </resources>

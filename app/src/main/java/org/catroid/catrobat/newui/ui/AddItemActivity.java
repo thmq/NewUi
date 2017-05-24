@@ -34,6 +34,7 @@ public class AddItemActivity extends AppCompatActivity {
     Button createBtn;
     Boolean firstRun = false;
     ArrayList<String> names;
+    Boolean bitmapSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,7 @@ public class AddItemActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         addImage.setImageResource(R.drawable.blue_square);
+                        bitmapSet = true;
                         dialog.dismiss();
                     }
                 });
@@ -99,8 +101,10 @@ public class AddItemActivity extends AppCompatActivity {
                 String name = itemName.getText().toString();
                 if(!isNameValid(name)) {
                     itemName.setError(getString(R.string.error_invalid_item_name));
+                } else {
+                    itemName.setError(null);
                 }
-                return true;
+                return false;
             }
         });
 
@@ -111,11 +115,11 @@ public class AddItemActivity extends AppCompatActivity {
                     String name = itemName.getText().toString();
                     Bitmap bitmap = ((BitmapDrawable) addImage.getDrawable()).getBitmap();
 
-                    if(name.isEmpty()) {
+                    if(!isNameValid(name)) {
+                        itemName.setError(getString(R.string.error_invalid_item_name));
+                    } else if (!bitmapSet) {
 
-                    }
-
-                    if(isNameValid(name) && bitmap != null) {
+                    } else {
                         Intent result = new Intent();
                         result.putExtra("name", name);
 
@@ -126,8 +130,6 @@ public class AddItemActivity extends AppCompatActivity {
 
                         setResult(Activity.RESULT_OK, result);
                         finish();
-                    } else {
-                        itemName.setError(getString(R.string.error_invalid_item_name));
                     }
 
                 } catch(Exception e) {
@@ -154,20 +156,30 @@ public class AddItemActivity extends AppCompatActivity {
             case 0: //Camera
                 if(resultCode == RESULT_OK){
                     Bitmap photo = (Bitmap) imageReturnedIntent.getExtras().get("data");
-                    addImage.setImageBitmap(photo);
-                    //Uri selectedImage = imageReturnedIntent.getData();
-                    //addImage.setImageURI(selectedImage);
-                    addImage.setImageTintMode(null);
-                    addImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    if(photo != null) {
+                        addImage.setImageBitmap(photo);
+                        //Uri selectedImage = imageReturnedIntent.getData();
+                        //addImage.setImageURI(selectedImage);
+                        addImage.setImageTintMode(null);
+                        addImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        bitmapSet = true;
+                    } else {
+                        bitmapSet = false;
+                    }
                 }
 
                 break;
             case 1:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = imageReturnedIntent.getData();
-                    addImage.setImageURI(selectedImage);
-                    addImage.setImageTintMode(null);
-                    addImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    if(!selectedImage.toString().isEmpty()) {
+                        addImage.setImageURI(selectedImage);
+                        addImage.setImageTintMode(null);
+                        addImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        bitmapSet = true;
+                    } else {
+                        bitmapSet = false;
+                    }
                 }
                 break;
         }
