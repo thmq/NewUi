@@ -61,14 +61,6 @@ public class AddItemActivity extends AppCompatActivity {
         caller_tag = callingIntent.getStringExtra("caller_tag");
         firstRun = true;
 
-        if(caller_tag.equals(R.string.tab_name_looks)) {
-            initLooksActivity();
-        } else if (caller_tag.equals(R.string.tab_name_sounds)) {
-            initSoundsActivity();
-        } else {
-
-        }
-
         itemName.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -88,32 +80,34 @@ public class AddItemActivity extends AppCompatActivity {
 
                 final AlertDialog dialog = new AlertDialog.Builder(AddItemActivity.this).create();
 
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = inflater.inflate(R.layout.dialog_select_image, null);
-                dialog.setView(layout);
+                if(caller_tag.equals(LOOKS)) {
+                    LayoutInflater inflater = getLayoutInflater();
+                    View layout = inflater.inflate(R.layout.dialog_select_image, null);
+                    dialog.setView(layout);
 
+                    LinearLayout cameraOption = (LinearLayout) layout.findViewById(R.id.option_camera);
+                    cameraOption.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(takePicture, 0);
+                            dialog.dismiss();
+                        }
+                    });
 
+                    LinearLayout galleryOption = (LinearLayout) layout.findViewById(R.id.option_gallery);
+                    galleryOption.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pickPhoto, 1);
+                            dialog.dismiss();
+                        }
+                    });
+                } else if(caller_tag.equals(SOUNDS)) {
 
-                LinearLayout cameraOption = (LinearLayout) layout.findViewById(R.id.option_camera);
-                cameraOption.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(takePicture, 0);
-                        dialog.dismiss();
-                    }
-                });
-
-                LinearLayout galleryOption = (LinearLayout) layout.findViewById(R.id.option_gallery);
-                galleryOption.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(pickPhoto, 1);
-                        dialog.dismiss();
-                    }
-                });
+                }
 
                 dialog.show();
             }
@@ -153,14 +147,6 @@ public class AddItemActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void initSoundsActivity() {
-
-    }
-
-    private void initLooksActivity() {
-
     }
 
     private boolean isNameValid(String name) {
