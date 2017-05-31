@@ -61,6 +61,9 @@
 
 
 
+    <!-- Bricks -->
+    <string name="brick_set_x">Set X:</string>
+
     <!-- Look Bricks -->
     <string name="brick_set_x">Set X:</string>
     <string name="brick_set_look">Switch to look</string>

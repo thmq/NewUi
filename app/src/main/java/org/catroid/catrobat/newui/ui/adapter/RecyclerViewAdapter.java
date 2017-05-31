@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener, RecyclerViewMultiSelectionManagerDelegate<T> {
+
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         View mItemView;
         TextView mNameView;
