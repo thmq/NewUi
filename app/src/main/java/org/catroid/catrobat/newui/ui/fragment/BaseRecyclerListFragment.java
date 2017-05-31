@@ -142,7 +142,6 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
     @Override
     public void onStart() {
         super.onStart();
-
         getActivity().invalidateOptionsMenu();
     }
 
@@ -162,7 +161,6 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
         switch (item.getItemId()) {
             case R.id.btnPaste:
                 pasteItems();
-
                 return true;
         }
 
