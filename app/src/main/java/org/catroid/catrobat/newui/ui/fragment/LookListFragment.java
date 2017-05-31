@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 
 import org.catroid.catrobat.newui.R;
+import org.catroid.catrobat.newui.copypaste.Clipboard;
 import org.catroid.catrobat.newui.data.LookInfo;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
 import org.catroid.catrobat.newui.ui.adapter.LookAdapter;
 import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
-import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryFactory;
 import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryManager;
 import org.catroid.catrobat.newui.utils.Utils;
 
@@ -54,7 +54,8 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     public RecyclerViewAdapter<LookInfo> createAdapter() {
         //TODO change again
         List<LookInfo> lookInfoList = new ArrayList<LookInfo>();
-        for (int i = 0; i < 3; i++) {
+
+        for (int i = 0; i < 0; i++) {
             lookInfoList.add(new LookInfo("Item " + i, createImage()));
         }
 
@@ -65,6 +66,11 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     @Override
     protected String getItemName(LookInfo item) {
         return item.getName();
+    }
+
+    @Override
+    protected Clipboard.ItemType getItemType() {
+        return Clipboard.ItemType.LOOK;
     }
 
     @Override
@@ -131,6 +137,6 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     }
 
     private boolean shouldPresentFeatureDiscovery() {
-        return true;
+        return false;
     }
 }

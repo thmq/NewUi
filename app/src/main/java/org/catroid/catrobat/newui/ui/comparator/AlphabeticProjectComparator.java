@@ -1,13 +1,13 @@
 package org.catroid.catrobat.newui.ui.comparator;
 
-import org.catroid.catrobat.newui.data.ProjectItem;
+import org.catroid.catrobat.newui.data.Project;
 
 import java.util.Comparator;
 
-public class AlphabeticProjectComparator implements Comparator<ProjectItem> {
+public class AlphabeticProjectComparator implements Comparator<Project> {
 
         @Override
-        public int compare(ProjectItem project1, ProjectItem project2) {
-            return project1.getTitle().compareTo(project2.getTitle());
+        public int compare(Project project1, Project project2) {
+            return project1.getInfoText().compareTo(project2.getInfoText());
         }
 }

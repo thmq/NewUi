@@ -3,24 +3,19 @@ package org.catroid.catrobat.newui.data;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.util.Log;
 
+import org.catroid.catrobat.newui.copypaste.CopyPasteable;
 import org.catroid.catrobat.newui.io.PathInfoDirectory;
 import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
 
 import java.io.Serializable;
 
-public class LookInfo implements Serializable {
+public class LookInfo implements Serializable, CopyPasteable {
 
     private static final transient int THUMBNAIL_WIDTH = 80;
     private static final transient int THUMBNAIL_HEIGHT = 80;
@@ -29,7 +24,7 @@ public class LookInfo implements Serializable {
     //@XStreamAsAttribute
     private String name;
     private String fileName;
-    private transient PathInfoFile pathInfo;
+    private transient PathInfoFile mPathInfo;
     private transient int width;
     private transient int height;
     private transient Bitmap mThumbnail;
@@ -37,7 +32,7 @@ public class LookInfo implements Serializable {
 
     public LookInfo(String name, PathInfoFile pathInfo) {
         this.name = name;
-        this.pathInfo = pathInfo;
+        this.mPathInfo = pathInfo;
         //TODO what if the pathInfo's relative path is not the filename alone?
         fileName = pathInfo.getRelativePath();
 
@@ -45,7 +40,7 @@ public class LookInfo implements Serializable {
     }
 
     public void initializeAfterDeserialize(PathInfoDirectory parent) {
-        pathInfo = new PathInfoFile(parent, fileName);
+        mPathInfo = new PathInfoFile(parent, fileName);
     }
 
     public String getName() {
@@ -57,7 +52,16 @@ public class LookInfo implements Serializable {
     }
 
     public PathInfoFile getPathInfo() {
-        return pathInfo;
+        return mPathInfo;
+    }
+
+    public void setPathInfo(PathInfoFile pathInfo) {
+        mPathInfo = pathInfo;
+    }
+
+    public void setAndCopyToPathInfo(PathInfoFile pathInfo) throws Exception {
+        StorageHandler.copyFile(mPathInfo, pathInfo);
+        setPathInfo(pathInfo);
     }
 
     public int getWidth() {
@@ -73,11 +77,11 @@ public class LookInfo implements Serializable {
     }
 
     public void cleanup() throws Exception {
-        StorageHandler.deleteFile(pathInfo);
+        StorageHandler.deleteFile(mPathInfo);
     }
 
     public Bitmap getBitmap() {
-        String imagePath = pathInfo.getAbsolutePath();
+        String imagePath = mPathInfo.getAbsolutePath();
 
         if (!StorageHandler.fileExists(imagePath)) {
             return null;
@@ -102,6 +106,24 @@ public class LookInfo implements Serializable {
         return mThumbnailDrawable;
     }
 
+    @Override
+    public LookInfo clone() throws CloneNotSupportedException {
+        LookInfo clonedLookInfo = (LookInfo) super.clone();
+        mThumbnailDrawable = (RoundedBitmapDrawable) clonedLookInfo.mThumbnailDrawable.mutate();
+        return clonedLookInfo;
+    }
+
+    @Override
+    public void prepareForClipboard() throws Exception {
+        setAndCopyToPathInfo(PathInfoFile.getUniqueTmpFilePath(mPathInfo));
+
+        createThumbnail();
+    }
+
+    @Override
+    public void cleanupFromClipboard() throws Exception {
+        cleanup();
+    }
 
     private void createThumbnail() {
         Bitmap bigImage = getBitmap();

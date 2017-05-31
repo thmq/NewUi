@@ -13,16 +13,16 @@ import android.widget.TextView;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
-import org.catroid.catrobat.newui.data.ProjectItem;
+import org.catroid.catrobat.newui.data.Project;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 public class ProjectRecycleViewAdapter extends RecyclerView.Adapter<ProjectRecycleViewAdapter.ViewHolder> {
-    private ArrayList<ProjectItem> mProjects;
+    private ArrayList<Project> mProjects;
     private Context mContext;
 
-    public ProjectRecycleViewAdapter(Context context, ArrayList<ProjectItem> projects) {
+    public ProjectRecycleViewAdapter(Context context, ArrayList<Project> projects) {
         mContext = context;
         mProjects = projects;
     }
@@ -52,7 +52,7 @@ public class ProjectRecycleViewAdapter extends RecyclerView.Adapter<ProjectRecyc
 
     @Override
     public void onBindViewHolder(ViewHolder mViewHolder, int position) {
-        final ProjectItem tmp = mProjects.get(position);
+        final Project tmp = mProjects.get(position);
 
         mViewHolder.mImgView.getLayoutParams().height = Constants.PROJECT_IMAGE_SIZE;
         mViewHolder.mImgView.getLayoutParams().width = Constants.PROJECT_IMAGE_SIZE;
@@ -61,7 +61,7 @@ public class ProjectRecycleViewAdapter extends RecyclerView.Adapter<ProjectRecyc
         mViewHolder.mTxtView.setWidth(Constants.PROJECT_IMAGE_SIZE);
         mViewHolder.mTxtView.setBackgroundColor(Color.BLACK);
         mViewHolder.mTxtView.getBackground().setAlpha(123);
-        mViewHolder.mTxtView.setText(tmp.getTitle());
+        mViewHolder.mTxtView.setText(tmp.getInfoText());
 
         if (tmp.getFavorite()) {
             mViewHolder.mFavoriteView.setImageResource(R.drawable.favorite_white_selected);

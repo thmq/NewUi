@@ -1,8 +1,13 @@
 package org.catroid.catrobat.newui.fragment;
 
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.view.View;
+import android.widget.EditText;
 
 import org.catroid.catrobat.newui.R;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -35,6 +40,47 @@ public class Utils {
     }
 
     static void navigateToTab(int resourceName) {
-        onView(ViewMatchers.withText(resourceName)).perform(click());
+        onView(withText(resourceName)).perform(click());
+    }
+
+    public static Matcher<View> withError(final int expectedStringRes) {
+        return new TypeSafeMatcher<View>() {
+
+            @Override
+            public boolean matchesSafely(View view) {
+                if (!(view instanceof EditText)) {
+                    return false;
+                }
+                EditText editText = (EditText) view;
+                String expectedString = editText.getResources().getString(expectedStringRes);
+
+                return editText.getError().toString().equals(expectedString);
+            }
+
+            @Override
+            public void describeTo(Description description) {
+
+            }
+        };
+    }
+
+    public static Matcher<View> withError(final String expected) {
+        return new TypeSafeMatcher<View>() {
+
+            @Override
+            public boolean matchesSafely(View view) {
+                if (!(view instanceof EditText)) {
+                    return false;
+                }
+                EditText editText = (EditText) view;
+
+                return editText.getError().toString().equals(expected);
+            }
+
+            @Override
+            public void describeTo(Description description) {
+
+            }
+        };
     }
 }

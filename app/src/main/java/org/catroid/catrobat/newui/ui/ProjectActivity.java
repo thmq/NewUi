@@ -22,23 +22,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
-import android.widget.AbsListView;
 import android.widget.GridView;
 import android.widget.Toast;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
-import org.catroid.catrobat.newui.data.ProjectItem;
-import org.catroid.catrobat.newui.ui.adapter.ProjectRecycleViewAdapter;
-import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapter;
-import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
+import org.catroid.catrobat.newui.data.Project;
 import org.catroid.catrobat.newui.ui.comparator.AlphabeticProjectComparator;
 import org.catroid.catrobat.newui.ui.comparator.RecentProjectComparator;
 import org.catroid.catrobat.newui.ui.listener.OnSwipeTouchListener;
+import org.catroid.catrobat.newui.ui.adapter.ProjectRecycleViewAdapter;
+import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapter;
+import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,10 +49,12 @@ public class ProjectActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNavigationView;
     private RecyclerView mRecyclerView;
     private ProjectViewAdapter mProjectViewAdapter;
-    private ArrayList<ProjectItem> mProjectItems = new ArrayList<>();
-    private ArrayList<ProjectItem> mDisplayedProjects = new ArrayList<>();
+    private ArrayList<Project> mProjects = new ArrayList<>();
+    private ArrayList<Project> mDisplayedProjects = new ArrayList<>();
     private OnSwipeTouchListener onSwipeTouchListener;
     private FloatingActionButton fab;
+    private int lastSelectedBottomTab = 1;  //0 - Favorite, 1 - All, 2 - Recen
+    int newSelectedBottomTab = 1;
 
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -80,7 +80,7 @@ public class ProjectActivity extends AppCompatActivity {
 
         try {
             if (!(WebViewManager.loadFromURL(mWebView, Constants.PROJECT_NEWS_URL, this))) {
-                Toast.makeText(this, "No Internet Connection!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show();
             } else {
                 DisplayMetrics mDisplayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
@@ -94,6 +94,8 @@ public class ProjectActivity extends AppCompatActivity {
 
 
         Constants.PROJECT_IMAGE_SIZE = getSizeForGridViewImages();
+
+        mProjectViewAdapter = new ProjectViewAdapter(this, R.layout.project_item, mProjects);
 
         // Fill in Test-Data
         for (int i = 0; i < 12; i++) {
@@ -113,8 +115,8 @@ public class ProjectActivity extends AppCompatActivity {
         }
 
 
-        mDisplayedProjects = sortAlphabetic(mProjectItems);
-        mDisplayedProjects = (ArrayList<ProjectItem>) mProjectItems.clone();
+        mDisplayedProjects = sortAlphabetic(mProjects);
+        mDisplayedProjects = (ArrayList<Project>) mProjects.clone();
         mProjectViewAdapter = new ProjectViewAdapter(this, R.layout.project_item, mDisplayedProjects);
 
         mAdapter = new ProjectRecycleViewAdapter(getApplicationContext(), mDisplayedProjects);
@@ -133,14 +135,14 @@ public class ProjectActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Replace with Action",
                         Toast.LENGTH_LONG).show();
 
-                for (int i = 0; i < mProjectItems.size(); i++) {
-                    Log.wtf("mProjectItems ", mProjectItems.get(i).getTitle()
-                            + " Favorite: " + mProjectItems.get(i).getFavorite()
-                            + " Last Access: " + mProjectItems.get(i).getLastAccess().toString());
+                for (int i = 0; i < mProjects.size(); i++) {
+                    Log.wtf("mProjectItems ", mProjects.get(i).getInfoText()
+                            + " Favorite: " + mProjects.get(i).getFavorite()
+                            + " Last Access: " + mProjects.get(i).getLastAccess().toString());
                 }
 
                 for (int i = 0; i < mDisplayedProjects.size(); i++) {
-                    Log.wtf("displayedProjects ", mDisplayedProjects.get(i).getTitle()
+                    Log.wtf("displayedProjects ", mDisplayedProjects.get(i).getInfoText()
                             + " Favorite: " + mDisplayedProjects.get(i).getFavorite()
                             + " Last Access: " + mDisplayedProjects.get(i).getLastAccess().toString());
                 }
@@ -156,46 +158,80 @@ public class ProjectActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
 
-                        Animation slide_right = AnimationUtils.loadAnimation(
-                                getApplicationContext(), android.R.anim.slide_out_right);
-                        slide_right.setDuration(200);
+                        switch(item.getItemId()) {
+                            case R.id.bottom_action_favorites:
+                                newSelectedBottomTab = 0;
+                                break;
+                            case R.id.bottom_action_all:
+                                newSelectedBottomTab = 1;
+                                break;
+                            case R.id.bottom_action_recent:
+                                 newSelectedBottomTab = 2;
+                                break;
+                            default:
+                                newSelectedBottomTab = 1;
+                                break;
+                        }
 
-                        final Animation slide_left = AnimationUtils.loadAnimation(getApplicationContext(),
-                                android.R.anim.slide_in_left);
-                        slide_left.setDuration(200);
+                        if(newSelectedBottomTab == lastSelectedBottomTab) {
+                            return true;
+                        }
+
+                        final Animation slide_out_right = AnimationUtils.loadAnimation(
+                                getApplicationContext(), R.anim.slide_out_right);
+                        slide_out_right.setDuration(200);
+
+                        final Animation slide_out_left = AnimationUtils.loadAnimation(getApplicationContext(),
+                                R.anim.slide_out_left);
+                        slide_out_left.setDuration(200);
+
+                        final Animation slide_in_left = AnimationUtils.loadAnimation(getApplicationContext(),
+                                R.anim.slide_in_left);
+                        slide_in_left.setDuration(200);
+
+                        final Animation slide_in_right = AnimationUtils.loadAnimation(getApplicationContext(),
+                                R.anim.slide_in_right);
+                        slide_in_right.setDuration(200);
 
 
-                        mRecyclerView.startAnimation(slide_right);
+
+                        if(newSelectedBottomTab > lastSelectedBottomTab) {
+                            mRecyclerView.startAnimation(slide_out_left);
+                        } else {
+                            mRecyclerView.startAnimation(slide_out_right);
+                        }
 
                         mRecyclerView.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                //mRecyclerView.setVisibility(View.INVISIBLE);
 
                                 switch (item.getItemId()) {
                                     case R.id.bottom_action_recent:
                                         mDisplayedProjects.clear();
-                                        mDisplayedProjects.addAll(sortRecent(mProjectItems));
+                                        mDisplayedProjects.addAll(sortRecent(mProjects));
                                         mAdapter.notifyDataSetChanged();
                                         break;
                                     case R.id.bottom_action_favorites:
                                         mDisplayedProjects.clear();
-                                        mDisplayedProjects.addAll(sortFavorite(mProjectItems));
+                                        mDisplayedProjects.addAll(sortFavorite(mProjects));
                                         mAdapter.notifyDataSetChanged();
                                         break;
                                     default:
                                         mDisplayedProjects.clear();
-                                        mDisplayedProjects.addAll(sortAlphabetic(mProjectItems));
+                                        mDisplayedProjects.addAll(sortAlphabetic(mProjects));
                                         mAdapter.notifyDataSetChanged();
                                         break;
                                 }
 
-                                mRecyclerView.startAnimation(slide_left);
+                                if(newSelectedBottomTab > lastSelectedBottomTab) {
+                                    mRecyclerView.startAnimation(slide_in_right);
+                                } else {
+                                    mRecyclerView.startAnimation(slide_in_left);
+                                }
+
+                                lastSelectedBottomTab = newSelectedBottomTab;
                             }
                         }, 200);
-
-
-
 
                         return true;
                     }
@@ -272,7 +308,7 @@ public class ProjectActivity extends AppCompatActivity {
             Bitmap.createScaledBitmap(image, Constants.PROJECT_IMAGE_SIZE,
                     Constants.PROJECT_IMAGE_SIZE, false);
 
-            mProjectItems.add(mProjectItems.size(), new ProjectItem(image, projectInfo));
+            mProjects.add(mProjects.size(), new Project(image, projectInfo));
         } catch (Exception ex) {
             Log.wtf("ADD NEW PROJECT ", ex.getMessage());
             return false;
@@ -323,25 +359,25 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
 
-    private ArrayList<ProjectItem> sortAlphabetic(ArrayList<ProjectItem> sortList) {
+    private ArrayList<Project> sortAlphabetic(ArrayList<Project> sortList) {
 
         Log.wtf("Starting ", "Alphapetic Sort ...");
         Collections.sort(sortList, new AlphabeticProjectComparator());
         return sortList;
     }
 
-    private ArrayList<ProjectItem> sortRecent(ArrayList<ProjectItem> sortList) {
+    private ArrayList<Project> sortRecent(ArrayList<Project> sortList) {
 
         Log.wtf("Starting ", "Alphapetic Sort ...");
         Collections.sort(sortList, new RecentProjectComparator());
         return sortList;
     }
 
-    private ArrayList<ProjectItem> sortFavorite(ArrayList<ProjectItem> sortList) {
+    private ArrayList<Project> sortFavorite(ArrayList<Project> sortList) {
 
         Log.wtf("Starting ", "Favorite Sort ...");
 
-        ArrayList<ProjectItem> favoriteList = new ArrayList<>();
+        ArrayList<Project> favoriteList = new ArrayList<>();
         for (int i = 0; i < sortList.size(); i++) {
 
             if (sortList.get(i).getFavorite()) {
