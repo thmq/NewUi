@@ -179,6 +179,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
         Intent intent = new Intent(getContext(), AddItemActivity.class);
         intent.putExtra("names_list", names);
+        intent.putExtra("caller_tag", getString(getTabNameResource()));
         startActivityForResult(intent, ADD_NEW_ITEM_REQUEST);
     }
 

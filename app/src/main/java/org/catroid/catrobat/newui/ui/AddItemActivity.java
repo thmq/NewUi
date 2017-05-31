@@ -12,6 +12,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,12 +30,17 @@ import java.util.ArrayList;
 
 
 public class AddItemActivity extends AppCompatActivity {
-    ImageView addImage;
-    EditText itemName;
-    Button createBtn;
-    Boolean firstRun = false;
-    ArrayList<String> names;
-    Boolean bitmapSet = false;
+    private ImageView addImage;
+    private EditText itemName;
+    private Button createBtn;
+    private ArrayList<String> names;
+
+    private Boolean firstRun = false;
+    private Boolean itemChosen = false;
+    private String caller_tag;
+
+    private static String LOOKS;
+    private static String SOUNDS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +50,37 @@ public class AddItemActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_activity_add_item);
 
+        LOOKS = getString(R.string.tab_name_looks);
+        SOUNDS = getString(R.string.tab_name_sounds);
         addImage = (ImageView) findViewById(R.id.addItemImage);
         createBtn = (Button) findViewById(R.id.createItemBtn);
         itemName = (EditText) findViewById(R.id.addItemNameTxt);
-        names = getIntent().getStringArrayListExtra("names_list");
+
+        Intent callingIntent = getIntent();
+        names = callingIntent.getStringArrayListExtra("names_list");
+        caller_tag = callingIntent.getStringExtra("caller_tag");
         firstRun = true;
+
+        if(caller_tag.equals(R.string.tab_name_looks)) {
+            initLooksActivity();
+        } else if (caller_tag.equals(R.string.tab_name_sounds)) {
+            initSoundsActivity();
+        } else {
+
+        }
+
+        itemName.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                String name = itemName.getText().toString();
+                if(!isNameValid(name)) {
+                    itemName.setError(getString(R.string.error_invalid_item_name));
+                } else {
+                    itemName.setError(null);
+                }
+                return false;
+            }
+        });
 
         addImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +91,8 @@ public class AddItemActivity extends AppCompatActivity {
                 LayoutInflater inflater = getLayoutInflater();
                 View layout = inflater.inflate(R.layout.dialog_select_image, null);
                 dialog.setView(layout);
+
+
 
                 LinearLayout cameraOption = (LinearLayout) layout.findViewById(R.id.option_camera);
                 cameraOption.setOnClickListener(new View.OnClickListener() {
@@ -76,17 +110,7 @@ public class AddItemActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(pickPhoto , 1);
-                        dialog.dismiss();
-                    }
-                });
-
-                LinearLayout defaultOption = (LinearLayout) layout.findViewById(R.id.option_set_default_picture);
-                defaultOption.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        addImage.setImageResource(R.drawable.blue_square);
-                        bitmapSet = true;
+                        startActivityForResult(pickPhoto, 1);
                         dialog.dismiss();
                     }
                 });
@@ -95,50 +119,48 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
 
-        itemName.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                String name = itemName.getText().toString();
-                if(!isNameValid(name)) {
-                    itemName.setError(getString(R.string.error_invalid_item_name));
-                } else {
-                    itemName.setError(null);
-                }
-                return false;
-            }
-        });
-
         createBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     String name = itemName.getText().toString();
-                    Bitmap bitmap = ((BitmapDrawable) addImage.getDrawable()).getBitmap();
 
                     if(!isNameValid(name)) {
                         itemName.setError(getString(R.string.error_invalid_item_name));
-                    } else if (!bitmapSet) {
+                        return;
+                    }
+                    Intent result = new Intent();
+                    result.putExtra("name", name);
 
-                    } else {
-                        Intent result = new Intent();
-                        result.putExtra("name", name);
-
+                    if(caller_tag.equals(LOOKS)){
+                        Bitmap bitmap = ((BitmapDrawable) addImage.getDrawable()).getBitmap();
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                         byte[] byteArrayBitmap = stream.toByteArray();
                         result.putExtra("image", byteArrayBitmap);
 
-                        setResult(Activity.RESULT_OK, result);
-                        finish();
+
+                    } else if(caller_tag.equals(SOUNDS)){
+
                     }
+
+                    setResult(Activity.RESULT_OK, result);
+                    finish();
 
                 } catch(Exception e) {
                     e.printStackTrace();
                     //TODO
-                    //itemName.setError(getString(R.string.error_invalid_item_name));
                 }
             }
         });
+    }
+
+    private void initSoundsActivity() {
+
+    }
+
+    private void initLooksActivity() {
+
     }
 
     private boolean isNameValid(String name) {
@@ -162,9 +184,9 @@ public class AddItemActivity extends AppCompatActivity {
                         //addImage.setImageURI(selectedImage);
                         addImage.setImageTintMode(null);
                         addImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        bitmapSet = true;
+                        itemChosen = true;
                     } else {
-                        bitmapSet = false;
+                        itemChosen = false;
                     }
                 }
 
@@ -176,9 +198,9 @@ public class AddItemActivity extends AppCompatActivity {
                         addImage.setImageURI(selectedImage);
                         addImage.setImageTintMode(null);
                         addImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        bitmapSet = true;
+                        itemChosen = true;
                     } else {
-                        bitmapSet = false;
+                        itemChosen = false;
                     }
                 }
                 break;
