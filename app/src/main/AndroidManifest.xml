@@ -31,7 +31,7 @@
             android:label="@string/title_activity_project_view"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.SpriteActivity"
+            android:name=".ui.activity.SpriteDetailActivity"
             android:label="@string/title_activity_recycle_view"
             android:screenOrientation="portrait" />
         <activity
@@ -42,6 +42,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.catroid.catrobat.newui.ui.activity.ProjectActivity" />
+        </activity>
+        <activity
+            android:name=".ui.activity.SpriteActivity"
+            android:label="@string/title_activity_sprite"
+            android:parentActivityName=".ui.activity.SceneActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.catroid.catrobat.newui.ui.activity.SceneActivity" />
         </activity>
 
         <provider
