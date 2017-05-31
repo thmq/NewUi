@@ -1,6 +1,6 @@
 package org.catroid.catrobat.newui;
 
-import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.adapter.recyclerview.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragment;
 import org.junit.Test;
 

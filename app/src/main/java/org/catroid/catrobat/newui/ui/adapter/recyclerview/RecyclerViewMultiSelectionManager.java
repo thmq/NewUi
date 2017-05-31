@@ -1,4 +1,4 @@
-package org.catroid.catrobat.newui.ui.adapter;
+package org.catroid.catrobat.newui.ui.adapter.recyclerview;
 
 import java.util.ArrayList;
 import java.util.HashSet;

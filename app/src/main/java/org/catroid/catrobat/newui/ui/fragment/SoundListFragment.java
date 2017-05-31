@@ -7,8 +7,8 @@ import org.catroid.catrobat.newui.copypaste.Clipboard;
 import org.catroid.catrobat.newui.data.SoundInfo;
 import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
-import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
-import org.catroid.catrobat.newui.ui.adapter.SoundAdapter;
+import org.catroid.catrobat.newui.ui.adapter.recyclerview.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.adapter.recyclerview.SoundAdapter;
 import org.catroid.catrobat.newui.utils.Utils;
 
 import java.util.ArrayList;

@@ -1,6 +1,7 @@
 package org.catroid.catrobat.newui;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,8 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import org.catroid.catrobat.newui.ui.ProjectActivity;
-import org.catroid.catrobat.newui.ui.SpriteActivity;
+import org.catroid.catrobat.newui.db.util.CatroidDBHelper;
+import org.catroid.catrobat.newui.ui.activity.ProjectActivity;
+import org.catroid.catrobat.newui.ui.activity.SpriteActivity;
 
 public class MainMenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,6 +36,11 @@ public class MainMenuActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        CatroidDBHelper dbHelper = new CatroidDBHelper(this);
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
     }
 
     @Override
@@ -71,7 +78,7 @@ public class MainMenuActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        // Handle navigation mView item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {

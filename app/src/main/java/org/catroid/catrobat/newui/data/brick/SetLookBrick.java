@@ -34,4 +34,14 @@ public class SetLookBrick extends BaseBrick {
     public void onClick(View view) {
 
     }
+
+    @Override
+    public void prepareForClipboard() throws Exception {
+
+    }
+
+    @Override
+    public void cleanupFromClipboard() throws Exception {
+
+    }
 }

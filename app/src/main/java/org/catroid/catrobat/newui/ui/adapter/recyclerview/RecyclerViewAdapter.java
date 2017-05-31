@@ -1,6 +1,7 @@
-package org.catroid.catrobat.newui.ui.adapter;
+package org.catroid.catrobat.newui.ui.adapter.recyclerview;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.ViewSwitcher;
 
 import org.catroid.catrobat.newui.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements View.OnLongClickListener, RecyclerViewMultiSelectionManagerDelegate<T> {
@@ -94,6 +96,12 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         mMultiSelectionManager.setDelegate(this);
     }
 
+    public RecyclerViewAdapter(int itemLayout) {
+        mListItems = new ArrayList<>();
+        mItemLayoutId = itemLayout;
+        mMultiSelectionManager.setDelegate(this);
+    }
+
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(mItemLayoutId, parent, false);
@@ -151,13 +159,20 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         return mListItems.get(position);
     }
 
-    public void addItem(T item) {
+
+    protected void addItems(List<T> items) {
+        for (T item : items) {
+            addItem(item);
+        }
+    }
+
+    private void addItem(T item) {
         mListItems.add(item);
         int pos = mListItems.indexOf(item);
         notifyItemInserted(pos);
     }
 
-    public void removeItem(T item) {
+    private void removeItem(T item) {
         int pos = mListItems.indexOf(item);
         mListItems.remove(item);
         mMultiSelectionManager.removeItem(item);
@@ -169,7 +184,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         notifyItemRemoved(pos);
     }
 
-    public void itemChanged(T item) {
+    private void itemChanged(T item) {
         if (mListItems.contains(item)) {
             int pos = mListItems.indexOf(item);
             notifyItemChanged(pos);
@@ -194,6 +209,11 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        mMultiSelectionManager.clearSelection();
+        mListItems.clear();
+        notifyDataSetChanged();
+    }
 
     private void setItemToAnimate(T item) {
         mItemToAnimate = item;
@@ -207,7 +227,6 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         mItemToAnimate = null;
     }
 
-
     public void onSelectionChanged(RecyclerViewMultiSelectionManager multiSelectionManager) {
         notifySelectionChanged();
     }
@@ -216,5 +235,21 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         if (delegate != null) {
             delegate.onSelectionChanged(this);
         }
+    }
+
+    public void cleanup() {}
+
+    // Data Manipulation
+    public void insertItem(T item) {
+        addItem(item);
+    }
+
+
+    public void updateItem(T item) {
+        itemChanged(item);
+    }
+
+    public void destroyItem(T item) {
+        removeItem(item);
     }
 }
