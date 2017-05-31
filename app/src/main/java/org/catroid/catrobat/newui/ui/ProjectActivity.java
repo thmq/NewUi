@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -53,6 +54,10 @@ public class ProjectActivity extends AppCompatActivity {
     private ArrayList<Project> mDisplayedProjects = new ArrayList<>();
     private OnSwipeTouchListener onSwipeTouchListener;
     private FloatingActionButton fab;
+
+    private BottomSheetBehavior mBottomSheetBehavior;
+    private View mBottomSheet;
+
     private int lastSelectedBottomTab = 1;  //0 - Favorite, 1 - All, 2 - Recen
     int newSelectedBottomTab = 1;
 
@@ -127,27 +132,32 @@ public class ProjectActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
+
+        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // TODO: Get the Bottomsheet Behavior
+        mBottomSheet = (View) findViewById(R.id.bottom_sheet);
+
+        Log.wtf("Bottom Sheet:", "Before Behavior");
+
+        mBottomSheetBehavior = (BottomSheetBehavior) BottomSheetBehavior.from(mBottomSheet);
+        mBottomSheetBehavior.setHideable(true);
+
+        Log.wtf("Bottom Sheet:", "After Behavior");
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
                 Toast.makeText(getApplicationContext(), "Replace with Action",
                         Toast.LENGTH_LONG).show();
 
-                for (int i = 0; i < mProjects.size(); i++) {
-                    Log.wtf("mProjectItems ", mProjects.get(i).getInfoText()
-                            + " Favorite: " + mProjects.get(i).getFavorite()
-                            + " Last Access: " + mProjects.get(i).getLastAccess().toString());
-                }
-
-                for (int i = 0; i < mDisplayedProjects.size(); i++) {
-                    Log.wtf("displayedProjects ", mDisplayedProjects.get(i).getInfoText()
-                            + " Favorite: " + mDisplayedProjects.get(i).getFavorite()
-                            + " Last Access: " + mDisplayedProjects.get(i).getLastAccess().toString());
-                }
             }
         });
+
+        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         mBottomNavigationView.getMenu().getItem(1).setChecked(true);
@@ -361,21 +371,17 @@ public class ProjectActivity extends AppCompatActivity {
 
     private ArrayList<Project> sortAlphabetic(ArrayList<Project> sortList) {
 
-        Log.wtf("Starting ", "Alphapetic Sort ...");
         Collections.sort(sortList, new AlphabeticProjectComparator());
         return sortList;
     }
 
     private ArrayList<Project> sortRecent(ArrayList<Project> sortList) {
 
-        Log.wtf("Starting ", "Alphapetic Sort ...");
         Collections.sort(sortList, new RecentProjectComparator());
         return sortList;
     }
 
     private ArrayList<Project> sortFavorite(ArrayList<Project> sortList) {
-
-        Log.wtf("Starting ", "Favorite Sort ...");
 
         ArrayList<Project> favoriteList = new ArrayList<>();
         for (int i = 0; i < sortList.size(); i++) {

@@ -17,4 +17,10 @@
     <!-- Hint text dimens -->
     <dimen name="hint_text_icon">40dp</dimen>
     <dimen name="hint_text_size">14dp</dimen>
+    <!-- Bottom Shet dimens -->
+    <dimen name="bottom_sheet_title_text_size">26sp</dimen>
+    <dimen name="bottom_sheet_default_text_size">20sp</dimen>
+    <dimen name="bottom_sheet_padding">2dp</dimen>
+    <dimen name="bottom_sheet_fixed_height">300dp</dimen>
+    <dimen name="bottom_sheet_variable_text_width">200dp</dimen>
 </resources>

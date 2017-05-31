@@ -53,4 +53,11 @@
     <string name="bottom_nav_recent">Recent</string>
     <string name="bottom_nav_all">All</string>
 
+
+    <!-- Bottom Sheet -->
+    <string name="project_description">Description:</string>
+    <string name="project_last_access">Last Access:</string>
+    <string name="project_size">Size:</string>
+    <string name="project_brick_count">Brick Count:</string>
+
 </resources>
