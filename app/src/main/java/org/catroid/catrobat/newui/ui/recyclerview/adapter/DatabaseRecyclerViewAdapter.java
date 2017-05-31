@@ -1,4 +1,4 @@
-package org.catroid.catrobat.newui.ui.adapter.recyclerview;
+package org.catroid.catrobat.newui.ui.recyclerview.adapter;
 
 
 import android.database.ContentObserver;
@@ -22,7 +22,7 @@ abstract public class DatabaseRecyclerViewAdapter<T extends PersistableRecord> e
 
     private static final String TAG = "DBRecyclerViewAdapter";
     private final AppCompatActivity mContext;
-    private DatabaseBridge<T> mBridge;
+    protected DatabaseBridge<T> mBridge;
     private ContentObserver mContentObserver;
 
     public DatabaseRecyclerViewAdapter(int itemLayout, AppCompatActivity context) {

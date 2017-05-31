@@ -38,6 +38,7 @@ public class SceneActivity extends AppCompatActivity {
                 throw new UnsupportedOperationException();
             }
         }
+
         setupFAB();
         setupRecyclerListFragment();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -47,7 +48,6 @@ public class SceneActivity extends AppCompatActivity {
     private void setupRecyclerListFragment() {
         mSceneFragment = (SceneListFragment) getSupportFragmentManager().findFragmentById(R.id.scene_fragment);
     }
-
 
     private void setupFAB() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

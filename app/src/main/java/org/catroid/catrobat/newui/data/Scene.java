@@ -73,6 +73,7 @@ public class Scene implements Serializable, CopyPasteable, PersistableRecord {
         mId = id;
     }
 
+
     public long getProjectId() {
         return mProjectId;
     }
@@ -87,5 +88,15 @@ public class Scene implements Serializable, CopyPasteable, PersistableRecord {
 
     public void setName(String mName) {
         this.mName = mName;
+    }
+
+    @Override
+    public void beforeDestroy() {
+
+    }
+
+    @Override
+    public void afterDestroy() {
+        // TODO: Remove any thumbnails!
     }
 }

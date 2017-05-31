@@ -16,32 +16,26 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
-import android.widget.GridView;
 import android.widget.Toast;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.Project;
 
-import org.catroid.catrobat.newui.db.brigde.ProjectBridge;
-import org.catroid.catrobat.newui.db.util.DataContract;
 import org.catroid.catrobat.newui.ui.adapter.OnSwipeTouchListener;
-import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapter;
-import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapterDelegate;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
-
-import java.util.ArrayList;
+import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragment;
+import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragmentDelegate;
+import org.catroid.catrobat.newui.ui.fragment.ProjectListFragment;
 
 import static android.view.View.GONE;
 
-public class ProjectActivity extends AppCompatActivity implements ProjectViewAdapterDelegate {
+public class ProjectActivity extends AppCompatActivity implements BaseRecyclerListFragmentDelegate<Project> {
 
     private WebView mWebView;
-    private GridView mGridView;
-    private ProjectViewAdapter mProjectViewAdapter;
-    private ArrayList<Project> mProjects = new ArrayList<>();
     private OnSwipeTouchListener onSwipeTouchListener;
     private Boolean flinged;
+    private ProjectListFragment mProjectListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +50,13 @@ public class ProjectActivity extends AppCompatActivity implements ProjectViewAda
         requestAndroidPermissions();
 
         setupWebView();
-        setupProjectsListView();
+        setupRecyclerListFragment();
         setupFAB();
     }
 
-    private void setupProjectsListView() {
-        mProjectViewAdapter = new ProjectViewAdapter(this, R.layout.project_item, mProjects);
-        mProjectViewAdapter.setDelegate(this);
-        mGridView = (GridView) findViewById(R.id.project_gridview);
-        mGridView.setAdapter(mProjectViewAdapter);
+    private void setupRecyclerListFragment() {
+        mProjectListFragment = (ProjectListFragment) getSupportFragmentManager().findFragmentById(R.id.project_fragment);
+        mProjectListFragment.setBaseRecyclerListFragmentDelegate(this);
     }
 
     private void setupFAB() {
@@ -72,19 +64,13 @@ public class ProjectActivity extends AppCompatActivity implements ProjectViewAda
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addProjectClicked();
+                onAddProjectClicked();
             }
         });
     }
 
-    private void addProjectClicked() {
-        String text = "My Project";
-        Project p = new Project();
-
-        p.setInfoText(text);
-
-        ProjectBridge bridge = new ProjectBridge(this);
-        bridge.insert(p);
+    private void onAddProjectClicked() {
+        mProjectListFragment.onAddButtonClicked();
     }
 
     private void setupWebView() {
@@ -119,17 +105,6 @@ public class ProjectActivity extends AppCompatActivity implements ProjectViewAda
         ActivityCompat.requestPermissions(ProjectActivity.this, new String[]
                 {Manifest.permission.ACCESS_NETWORK_STATE}, 1);
 
-    }
-
-    private void setupTestData() {
-        for (int i = 0; i < 3; i++) {
-            String text = "Project " + i;
-            Project p = new Project();
-
-            p.setInfoText(text);
-        }
-
-        mProjectViewAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -195,11 +170,12 @@ public class ProjectActivity extends AppCompatActivity implements ProjectViewAda
     }
 
     @Override
-    public void onProjectClick(ProjectViewAdapter adapter, Project project) {
+    public void onItemClicked(BaseRecyclerListFragment<Project> fragment, Project project) {
         Intent scenesActivityIntent = new Intent(this, SceneActivity.class);
 
         scenesActivityIntent.putExtra(SceneActivity.PROJECT_ID_KEY, project.getId());
         scenesActivityIntent.putExtra(SceneActivity.PROJECT_NAME_KEY, project.getName());
+
         startActivity(scenesActivityIntent);
     }
 }

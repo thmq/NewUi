@@ -1,22 +1,13 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
 import org.catroid.catrobat.newui.copypaste.Clipboard;
 import org.catroid.catrobat.newui.data.Scene;
 import org.catroid.catrobat.newui.db.brigde.SceneBridge;
 import org.catroid.catrobat.newui.ui.activity.SceneActivity;
-import org.catroid.catrobat.newui.ui.adapter.recyclerview.RecyclerViewAdapter;
-import org.catroid.catrobat.newui.ui.adapter.recyclerview.SceneAdapter;
+import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.adapter.SceneAdapter;
 
 public class SceneListFragment extends BaseRecyclerListFragment<Scene> {
-
-    @Override
-    public int getTabNameResource() {
-        return 0;
-    }
-
     @Override
     public RecyclerViewAdapter<Scene> createAdapter() {
         SceneActivity activity = (SceneActivity) getActivity();
@@ -61,4 +52,5 @@ public class SceneListFragment extends BaseRecyclerListFragment<Scene> {
 
         return scene;
     }
+
 }

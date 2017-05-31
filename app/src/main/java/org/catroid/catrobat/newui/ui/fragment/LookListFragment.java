@@ -11,8 +11,8 @@ import org.catroid.catrobat.newui.data.LookInfo;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
-import org.catroid.catrobat.newui.ui.adapter.recyclerview.LookAdapter;
-import org.catroid.catrobat.newui.ui.adapter.recyclerview.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.adapter.LookAdapter;
+import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryManager;
 import org.catroid.catrobat.newui.utils.Utils;
 
@@ -22,13 +22,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
+public class LookListFragment extends TabableFragment<LookInfo>
         implements NewItemDialog.NewItemInterface {
     public static final String TAG = LookListFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number_look_list";
 
-    public static BaseRecyclerListFragment newInstance(int sectionNumber) {
-        BaseRecyclerListFragment fragment = new LookListFragment();
+    public static LookListFragment newInstance(int sectionNumber) {
+        LookListFragment fragment = new LookListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
@@ -139,4 +139,5 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     private boolean shouldPresentFeatureDiscovery() {
         return false;
     }
+
 }
