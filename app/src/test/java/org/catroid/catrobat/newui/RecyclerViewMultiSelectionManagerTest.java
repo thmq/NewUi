@@ -1,6 +1,6 @@
 package org.catroid.catrobat.newui;
 
-import org.catroid.catrobat.newui.ui.adapter.recyclerview.RecyclerViewMultiSelectionManager;
+import org.catroid.catrobat.newui.ui.recyclerview.multiselection.RecyclerViewMultiSelectionManager;
 import org.junit.Test;
 
 import java.util.List;

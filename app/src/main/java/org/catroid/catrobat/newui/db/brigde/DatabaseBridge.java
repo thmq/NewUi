@@ -30,6 +30,9 @@ public abstract class DatabaseBridge<T extends PersistableRecord> {
     protected abstract Uri getCollectionUri();
     protected abstract Uri getItemUri(long id);
 
+    protected abstract void beforeDestroy(T item);
+    protected abstract void afterDestroy(T item);
+
     public List<T> findAll() {
         return findAll(null, null, null);
     }
@@ -117,7 +120,13 @@ public abstract class DatabaseBridge<T extends PersistableRecord> {
     public boolean delete(T item) {
         Uri itemUri = getItemUri(item.getId());
 
+        beforeDestroy(item);
+
+        item.beforeDestroy();
         int removedRecordsCount = getContentResolver().delete(itemUri, null, null);
+        item.afterDestroy();
+
+        afterDestroy(item);
 
         return removedRecordsCount > 0;
     }

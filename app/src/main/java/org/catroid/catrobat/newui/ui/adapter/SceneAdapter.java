@@ -1,21 +1,24 @@
-package org.catroid.catrobat.newui.ui.adapter.recyclerview;
+package org.catroid.catrobat.newui.ui.adapter;
 
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Scene;
 import org.catroid.catrobat.newui.db.fetchrequest.ChildCollectionFetchRequest;
 import org.catroid.catrobat.newui.db.fetchrequest.FetchRequest;
-import org.catroid.catrobat.newui.db.brigde.DatabaseBridge;
 import org.catroid.catrobat.newui.db.brigde.SceneBridge;
 import org.catroid.catrobat.newui.db.util.DataContract;
-import org.catroid.catrobat.newui.ui.activity.SceneActivity;
+import org.catroid.catrobat.newui.ui.recyclerview.adapter.DatabaseRecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.recyclerview.viewholder.ListViewHolder;
+import org.catroid.catrobat.newui.ui.recyclerview.viewholder.RecyclerViewHolder;
 
 public class SceneAdapter extends DatabaseRecyclerViewAdapter<Scene> {
     private long mProjectId;
 
-    private static String TAG = SceneActivity.class.getSimpleName();
+    private static String TAG = SceneAdapter.class.getSimpleName();
     public SceneAdapter(AppCompatActivity activity) {
         super(R.layout.list_item, activity);
     }
@@ -43,7 +46,13 @@ public class SceneAdapter extends DatabaseRecyclerViewAdapter<Scene> {
     }
 
     @Override
-    public void bindDataToViewHolder(Scene item, ViewHolder holder, boolean isSelected) {
-        holder.mNameView.setText(item.getName());
+    public RecyclerViewHolder createViewHolder(View view) {
+        return new ListViewHolder(view);
+    }
+
+    @Override
+    public void bindDataToViewHolder(Scene item, RecyclerViewHolder holder, boolean isSelected) {
+        ListViewHolder listViewHolder = (ListViewHolder) holder;
+        listViewHolder.mNameView.setText(item.getName());
     }
 }

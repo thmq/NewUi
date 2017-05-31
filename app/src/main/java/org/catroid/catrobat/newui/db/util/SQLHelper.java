@@ -33,7 +33,7 @@ public class SQLHelper {
     }
 
     public static String idColumnDefinition(String columnName) {
-        return escapeColumn(columnName) + " INTEGER NOT NULL PRIMARY KEY";
+        return escapeColumn(columnName) + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT";
     }
 
     public static String stringColumnDefinition(String columnName) {

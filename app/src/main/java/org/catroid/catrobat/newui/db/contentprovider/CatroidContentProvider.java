@@ -6,12 +6,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import org.catroid.catrobat.newui.db.util.CatroidDBHelper;
 import org.catroid.catrobat.newui.db.util.DataContract;
@@ -20,13 +18,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CatroidContentProvider extends ContentProvider {
+    private enum MatchType {
+        COLLECTION_MATCH,
+        MEMBER_MATCH
+    }
+
+    private class ContentDescriptionMatch {
+        private MatchType mMatchType;
+        private ContentDescription mContentDescription;
+
+        ContentDescriptionMatch(MatchType matchType, ContentDescription contentDescription) {
+            mMatchType = matchType;
+            mContentDescription = contentDescription;
+        }
+    }
 
     private static final String TAG = "BCP";
 
     private UriMatcher mUriMatcher;
     private CatroidDBHelper mDbHelper;
     private Map<String, ContentDescription> mContentDescriptions;
-    private Map<Integer, ContentDescription> mURIMatcherMapping;
+    private Map<Integer, ContentDescriptionMatch> mURIMatcherMapping;
     private int mContentDescriptionMappingId = 1;
 
     @Override
@@ -55,20 +67,20 @@ public class CatroidContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        ContentDescription description = getContentDescription(uri);
+        ContentDescriptionMatch descriptionMatch = getContentDescriptionMatch(uri);
 
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        return db.query(description.getTableName(), projection, selection, selectionArgs, null, null, sortOrder);
+        return db.query(descriptionMatch.mContentDescription.getTableName(), projection, selection, selectionArgs, null, null, sortOrder);
     }
 
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        ContentDescription description = getContentDescription(uri);
+        ContentDescriptionMatch descriptionMatch = getContentDescriptionMatch(uri);
 
-        if (description != null) {
-            return "application/Catroid." + description.getPath();
+        if (descriptionMatch != null) {
+            return "application/Catroid." + descriptionMatch.mContentDescription.getPath();
         } else {
             return null;
         }
@@ -77,17 +89,23 @@ public class CatroidContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        ContentDescription description = getContentDescription(uri);
+        ContentDescriptionMatch descriptionMatch = getContentDescriptionMatch(uri);
 
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        ContentDescription description = descriptionMatch.mContentDescription;
 
-        long id = db.insert(description.getTableName(), null, contentValues);
-        if (id > 0) {
-            Uri itemUri = ContentUris.withAppendedId(description.getItemsUri(), id);
+        if (descriptionMatch.mMatchType == MatchType.COLLECTION_MATCH) {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-            getContext().getContentResolver().notifyChange(itemUri, null);
+            long id = db.insert(description.getTableName(), null, contentValues);
+            if (id > 0) {
+                Uri itemUri = ContentUris.withAppendedId(description.getItemsUri(), id);
 
-            return itemUri;
+                getContext().getContentResolver().notifyChange(itemUri, null);
+
+                return itemUri;
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
@@ -96,14 +114,20 @@ public class CatroidContentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        ContentDescription description = getContentDescription(uri);
+        ContentDescriptionMatch descriptionMatch = getContentDescriptionMatch(uri);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        String idString = uri.getLastPathSegment();
+        ContentDescription description = descriptionMatch.mContentDescription;
 
-        // TODO: Check if idString is an ID for real!
+        int deletedRecordsCount;
+        if (descriptionMatch.mMatchType == MatchType.MEMBER_MATCH) {
+            String idString = uri.getLastPathSegment();
 
-        int deletedRecordsCount = db.delete(description.getTableName(), description.getIdColumn() + " = ? ", new String[]{idString});
+            deletedRecordsCount = db.delete(description.getTableName(), description.getIdColumn() + " = ? ", new String[]{idString});
+        } else {
+            deletedRecordsCount = db.delete(description.getTableName(), selection, selectionArgs);
+        }
+
         if (deletedRecordsCount != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
@@ -113,13 +137,19 @@ public class CatroidContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
-        ContentDescription description = getContentDescription(uri);
+        ContentDescriptionMatch descriptionMatch = getContentDescriptionMatch(uri);
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        String idString = uri.getLastPathSegment();
+        ContentDescription description = descriptionMatch.mContentDescription;
 
-        // TODO: Check if idString is an ID for real!
-        int updatedRecordsCount = db.update(description.getTableName(), contentValues, description.getIdColumn() + " = ? ", new String[]{idString});
+        int updatedRecordsCount;
+        if (descriptionMatch.mMatchType == MatchType.MEMBER_MATCH) {
+            String idString = uri.getLastPathSegment();
+
+            updatedRecordsCount = db.update(description.getTableName(), contentValues, description.getIdColumn() + " = ? ", new String[]{idString});
+        } else {
+            updatedRecordsCount = db.update(description.getTableName(), contentValues, selection, selectionArgs);
+        }
 
         if (updatedRecordsCount != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -144,14 +174,14 @@ public class CatroidContentProvider extends ContentProvider {
             uriMatcher.addURI(DataContract.CONTENT_AUTHORITY, itemsPath, itemsMappingId);
             uriMatcher.addURI(DataContract.CONTENT_AUTHORITY, itemPath, itemMappingId);
 
-            mURIMatcherMapping.put(itemsMappingId, description);
-            mURIMatcherMapping.put(itemMappingId, description);
+            mURIMatcherMapping.put(itemsMappingId, new ContentDescriptionMatch(MatchType.COLLECTION_MATCH, description));
+            mURIMatcherMapping.put(itemMappingId, new ContentDescriptionMatch(MatchType.MEMBER_MATCH, description));
         }
 
         return uriMatcher;
     }
 
-    private ContentDescription getContentDescription(Uri uri) {
+    private ContentDescriptionMatch getContentDescriptionMatch(Uri uri) {
         int matchId = mUriMatcher.match(uri);
 
         if (matchId > 0) {

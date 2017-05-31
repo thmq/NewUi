@@ -48,4 +48,14 @@ public class SceneBridge extends DatabaseBridge<Scene> {
     protected Uri getItemUri(long id) {
         return SceneEntry.getSceneUri(id);
     }
+
+    @Override
+    protected void beforeDestroy(Scene item) {
+
+    }
+
+    @Override
+    protected void afterDestroy(Scene item) {
+
+    }
 }
