@@ -58,6 +58,7 @@ public class CatroidContentProvider extends ContentProvider {
 
         registerContentDescription(new ProjectContentDescription());
         registerContentDescription(new SceneContentDescription());
+        registerContentDescription(new SpriteContentDescription());
     }
 
     private void registerContentDescription(ContentDescription contentDescription) {

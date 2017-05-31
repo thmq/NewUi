@@ -102,9 +102,6 @@ abstract public class DatabaseRecyclerViewAdapter<T extends PersistableRecord> e
 
     @Override
     public void updateItem(T item) {
-        Scene scene = (Scene) item;
-
-        Log.d(TAG, "Updating item: " + scene.getId() + " / " + scene.getName());
         mBridge.update(item);
     }
 

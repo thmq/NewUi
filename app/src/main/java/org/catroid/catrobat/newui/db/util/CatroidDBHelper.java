@@ -7,6 +7,7 @@ import android.util.Log;
 
 import org.catroid.catrobat.newui.db.util.DataContract.ProjectEntry;
 import org.catroid.catrobat.newui.db.util.DataContract.SceneEntry;
+import org.catroid.catrobat.newui.db.util.DataContract.SpriteEntry;
 
 
 public class CatroidDBHelper extends SQLiteOpenHelper {
@@ -29,13 +30,21 @@ public class CatroidDBHelper extends SQLiteOpenHelper {
         Log.d(TAG, "Creating Scenes... ");
         Log.d(TAG, createScenesTableSQL);
         sqLiteDatabase.execSQL(createScenesTableSQL);
+
+
+        String createSpritesTableSQL = createSpritesTable();
+        Log.d(TAG, "Creating Sprites... ");
+        Log.d(TAG, createSpritesTableSQL);
+        sqLiteDatabase.execSQL(createSpritesTableSQL);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int versionFrom, int versionTo) {
         Log.d(TAG, "Upgrading ... ");
+
         sqLiteDatabase.execSQL(SQLHelper.dropTableIfExists(ProjectEntry.TABLE_NAME));
         sqLiteDatabase.execSQL(SQLHelper.dropTableIfExists(SceneEntry.TABLE_NAME));
+        sqLiteDatabase.execSQL(SQLHelper.dropTableIfExists(SpriteEntry.TABLE_NAME));
 
         onCreate(sqLiteDatabase);
     }
@@ -43,7 +52,7 @@ public class CatroidDBHelper extends SQLiteOpenHelper {
     private String createProjectsTable() {
         return SQLHelper.createTableDefinition(ProjectEntry.TABLE_NAME, new String[]{
                 SQLHelper.idColumnDefinition(ProjectEntry._ID),
-                SQLHelper.stringColumnDefinition(ProjectEntry.COLUMN_NAME),
+                SQLHelper.modifierUnique(SQLHelper.stringColumnDefinition(ProjectEntry.COLUMN_NAME)),
                 SQLHelper.stringColumnDefinition(ProjectEntry.COLUMN_INFO_TEXT),
                 SQLHelper.stringColumnDefinition(ProjectEntry.COLUMN_DESCRIPTION),
                 SQLHelper.booleanColumnDefinition(ProjectEntry.COLUMN_FAVORITE)
@@ -55,6 +64,15 @@ public class CatroidDBHelper extends SQLiteOpenHelper {
                 SQLHelper.idColumnDefinition(SceneEntry._ID),
                 SQLHelper.integerColumnDefinition(SceneEntry.COLUMN_PROJECT_ID),
                 SQLHelper.modifierUnique(SQLHelper.stringColumnDefinition(SceneEntry.COLUMN_NAME))
+        });
+    }
+
+
+    private String createSpritesTable() {
+        return SQLHelper.createTableDefinition(SpriteEntry.TABLE_NAME, new String[]{
+                SQLHelper.idColumnDefinition(SpriteEntry._ID),
+                SQLHelper.integerColumnDefinition(SpriteEntry.COLUMN_SCENE_ID),
+                SQLHelper.modifierUnique(SQLHelper.stringColumnDefinition(SpriteEntry.COLUMN_NAME))
         });
     }
 

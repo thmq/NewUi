@@ -6,7 +6,13 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import org.catroid.catrobat.newui.data.Scene;
+import org.catroid.catrobat.newui.data.Sprite;
+import org.catroid.catrobat.newui.db.fetchrequest.ChildCollectionFetchRequest;
+import org.catroid.catrobat.newui.db.util.DataContract;
 import org.catroid.catrobat.newui.db.util.DataContract.SceneEntry;
+import org.catroid.catrobat.newui.ui.recyclerview.viewholder.ListViewHolder;
+
+import java.util.List;
 
 public class SceneBridge extends DatabaseBridge<Scene> {
     public SceneBridge(Context context) {
@@ -50,12 +56,23 @@ public class SceneBridge extends DatabaseBridge<Scene> {
     }
 
     @Override
-    protected void beforeDestroy(Scene item) {
-
+    protected void beforeDestroy(Scene scene) {
+        destroySprites(scene);
     }
+
 
     @Override
     protected void afterDestroy(Scene item) {
 
+    }
+
+    private void destroySprites(Scene scene) {
+        SpriteBridge spriteBridge = new SpriteBridge(getContext());
+
+        List<Sprite> sprites = spriteBridge.findAll(new ChildCollectionFetchRequest(DataContract.SpriteEntry.COLUMN_SCENE_ID, scene.getId()));
+
+        for (Sprite sprite : sprites) {
+            spriteBridge.delete(sprite);
+        }
     }
 }

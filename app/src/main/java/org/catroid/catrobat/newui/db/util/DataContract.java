@@ -5,6 +5,7 @@ import android.provider.BaseColumns;
 
 import org.catroid.catrobat.newui.data.Project;
 import org.catroid.catrobat.newui.data.Scene;
+import org.catroid.catrobat.newui.data.Sprite;
 
 public class DataContract {
     public static final String CONTENT_AUTHORITY = "org.catroid.catrobat.newui";
@@ -53,8 +54,8 @@ public class DataContract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_PROJECT_ID = "project_id";
 
-        public static Uri getSceneUri(Scene project) {
-            return getSceneUri(project.getId());
+        public static Uri getSceneUri(Scene scene) {
+            return getSceneUri(scene.getId());
         }
 
         public static Uri getSceneUri(long id) {
@@ -66,6 +67,31 @@ public class DataContract {
                     _ID,
                     COLUMN_NAME,
                     COLUMN_PROJECT_ID
+            };
+        }
+    }
+
+
+    public static class SpriteEntry implements BaseColumns {
+        public static final Uri SPRITE_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_SPRITE).build();
+
+        public static final String TABLE_NAME = "sprites";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_SCENE_ID = "scene_id";
+
+        public static Uri getSpriteUri(Sprite sprite) {
+            return getSpriteUri(sprite.getId());
+        }
+
+        public static Uri getSpriteUri(long id) {
+            return SPRITE_URI.buildUpon().appendPath(String.valueOf(id)).build();
+        }
+
+        public static String[] getFullProjection() {
+            return new String[]{
+                    _ID,
+                    COLUMN_NAME,
+                    COLUMN_SCENE_ID
             };
         }
     }

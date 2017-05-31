@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.catroid.catrobat.newui.ui.activity.SpriteActivity;
+import org.catroid.catrobat.newui.ui.activity.SpriteDetailActivity;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,8 +16,8 @@ import static junit.framework.Assert.assertEquals;
 
 public class RecyclerViewInstrumentedTest {
     @Rule
-    public ActivityTestRule<SpriteActivity> activityRule =
-            new ActivityTestRule<>(SpriteActivity.class);
+    public ActivityTestRule<SpriteDetailActivity> activityRule =
+            new ActivityTestRule<>(SpriteDetailActivity.class);
 
     @Test
     public void useAppContext() throws Exception {

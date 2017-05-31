@@ -1,66 +1,71 @@
 package org.catroid.catrobat.newui.ui.activity;
 
-import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
+import android.util.Log;
 import android.view.View;
 
 import org.catroid.catrobat.newui.R;
-import org.catroid.catrobat.newui.ui.adapter.SpriteViewPagerAdapter;
+import org.catroid.catrobat.newui.ui.fragment.SceneListFragment;
+import org.catroid.catrobat.newui.ui.fragment.SpriteListFragment;
+
 
 public class SpriteActivity extends AppCompatActivity {
+    public static final String SCENE_ID_KEY = "scene_id";
+    public static final String SCENE_NAME_KEY = "scene_name";
+    private static final String TAG = SpriteActivity.class.getSimpleName();
 
-    public static final String TAG = SpriteActivity.class.getSimpleName();
-    SpriteViewPagerAdapter mSpriteViewPagerAdapter;
-    ViewPager mViewPager;
+    private long mSceneId;
+    private SpriteListFragment mSpriteFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_recycler_view);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_sprite);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mSpriteViewPagerAdapter = new SpriteViewPagerAdapter(this);
+        Intent intent = getIntent();
+        if (intent != null) {
+            mSceneId = intent.getLongExtra(SCENE_ID_KEY, -1);
 
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSpriteViewPagerAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                mSpriteViewPagerAdapter.onPageSelected(position);
+            Log.d(TAG, "Setting scene id: " + mSceneId);
+
+            if (mSceneId == -1) {
+                throw new UnsupportedOperationException();
             }
-        });
+        }
 
+        setupFAB();
+        setupRecyclerListFragment();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
+
+    private void setupRecyclerListFragment() {
+        mSpriteFragment = (SpriteListFragment) getSupportFragmentManager().findFragmentById(R.id.sprite_fragment);
+    }
+
+    private void setupFAB() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onAddButtonClicked();
+                addButtonClicked();
             }
         });
-
-        ActivityCompat.requestPermissions(SpriteActivity.this, new String[]
-                {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-
-        inflater.inflate(R.menu.main_menu, menu);
-
-        return true;
+    private void addButtonClicked() {
+        mSpriteFragment.onAddButtonClicked();
     }
 
-    private void onAddButtonClicked() {
-        mSpriteViewPagerAdapter.onAddButtonClicked();
+    public long getSceneId() {
+        return mSceneId;
     }
 }

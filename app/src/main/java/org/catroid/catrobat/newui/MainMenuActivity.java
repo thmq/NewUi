@@ -15,7 +15,7 @@ import android.view.View;
 
 import org.catroid.catrobat.newui.db.util.CatroidDBHelper;
 import org.catroid.catrobat.newui.ui.activity.ProjectActivity;
-import org.catroid.catrobat.newui.ui.activity.SpriteActivity;
+import org.catroid.catrobat.newui.ui.activity.SpriteDetailActivity;
 
 public class MainMenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -101,7 +101,7 @@ public class MainMenuActivity extends AppCompatActivity
     }
 
     public void onRecycleViewClick(View view) {
-        Intent intent = new Intent(this, SpriteActivity.class);
+        Intent intent = new Intent(this, SpriteDetailActivity.class);
         startActivity(intent);
     }
 
