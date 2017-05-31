@@ -221,7 +221,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
             for (T item : items) {
                 try {
                     T copiedItem = copyItem(item);
-                    mRecyclerViewAdapter.addItem(copiedItem);
+                    mRecyclerViewAdapter.insertItem(copiedItem);
                 } catch (Exception e) {
                     Log.d(TAG, e.getMessage());
                     e.printStackTrace();
@@ -238,7 +238,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
         for (T item : items) {
             try {
                 cleanupItem(item);
-                mRecyclerViewAdapter.removeItem(item);
+                mRecyclerViewAdapter.destroyItem(item);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -301,7 +301,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
         T item = createNewItem(itemName);
 
         if (item != null) {
-            mRecyclerViewAdapter.addItem(item);
+            mRecyclerViewAdapter.insertItem(item);
 
             for (BaseRecyclerListFragmentObserver observer : mObservers) {
                 observer.onNewItemAdded(this, item);
@@ -318,7 +318,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
             renameItem(item, itemName);
 
-            mRecyclerViewAdapter.itemChanged(item);
+            mRecyclerViewAdapter.updateItem(item);
             mRecyclerViewAdapter.clearSelection();
         }
     }

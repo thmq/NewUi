@@ -11,6 +11,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import org.catroid.catrobat.newui.data.Scene;
 import org.catroid.catrobat.newui.db.fetchrequest.FetchRequest;
 import org.catroid.catrobat.newui.db.brigde.DatabaseBridge;
 import org.catroid.catrobat.newui.db.brigde.PersistableRecord;
@@ -97,6 +98,24 @@ abstract public class DatabaseRecyclerViewAdapter<T extends PersistableRecord> e
         } else {
             Log.d(TAG, "There are no items");
         }
+    }
+
+    @Override
+    public void updateItem(T item) {
+        Scene scene = (Scene) item;
+
+        Log.d(TAG, "Updating item: " + scene.getId() + " / " + scene.getName());
+        mBridge.update(item);
+    }
+
+    @Override
+    public void destroyItem(T item) {
+        mBridge.delete(item);
+    }
+
+    @Override
+    public void insertItem(T item) {
+        mBridge.insert(item);
     }
 
     @Override

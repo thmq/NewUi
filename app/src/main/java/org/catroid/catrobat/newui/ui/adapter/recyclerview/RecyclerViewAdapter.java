@@ -160,19 +160,19 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     }
 
 
-    public void addItems(List<T> items) {
+    protected void addItems(List<T> items) {
         for (T item : items) {
             addItem(item);
         }
     }
 
-    public void addItem(T item) {
+    private void addItem(T item) {
         mListItems.add(item);
         int pos = mListItems.indexOf(item);
         notifyItemInserted(pos);
     }
 
-    public void removeItem(T item) {
+    private void removeItem(T item) {
         int pos = mListItems.indexOf(item);
         mListItems.remove(item);
         mMultiSelectionManager.removeItem(item);
@@ -184,7 +184,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         notifyItemRemoved(pos);
     }
 
-    public void itemChanged(T item) {
+    private void itemChanged(T item) {
         if (mListItems.contains(item)) {
             int pos = mListItems.indexOf(item);
             notifyItemChanged(pos);
@@ -197,8 +197,6 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
     @Override
     public int getItemCount() {
-        Log.d("RVA", "Item Count: " + mListItems.size());
-
         return mListItems.size();
     }
 
@@ -239,7 +237,19 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         }
     }
 
-    public void cleanup() {
+    public void cleanup() {}
 
+    // Data Manipulation
+    public void insertItem(T item) {
+        addItem(item);
+    }
+
+
+    public void updateItem(T item) {
+        itemChanged(item);
+    }
+
+    public void destroyItem(T item) {
+        removeItem(item);
     }
 }

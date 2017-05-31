@@ -46,16 +46,19 @@ public class SceneListFragment extends BaseRecyclerListFragment<Scene> {
 
     @Override
     protected void cleanupItem(Scene item) throws Exception {
-
+        // derp
     }
 
     @Override
     protected void renameItem(Scene item, String itemName) {
-
+        item.setName(itemName);
     }
 
     @Override
     protected Scene createNewItem(String itemName) {
-        return null;
+        Scene scene = new Scene();
+        scene.setName(itemName);
+
+        return scene;
     }
 }

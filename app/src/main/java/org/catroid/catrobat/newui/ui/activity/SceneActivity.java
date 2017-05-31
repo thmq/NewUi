@@ -18,7 +18,6 @@ public class SceneActivity extends AppCompatActivity {
     public static final String PROJECT_ID_KEY = "project_id";
     public static final String PROJECT_NAME_KEY = "project_name";
     private long mProjectId;
-    private BaseRecyclerListFragment mRecyclerViewFragment;
     private SceneListFragment mSceneFragment;
 
     @Override
@@ -61,13 +60,7 @@ public class SceneActivity extends AppCompatActivity {
     }
 
     private void addButtonClicked() {
-        Scene scene = new Scene();
-
-        scene.setName("New Scene");
-        scene.setProjectId(mProjectId);
-
-        SceneBridge bridge = new SceneBridge(this);
-        bridge.insert(scene);
+        mSceneFragment.onAddButtonClicked();
     }
 
     public long getProjectId() {
