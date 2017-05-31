@@ -35,6 +35,7 @@ public class CatroidDBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int versionFrom, int versionTo) {
         Log.d(TAG, "Upgrading ... ");
         sqLiteDatabase.execSQL(SQLHelper.dropTableIfExists(ProjectEntry.TABLE_NAME));
+        sqLiteDatabase.execSQL(SQLHelper.dropTableIfExists(SceneEntry.TABLE_NAME));
 
         onCreate(sqLiteDatabase);
     }
@@ -53,7 +54,7 @@ public class CatroidDBHelper extends SQLiteOpenHelper {
         return SQLHelper.createTableDefinition(SceneEntry.TABLE_NAME, new String[]{
                 SQLHelper.idColumnDefinition(SceneEntry._ID),
                 SQLHelper.integerColumnDefinition(SceneEntry.COLUMN_PROJECT_ID),
-                SQLHelper.stringColumnDefinition(SceneEntry.COLUMN_NAME)
+                SQLHelper.modifierUnique(SQLHelper.stringColumnDefinition(SceneEntry.COLUMN_NAME))
         });
     }
 

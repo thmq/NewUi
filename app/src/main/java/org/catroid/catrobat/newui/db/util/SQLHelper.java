@@ -1,5 +1,7 @@
 package org.catroid.catrobat.newui.db.util;
 
+import android.support.annotation.NonNull;
+
 public class SQLHelper {
 
     public static String escapeTable(String tableName) {
@@ -50,5 +52,9 @@ public class SQLHelper {
 
     public static String integerColumnDefinition(String columnName) {
         return escapeColumn(columnName) + " INTEGER";
+    }
+
+    public static String modifierUnique(@NonNull String columnDefinition) {
+        return columnDefinition + " UNIQUE";
     }
 }
