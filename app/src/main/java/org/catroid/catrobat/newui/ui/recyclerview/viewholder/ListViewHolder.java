@@ -66,7 +66,7 @@ public class ListViewHolder extends RecyclerViewHolder {
         if (isSelected) {
             mItemView.setBackgroundColor(itemView.getResources().getColor(R.color.list_item_selected_bg));
         } else {
-            mItemView.setBackgroundColor(0xFF0000FF);
+            mItemView.setBackgroundColor(itemView.getResources().getColor(R.color.white));
         }
     }
 }

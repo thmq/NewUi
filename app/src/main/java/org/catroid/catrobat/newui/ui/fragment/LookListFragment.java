@@ -58,7 +58,7 @@ public class LookListFragment extends TabableFragment<LookInfo>
         //TODO change again
         List<LookInfo> lookInfoList = new ArrayList<LookInfo>();
 
-        for (int i = 0; i < 0; i++) {
+        for (int i = 0; i < 5; i++) {
             lookInfoList.add(new LookInfo("Item " + i, createImage()));
         }
 

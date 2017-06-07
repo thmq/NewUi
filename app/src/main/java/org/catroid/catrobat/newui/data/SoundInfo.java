@@ -1,6 +1,7 @@
 package org.catroid.catrobat.newui.data;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 
@@ -17,6 +18,7 @@ public class SoundInfo extends ItemInfo implements Serializable, CopyPasteable {
     //TODO: uncomment after XStream integration
     //@XStreamAsAttribute
     private String fileName;
+    private transient PathInfoFile mPathInfoBitmap;
     private transient PathInfoFile mPathInfo;
     private String duration;
 
@@ -26,9 +28,15 @@ public class SoundInfo extends ItemInfo implements Serializable, CopyPasteable {
 
         //TODO what if the mPathInfo's relative path is not the filename alone?
         if (pathInfo != null) {
-            fileName = pathInfo.getAbsolutePath();
+            //TODO differentiate between external and local sounds (means: between relative and absolute)
+            fileName = pathInfo.getRelativePath();
             getDurationFromFile();
         }
+    }
+
+    public void setPathInfoBitmap(PathInfoFile pathInfoBitmap) {
+        this.mPathInfoBitmap = pathInfoBitmap;
+        createThumbnail();
     }
 
     public SoundInfo(SoundInfo srcSoundInfo) throws Exception {
@@ -57,7 +65,10 @@ public class SoundInfo extends ItemInfo implements Serializable, CopyPasteable {
     }
 
     public String getDuration() {
-        return duration;
+        Long ms = Long.parseLong(duration);
+        int min = (int) (((ms / 1000) / 60) % 60);
+        int sec = (int) ((ms / 1000)  % 60);
+        return String.format("%02d:%02d", min, sec);
     }
 
     public void deleteFile() throws Exception {
@@ -66,7 +77,7 @@ public class SoundInfo extends ItemInfo implements Serializable, CopyPasteable {
 
     private void getDurationFromFile() {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(mPathInfo.getAbsolutePath());
+        retriever.setDataSource(fileName);
         duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
     }
 
@@ -88,5 +99,19 @@ public class SoundInfo extends ItemInfo implements Serializable, CopyPasteable {
     @Override
     public void cleanupFromClipboard() throws Exception {
         StorageHandler.deleteFile(mPathInfo);
+    }
+
+    @Override
+    public Bitmap getBitmap() {
+        String imagePath = mPathInfoBitmap.getAbsolutePath();
+
+        if (!StorageHandler.fileExists(imagePath)) {
+            return null;
+        }
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+        return BitmapFactory.decodeFile(imagePath, options);
     }
 }

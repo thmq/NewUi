@@ -3,10 +3,14 @@ package org.catroid.catrobat.newui.data;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.ThumbnailUtils;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 
-public class ItemInfo {
+public abstract class ItemInfo {
+    private static final transient int THUMBNAIL_WIDTH = 80;
+    private static final transient int THUMBNAIL_HEIGHT = 80;
+
     private String name;
     private transient Bitmap mThumbnail;
     private RoundedBitmapDrawable mThumbnailDrawable;
@@ -52,4 +56,11 @@ public class ItemInfo {
     public void setThumbnailDrawable(RoundedBitmapDrawable mThumbnailDrawable) {
         this.mThumbnailDrawable = mThumbnailDrawable;
     }
+
+    protected void createThumbnail() {
+        Bitmap bigImage = getBitmap();
+        setThumbnail(ThumbnailUtils.extractThumbnail(bigImage, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT));
+    }
+
+    public abstract Bitmap getBitmap();
 }

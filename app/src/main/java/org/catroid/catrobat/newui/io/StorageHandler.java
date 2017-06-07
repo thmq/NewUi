@@ -1,6 +1,7 @@
 package org.catroid.catrobat.newui.io;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
@@ -201,5 +202,12 @@ public final class StorageHandler {
         }
 
         return new PathInfoFile(Utils.getImageDirectory(), file.getName());
+    }
+
+    public static PathInfoFile createSound(Uri uri, String itemName) {
+        if(uri == null) { return null; }
+
+        String uri_ = uri.getPath();
+        return new PathInfoFile(Utils.getSoundDirectory(), uri.getEncodedPath());
     }
 }

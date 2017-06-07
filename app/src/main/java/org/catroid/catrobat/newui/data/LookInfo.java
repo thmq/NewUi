@@ -17,9 +17,6 @@ import java.io.Serializable;
 
 public class LookInfo extends ItemInfo implements Serializable, CopyPasteable {
 
-    private static final transient int THUMBNAIL_WIDTH = 80;
-    private static final transient int THUMBNAIL_HEIGHT = 80;
-
     //TODO: uncomment after XStream integration
     //@XStreamAsAttribute
     private String fileName;
@@ -65,6 +62,7 @@ public class LookInfo extends ItemInfo implements Serializable, CopyPasteable {
         StorageHandler.deleteFile(mPathInfo);
     }
 
+    @Override
     public Bitmap getBitmap() {
         String imagePath = mPathInfo.getAbsolutePath();
 
@@ -97,8 +95,5 @@ public class LookInfo extends ItemInfo implements Serializable, CopyPasteable {
         cleanup();
     }
 
-    private void createThumbnail() {
-        Bitmap bigImage = getBitmap();
-        setThumbnail(ThumbnailUtils.extractThumbnail(bigImage, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT));
-    }
+
 }

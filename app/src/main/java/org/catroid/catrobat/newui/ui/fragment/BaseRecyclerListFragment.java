@@ -25,6 +25,7 @@ import android.widget.Toast;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.copypaste.Clipboard;
 import org.catroid.catrobat.newui.copypaste.CopyPasteable;
+import org.catroid.catrobat.newui.data.SoundInfo;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.dialog.RenameItemDialog;
 import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapter;
@@ -133,7 +134,9 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
     public void onStart() {
         super.onStart();
 
-        mRecyclerViewAdapter = createAdapter();
+        if(mRecyclerViewAdapter == null) {
+            mRecyclerViewAdapter = createAdapter();
+        }
         mRecyclerViewAdapter.setDelegate(this);
 
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
@@ -198,11 +201,16 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
             byte[] byteArray = data.getByteArrayExtra("image");
             Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
-            PathInfoFile pathInfoFile = StorageHandler.createImage(bitmap, name);
-            T item = createNewItem(name, pathInfoFile);
-            if(sound_uri != null) {
-                //item.
-                //TODO handle sound storing
+            PathInfoFile pathInfoFileImage = StorageHandler.createImage(bitmap, name);
+            T item;
+            if(sound_uri == null) {
+                item = createNewItem(name, pathInfoFileImage);
+            }
+            else {
+                PathInfoFile pathInfoSound = StorageHandler.createSound(sound_uri, name);
+                item = createNewItem(name, pathInfoSound);
+                ((SoundInfo)item).setPathInfoBitmap(pathInfoFileImage);
+                //TODO: handle copy/storage of recorded sound here - if needed?
             }
             addToList(item);
         }

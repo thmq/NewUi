@@ -97,7 +97,6 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
     public void addItem(T item) {
         mListItems.add(item);
-//        notifyDataSetChanged();
         int pos = mListItems.indexOf(item);
         notifyItemInserted(pos);
     }

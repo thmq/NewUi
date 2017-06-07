@@ -90,7 +90,7 @@ public class SoundRecorderActivity extends AppCompatActivity implements OnClickL
             if (soundRecorder != null) {
                 soundRecorder.stop();
             }
-            String recordPath = "/madi" /* TODO */
+            String recordPath = "/madi" /* TODO use right paths */
                     + SoundRecorder.RECORDING_EXTENSION;
             soundRecorder = new SoundRecorder(recordPath);
             soundRecorder.start();

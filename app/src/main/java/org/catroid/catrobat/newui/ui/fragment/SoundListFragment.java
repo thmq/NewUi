@@ -40,7 +40,7 @@ public class SoundListFragment extends TabableFragment<SoundInfo> {
 
     @Override
     protected void addToList(SoundInfo item) {
-//        TODO: implement method
+        mRecyclerViewAdapter.addItem(item);
     }
 
     @Override
@@ -86,6 +86,10 @@ public class SoundListFragment extends TabableFragment<SoundInfo> {
 
     @Override
     protected SoundInfo createNewItem(String itemName, PathInfoFile pathInfoFile) {
-        return null;
+
+        String uniqueSoundName = Utils.getUniqueSoundName(itemName,
+                mRecyclerViewAdapter.getItems());
+
+        return new SoundInfo(uniqueSoundName, pathInfoFile);
     }
 }

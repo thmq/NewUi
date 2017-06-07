@@ -1,7 +1,9 @@
 package org.catroid.catrobat.newui.ui;
 
 import android.app.Activity;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -136,10 +138,7 @@ public class AddItemActivity extends AppCompatActivity {
                     micOption.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //TODO fix sound recorder
-                            /*Intent openMic = new Intent(getApplicationContext(), SoundRecorderActivity.class);
-                            startActivityForResult(openMic, MIC);
-                            dialog.dismiss();*/
+                            //TODO: implement soundrecording - see soundrecorder
                         }
                     });
 
@@ -189,7 +188,7 @@ public class AddItemActivity extends AppCompatActivity {
                     result.putExtra("image", byteArrayBitmap);
 
                      if(caller_tag.equals(SOUNDS)){
-                        result.putExtra("item_uri", item_uri.toString());
+                        result.putExtra("sound_uri", getRealPathFromURI(item_uri));
                      }
 
                     setResult(Activity.RESULT_OK, result);
@@ -197,7 +196,6 @@ public class AddItemActivity extends AppCompatActivity {
 
                 } catch(Exception e) {
                     e.printStackTrace();
-                    //TODO
                 }
             }
         });
@@ -245,12 +243,13 @@ public class AddItemActivity extends AppCompatActivity {
             case PLACE_HOLDER2:
                 break;
             case MIC:
-
+                //TODO: implement SoundRecorder onResult
+                setAudioWaveThumbnail(item_uri);
                 break;
             case AUDIO_PICK:
                 item_uri = returnedIntent.getData();
                 if(!item_uri.toString().isEmpty()) {
-                    getAudioWaveThumbnail(item_uri);
+                    setAudioWaveThumbnail(item_uri);
                     itemChosen = true;
                 } else {
                     itemChosen = false;
@@ -281,14 +280,25 @@ public class AddItemActivity extends AppCompatActivity {
         return true;
     }
 
-    private Bitmap getAudioWaveThumbnail(Uri sound) {
-        //TODO calcualte soundwave
-        return BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.blue_square);
+    private void setAudioWaveThumbnail(Uri sound) {
+        //TODO: calcualte soundwave and make image out of it - delete default image
+        addImage.setImageResource(R.drawable.ic_volume_up_black_24dp);
+        itemChosen = true;
+        btnCreate.setEnabled(true);
     }
 
     private byte[] bitmapToByteArray(Bitmap bitmap){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
+    }
+
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        CursorLoader loader = new CursorLoader(getApplicationContext(), contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 }
