@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/relativelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id = "@+id/linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
+
+            <include layout="@layout/tabbed_app_bar" />
+
+
+            <WebView
+                android:id="@+id/webview"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="5dp"
+                />
+
+
+            <fragment class="org.catroid.catrobat.newui.ui.fragment.ProjectListFragment"
+                android:id="@+id/project_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+
+        <!-- Bottom Navigation Menu -->
+        <android.support.design.widget.BottomNavigationView android:id="@+id/bottom_navigation"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:fitsSystemWindows="true"
+            android:layout_alignParentBottom="true"
+            app:itemBackground="@color/white"
+            app:menu="@menu/menu_bottom_navigation"
+            />
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/ic_add_circle_white_24dp"
+            android:layout_above="@id/bottom_navigation"
+            android:layout_alignRight="@id/bottom_navigation" />
+    </RelativeLayout>
+
+
+    <!-- Bottom Sheet -->
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_sheet_fixed_height"
+        android:background="@color/white"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/bottom_sheet_padding">
+
+        <TextView
+            android:id="@+id/bottom_sheet_title"
+            android:text="Projekt 1"
+            android:textSize="@dimen/bottom_sheet_title_text_size"
+            android:layout_alignParentTop="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/bottom_sheet_default_text_size"/>
+
+        <TextView
+            android:id="@+id/bottom_sheet_description_label"
+            android:text="@string/project_description"
+            android:textSize="@dimen/bottom_sheet_default_text_size"
+            android:layout_below="@id/bottom_sheet_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:id="@+id/bottom_sheet_description"
+            android:text="gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+            android:textSize="@dimen/bottom_sheet_default_text_size"
+            android:layout_below="@id/bottom_sheet_description_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/bottom_sheet_default_text_size"/>
+
+
+        <TextView
+            android:id="@+id/bottom_sheet_last_access_label"
+            android:text="@string/project_last_access"
+            android:textSize="@dimen/bottom_sheet_default_text_size"
+            android:layout_below="@id/bottom_sheet_description"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/bottom_sheet_last_access"
+            android:text="31.05.2017"
+            android:textSize="@dimen/bottom_sheet_default_text_size"
+            android:layout_alignBaseline="@id/bottom_sheet_last_access_label"
+            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/bottom_sheet_variable_text_width"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/bottom_sheet_project_size_label"
+            android:layout_below="@id/bottom_sheet_last_access_label"
+            android:layout_alignParentLeft="true"
+            android:text="@string/project_size"
+            android:textSize="@dimen/bottom_sheet_default_text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/bottom_sheet_project_size"
+            android:text="412 Kb"
+            android:textSize="@dimen/bottom_sheet_default_text_size"
+            android:layout_alignBaseline="@id/bottom_sheet_project_size_label"
+            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/bottom_sheet_variable_text_width"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/bottom_sheet_brick_count_label"
+            android:text="@string/project_brick_count"
+            android:textSize="@dimen/bottom_sheet_default_text_size"
+            android:layout_below="@id/bottom_sheet_project_size_label"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/bottom_sheet_brick_count"
+            android:text="12 456"
+            android:textSize="@dimen/bottom_sheet_default_text_size"
+            android:layout_alignBaseline="@id/bottom_sheet_brick_count_label"
+            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/bottom_sheet_variable_text_width"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

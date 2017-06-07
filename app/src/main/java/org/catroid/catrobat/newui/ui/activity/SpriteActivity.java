@@ -3,13 +3,16 @@ package org.catroid.catrobat.newui.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import org.catroid.catrobat.newui.R;
-import org.catroid.catrobat.newui.ui.fragment.SceneListFragment;
+import org.catroid.catrobat.newui.data.Scene;
+import org.catroid.catrobat.newui.db.brigde.SceneBridge;
 import org.catroid.catrobat.newui.ui.fragment.SpriteListFragment;
 
 
@@ -20,7 +23,7 @@ public class SpriteActivity extends AppCompatActivity {
 
     private long mSceneId;
     private SpriteListFragment mSpriteFragment;
-
+    private Scene mScene;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +44,17 @@ public class SpriteActivity extends AppCompatActivity {
             }
         }
 
+        loadScene();
         setupFAB();
         setupRecyclerListFragment();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    private void loadScene() {
+        SceneBridge bridge = new SceneBridge(this);
+
+        mScene = bridge.find(mSceneId);
     }
 
     private void setupRecyclerListFragment() {
@@ -67,5 +77,22 @@ public class SpriteActivity extends AppCompatActivity {
 
     public long getSceneId() {
         return mSceneId;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Intent sceneIntent = getParentActivityIntent();
+
+                sceneIntent.putExtra(SceneActivity.PROJECT_ID_KEY, mScene.getProjectId());
+
+                NavUtils.navigateUpTo(this, sceneIntent);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

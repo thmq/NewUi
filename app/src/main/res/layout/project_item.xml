@@ -27,6 +27,15 @@
         android:textSize="@dimen/list_item_header"/>
 
     <ImageView
+        android:id="@+id/selected_project_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/ic_check_circle_white_24dp"
+        android:padding="2dp" />
+
+    <ImageView
         android:id="@+id/favorite_project_image_view"
         android:layout_width="50dp"
         android:layout_height="50dp"

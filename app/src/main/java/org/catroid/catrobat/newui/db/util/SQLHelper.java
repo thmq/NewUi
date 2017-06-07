@@ -57,4 +57,9 @@ public class SQLHelper {
     public static String modifierUnique(@NonNull String columnDefinition) {
         return columnDefinition + " UNIQUE";
     }
+
+    public static String dateColumnDefinition(String columnName) {
+        // SQLite duh!
+        return escapeColumn(columnName) + " INTEGER";
+    }
 }
