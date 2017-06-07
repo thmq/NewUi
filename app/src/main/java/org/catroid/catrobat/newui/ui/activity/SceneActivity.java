@@ -1,12 +1,17 @@
 package org.catroid.catrobat.newui.ui.activity;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import org.catroid.catrobat.newui.R;
@@ -30,24 +35,23 @@ public class SceneActivity extends AppCompatActivity implements BaseRecyclerList
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setupFAB();
+        setupRecyclerListFragment();
+        setupFromIntent();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setupFromIntent() {
         Intent intent = getIntent();
         if (intent != null) {
-            mProjectId = intent.getLongExtra(PROJECT_ID_KEY, -1);
+            long projectId = intent.getLongExtra(PROJECT_ID_KEY, -1);
 
-            if (mProjectId == -1 && savedInstanceState != null) {
-                mProjectId = savedInstanceState.getLong(PROJECT_ID_KEY, -1);
-            }
-
-            if (mProjectId == -1) {
-                throw new UnsupportedOperationException();
+            if (projectId != -1) {
+                mProjectId = projectId;
             }
 
             Log.d(TAG, "Project Id: " + mProjectId);
         }
-
-        setupFAB();
-        setupRecyclerListFragment();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setupRecyclerListFragment() {
@@ -81,5 +85,16 @@ public class SceneActivity extends AppCompatActivity implements BaseRecyclerList
         scenesActivityIntent.putExtra(SpriteActivity.SCENE_NAME_KEY, scene.getName());
 
         startActivity(scenesActivityIntent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

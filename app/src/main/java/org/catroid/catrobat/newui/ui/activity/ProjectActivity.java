@@ -3,8 +3,10 @@ package org.catroid.catrobat.newui.ui.activity;
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -27,7 +29,7 @@ import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.Project;
 
 import org.catroid.catrobat.newui.db.brigde.ProjectBridge;
-import org.catroid.catrobat.newui.ui.ProjectBottomSheet;
+import org.catroid.catrobat.newui.ui.bottomsheet.ProjectBottomSheet;
 import org.catroid.catrobat.newui.ui.adapter.OnSwipeTouchListener;
 import org.catroid.catrobat.newui.ui.adapter.ProjectAdapter;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
@@ -42,6 +44,7 @@ import static android.view.View.GONE;
 public class ProjectActivity extends AppCompatActivity implements BaseRecyclerListFragmentDelegate<Project> {
 
     private static final String TAG = ProjectActivity.class.getSimpleName();
+    private static final String TAB_POSITION_SHARED_PREF_KEY = "PROJECT_ACTIVITY_TAB_POSITION";
     private WebView mWebView;
     private OnSwipeTouchListener onSwipeTouchListener;
     private ProjectListFragment mProjectListFragment;
@@ -70,11 +73,19 @@ public class ProjectActivity extends AppCompatActivity implements BaseRecyclerLi
 
         setupBottomSheet();
         setupBottomNavigation();
-        selectBottomTab(1);
+        selectInitialBottomTab();
     }
 
     private void setupBottomSheet() {
         mBottomSheet = new ProjectBottomSheet(findViewById(R.id.bottom_sheet));
+    }
+
+    private void selectInitialBottomTab() {
+        // TODO: GET tab pos from shared prefs
+        int position = PreferenceManager.getDefaultSharedPreferences(this).getInt(TAB_POSITION_SHARED_PREF_KEY, 1);
+
+        selectBottomTab(position);
+        mProjectListFragment.setDefaultProjectScope(getScopeForPosition(position));
     }
 
     private void selectBottomTab(int tabPosition) {
@@ -104,7 +115,13 @@ public class ProjectActivity extends AppCompatActivity implements BaseRecyclerLi
             return;
         }
 
-        ProjectAdapter.ProjectScope newProjectScope = getScopeForMenuItem(item);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(TAB_POSITION_SHARED_PREF_KEY, newSelectedBottomTab);
+        editor.commit();
+
+        ProjectAdapter.ProjectScope newProjectScope = getScopeForPosition(newSelectedBottomTab);
 
         if (newSelectedBottomTab > mLastTabPosition) {
             mProjectListFragment.animateSlideRightToScope(newProjectScope);
@@ -117,13 +134,13 @@ public class ProjectActivity extends AppCompatActivity implements BaseRecyclerLi
         return;
     }
 
-    private ProjectAdapter.ProjectScope getScopeForMenuItem(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.bottom_action_favorites:
+    private ProjectAdapter.ProjectScope getScopeForPosition(int position) {
+        switch (position) {
+            case 0:
                 return ProjectAdapter.ProjectScope.FAVORITES;
-            case R.id.bottom_action_recent:
+            case 2:
                 return ProjectAdapter.ProjectScope.RECENT;
-            case R.id.bottom_action_all:
+            case 1:
             default:
                 return ProjectAdapter.ProjectScope.ALL;
         }

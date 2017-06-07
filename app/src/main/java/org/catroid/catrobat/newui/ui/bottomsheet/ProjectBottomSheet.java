@@ -1,4 +1,4 @@
-package org.catroid.catrobat.newui.ui;
+package org.catroid.catrobat.newui.ui.bottomsheet;
 
 import android.support.design.widget.BottomSheetBehavior;
 import android.view.View;
@@ -20,7 +20,6 @@ public class ProjectBottomSheet {
     private TextView mSizeTextView;
     private TextView mBrickCountTextView;
     private SimpleDateFormat mDateFormat;
-
 
     public ProjectBottomSheet(View bottomSheetView) {
         mBottomSheetView = bottomSheetView;
@@ -45,7 +44,6 @@ public class ProjectBottomSheet {
     private void setupDateFormat() {
         mDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm");
     }
-
 
     public void hide() {
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);

@@ -31,6 +31,7 @@ public class ProjectListFragment extends BaseRecyclerListFragment<Project> {
 
     private ProjectActivity mProjectActivity;
     private MenuItem mInfoButtonItem;
+    private ProjectAdapter.ProjectScope mDefaultProjectScope;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class ProjectListFragment extends BaseRecyclerListFragment<Project> {
         ProjectAdapter adapter = new ProjectAdapter(activity);
 
         adapter.startLoading(bridge);
+        adapter.updateScope(mDefaultProjectScope);
 
         return adapter;
     }
@@ -132,8 +134,13 @@ public class ProjectListFragment extends BaseRecyclerListFragment<Project> {
         });
     }
 
+
     public void setProjectActivity(ProjectActivity activity) {
         mProjectActivity = activity;
+    }
+
+    public void setDefaultProjectScope(ProjectAdapter.ProjectScope scope) {
+        mDefaultProjectScope = scope;
     }
 
     private void setupRecyclerViewScrollListener() {

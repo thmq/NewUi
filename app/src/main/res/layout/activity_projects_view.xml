@@ -158,7 +158,7 @@ gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/x"
+            android:id="@+id/bottom_sheet_brick_count"
             android:text="12 456"
             android:textSize="@dimen/bottom_sheet_default_text_size"
             android:layout_alignBaseline="@id/bottom_sheet_brick_count_label"
