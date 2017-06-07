@@ -27,6 +27,7 @@ public class DataContract {
         public static final String COLUMN_INFO_TEXT = "info_text";
         public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_FAVORITE = "favorite";
+        public static final String COLUMN_LAST_ACCESS = "last_access";
 
         public static Uri getProjectUri(Project project) {
             return PROJECT_URI.buildUpon().appendPath(String.valueOf(project.getId())).build();
@@ -42,7 +43,8 @@ public class DataContract {
                     COLUMN_NAME,
                     COLUMN_INFO_TEXT,
                     COLUMN_DESCRIPTION,
-                    COLUMN_FAVORITE
+                    COLUMN_FAVORITE,
+                    COLUMN_LAST_ACCESS
             };
         }
     }

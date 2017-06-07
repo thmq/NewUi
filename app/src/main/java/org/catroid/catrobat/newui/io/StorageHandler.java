@@ -1,8 +1,11 @@
 package org.catroid.catrobat.newui.io;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+
+import org.catroid.catrobat.newui.utils.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -171,5 +174,40 @@ public final class StorageHandler {
                 Log.e(TAG, "Directory NOT created! " + directory.getAbsolutePath());
             }
         }
+    }
+
+    public static PathInfoFile createImage(Bitmap bitmap, String itemName) {
+        if(bitmap == null) {
+            return null;
+        }
+
+        StorageHandler.setupDirectoryStructure();
+
+        String dir = Utils.getImageDirectory().getAbsolutePath();
+        File file;
+        try {
+            file = StorageHandler.getUniqueFile(itemName + ".png", dir);
+
+        } catch (Exception e) {
+            Log.d(TAG, "Image file not created");
+            e.printStackTrace();
+            return null;
+        }
+
+        try {
+            StorageHandler.exportBitmapToFile(bitmap, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return new PathInfoFile(Utils.getImageDirectory(), file.getName());
+    }
+
+    public static PathInfoFile createSound(Uri uri, String itemName) {
+        if(uri == null) { return null; }
+
+        String uri_ = uri.getPath();
+        return new PathInfoFile(Utils.getSoundDirectory(), uri.getEncodedPath());
     }
 }

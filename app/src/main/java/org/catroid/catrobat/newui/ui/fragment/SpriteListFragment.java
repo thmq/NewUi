@@ -1,8 +1,10 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
+import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.copypaste.Clipboard;
 import org.catroid.catrobat.newui.data.Sprite;
 import org.catroid.catrobat.newui.db.brigde.SpriteBridge;
+import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.ui.activity.SpriteActivity;
 import org.catroid.catrobat.newui.ui.activity.SpriteDetailActivity;
 import org.catroid.catrobat.newui.ui.adapter.SpriteAdapter;
@@ -20,6 +22,11 @@ public class SpriteListFragment extends BaseRecyclerListFragment<Sprite>  {
         adapter.startLoading(bridge, activity.getSceneId());
 
         return adapter;
+    }
+
+    @Override
+    protected void addToList(Sprite item) {
+
     }
 
     @Override
@@ -48,11 +55,21 @@ public class SpriteListFragment extends BaseRecyclerListFragment<Sprite>  {
     }
 
     @Override
+    protected Sprite createNewItem(String itemName, PathInfoFile pathInfoFile) {
+        return null;
+    }
+
+    @Override
     protected Sprite createNewItem(String name) {
         Sprite sprite = new Sprite();
 
         sprite.setName(name);
 
         return sprite;
+    }
+
+    @Override
+    public int getTabNameResource() {
+        return R.string.tab_name_sprite;
     }
 }

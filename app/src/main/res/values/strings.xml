@@ -8,20 +8,29 @@
 
     <string name="title_activity_project_view">All Programs</string>
 
+    <string name="required_field_explaination">* Required</string>
+
+
     <string name="title_activity_recycle_view">RecycleViewActivity</string>
     <string name="title_activity_list_view">ListViewActivity</string>
+    <string name="title_activity_add_item">AddItemActivity</string>
+    <string name="title_activity_sound_recorder">SoundRecorderActivity</string>
 
     <!-- General Dialog Strings -->
     <string name="dialog_new_name">new name:</string>
     <string name="cancel">cancel</string>
-    <string name="error_invalid_item_name">Item name is invalid.</string>
+    <string name="error_invalid_item_name">Item name is invalid</string>
 
     <!-- Shared Item Dialog Strings -->
     <string name="dialog_item_name_label">Item name</string>
 
     <!-- New Item Dialog -->
-    <string name="dialog_create_item">Create new Item</string>
-    <string name="dialog_create_item_primary_action">create</string>
+    <string name="create_item">Create new Item</string>
+    <string name="create_item_primary_action">create</string>
+    <string name="name_required">Name *</string>
+    <string name="new_item_name_placeholder">Item name</string>
+    <string name="new_name">new name:</string>
+
 
     <!-- Rename Item Dialog -->
     <string name="dialog_rename_item">Rename Item</string>
@@ -44,11 +53,37 @@
     <!-- Tab Names-->
     <string name="tab_name_looks">Looks</string>
     <string name="tab_name_sounds">Sounds</string>
+    <string name="tab_name_scene">Scene</string>
     <string name="title_activity_scene">SceneActivity</string>
+
+    <string name="dialog_select_image_placeholder1">...</string>
+    <string name="dialog_select_image_placeholder2">...</string>
+    <string name="dialog_select_image_gallery">Gallery</string>
+    <string name="dialog_select_image_camera">Camera</string>
+    <string name="dialog_select_image_title">Select image source</string>
+    <string name="dialog_select_sound_mic">Microphone</string>
+    <string name="dialog_select_sound_folder">Folder</string>
 
     <!-- Look Bricks -->
     <string name="brick_set_x">Set X:</string>
     <string name="brick_set_look">Switch to look</string>
     <string name="title_activity_sprite">SpriteActivity</string>
+
+    <!-- SoundRecorder -->
+    <string name="soundrecorder_name">Tap the icon above to start and stop recording.</string>
+    <string name="soundrecorder_text_view"></string>
+
+    <!-- Projects View -->
+    <string name="project_description">Description:</string>
+    <string name="project_last_access">Last Access:</string>
+    <string name="project_size">Size:</string>
+    <string name="project_brick_count">Brick Count:</string>
+
+    <string name="bottom_nav_favorites">Favorites</string>
+    <string name="bottom_nav_recent">Recent</string>
+    <string name="bottom_nav_all">All</string>
+    <string name="info_button">Info</string>
+    <string name="tab_name_projects">projects</string>
+    <string name="tab_name_sprite">sprites</string>
 
 </resources>

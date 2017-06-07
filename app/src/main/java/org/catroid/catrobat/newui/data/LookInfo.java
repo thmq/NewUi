@@ -15,23 +15,17 @@ import org.catroid.catrobat.newui.io.StorageHandler;
 
 import java.io.Serializable;
 
-public class LookInfo implements Serializable, CopyPasteable {
-
-    private static final transient int THUMBNAIL_WIDTH = 80;
-    private static final transient int THUMBNAIL_HEIGHT = 80;
+public class LookInfo extends ItemInfo implements Serializable, CopyPasteable {
 
     //TODO: uncomment after XStream integration
     //@XStreamAsAttribute
-    private String name;
     private String fileName;
     private transient PathInfoFile mPathInfo;
     private transient int width;
     private transient int height;
-    private transient Bitmap mThumbnail;
-    private RoundedBitmapDrawable mThumbnailDrawable;
 
     public LookInfo(String name, PathInfoFile pathInfo) {
-        this.name = name;
+        super(name);
         this.mPathInfo = pathInfo;
         //TODO what if the pathInfo's relative path is not the filename alone?
         fileName = pathInfo.getRelativePath();
@@ -41,14 +35,6 @@ public class LookInfo implements Serializable, CopyPasteable {
 
     public void initializeAfterDeserialize(PathInfoDirectory parent) {
         mPathInfo = new PathInfoFile(parent, fileName);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public PathInfoFile getPathInfo() {
@@ -72,14 +58,11 @@ public class LookInfo implements Serializable, CopyPasteable {
         return height;
     }
 
-    public Bitmap getThumbnail() {
-        return mThumbnail;
-    }
-
     public void cleanup() throws Exception {
         StorageHandler.deleteFile(mPathInfo);
     }
 
+    @Override
     public Bitmap getBitmap() {
         String imagePath = mPathInfo.getAbsolutePath();
 
@@ -93,23 +76,10 @@ public class LookInfo implements Serializable, CopyPasteable {
         return BitmapFactory.decodeFile(imagePath, options);
     }
 
-    public Drawable getRoundedDrawable() {
-        if (mThumbnailDrawable == null) {
-            Bitmap thumbnail = getThumbnail();
-
-            mThumbnailDrawable = RoundedBitmapDrawableFactory.create(Resources.getSystem(),
-                    thumbnail);
-
-            mThumbnailDrawable.setCircular(true);
-        }
-
-        return mThumbnailDrawable;
-    }
-
     @Override
     public LookInfo clone() throws CloneNotSupportedException {
         LookInfo clonedLookInfo = (LookInfo) super.clone();
-        mThumbnailDrawable = (RoundedBitmapDrawable) clonedLookInfo.mThumbnailDrawable.mutate();
+        setThumbnailDrawable((RoundedBitmapDrawable) clonedLookInfo.getThumbnailDrawable().mutate());
         return clonedLookInfo;
     }
 
@@ -125,8 +95,5 @@ public class LookInfo implements Serializable, CopyPasteable {
         cleanup();
     }
 
-    private void createThumbnail() {
-        Bitmap bigImage = getBitmap();
-        mThumbnail = ThumbnailUtils.extractThumbnail(bigImage, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
-    }
+
 }

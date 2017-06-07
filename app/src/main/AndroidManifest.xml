@@ -52,6 +52,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.catroid.catrobat.newui.ui.activity.SceneActivity" />
         </activity>
+        <activity
+            android:name=".ui.AddItemActivity"
+            android:label="@string/title_activity_add_item"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".soundrecorder.SoundRecorderActivity"
+            android:label="@string/title_activity_sound_recorder"
+            android:screenOrientation="portrait" />
+
 
         <provider
             android:authorities="org.catroid.catrobat.newui"

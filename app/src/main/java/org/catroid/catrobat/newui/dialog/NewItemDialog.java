@@ -7,6 +7,8 @@ import android.view.View;
 
 import org.catroid.catrobat.newui.R;
 
+import java.io.Serializable;
+
 public class NewItemDialog extends InputDialog {
 
     public static final String TAG = NewItemDialog.class.getSimpleName();
@@ -45,7 +47,7 @@ public class NewItemDialog extends InputDialog {
         return false;
     }
 
-    public interface NewItemInterface {
+    public interface NewItemInterface extends Serializable {
         boolean isNameValid(String itemName);
 
         void addNewItem(String itemName);

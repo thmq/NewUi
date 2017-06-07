@@ -1,5 +1,6 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import org.catroid.catrobat.newui.data.LookInfo;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
+import org.catroid.catrobat.newui.ui.AddItemActivity;
 import org.catroid.catrobat.newui.ui.adapter.LookAdapter;
 import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryManager;
@@ -19,6 +21,7 @@ import org.catroid.catrobat.newui.utils.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,11 +58,17 @@ public class LookListFragment extends TabableFragment<LookInfo>
         //TODO change again
         List<LookInfo> lookInfoList = new ArrayList<LookInfo>();
 
-        for (int i = 0; i < 0; i++) {
+        for (int i = 0; i < 5; i++) {
             lookInfoList.add(new LookInfo("Item " + i, createImage()));
         }
 
         return new LookAdapter(lookInfoList, R.layout.list_item);
+
+    }
+
+    @Override
+    protected void addToList(LookInfo item) {
+        mRecyclerViewAdapter.addItem(item);
 
     }
 
@@ -99,7 +108,6 @@ public class LookListFragment extends TabableFragment<LookInfo>
         return new LookInfo(uniqueLookName, pathInfo);
     }
 
-
     private PathInfoFile createImage() {
         StorageHandler.setupDirectoryStructure();
 
@@ -136,8 +144,13 @@ public class LookListFragment extends TabableFragment<LookInfo>
         return new PathInfoFile(Utils.getImageDirectory(), file.getName());
     }
 
+    @Override
+    protected LookInfo createNewItem(String itemName, PathInfoFile pathInfoFile) {
+        String uniqueLookName = Utils.getUniqueLookName(itemName, mRecyclerViewAdapter.getItems());
+        return new LookInfo(uniqueLookName, pathInfoFile);
+    }
+
     private boolean shouldPresentFeatureDiscovery() {
         return false;
     }
-
 }

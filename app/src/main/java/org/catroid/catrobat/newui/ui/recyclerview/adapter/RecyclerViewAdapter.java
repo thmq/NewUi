@@ -5,6 +5,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageSwitcher;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.LookInfo;
@@ -13,6 +19,7 @@ import org.catroid.catrobat.newui.ui.recyclerview.multiselection.RecyclerViewMul
 import org.catroid.catrobat.newui.ui.recyclerview.viewholder.RecyclerViewHolder;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerViewHolder> implements View.OnLongClickListener, View.OnClickListener, RecyclerViewMultiSelectionManagerDelegate<T> {
@@ -26,6 +33,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
 
     private RecyclerViewAdapterDelegate<T> mDelegate = null;
 
+    private static int SELECTED_ITEM_BACKGROUND_COLOR = 0xFFDDDDDD;
     protected static int CHECK_MARK_IMAGE_RESOURCE = R.drawable.ic_check_circle_black_24dp;
 
     public RecyclerViewAdapter(List<T> listItems, int itemLayout) {
@@ -87,7 +95,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
         }
     }
 
-    private void addItem(T item) {
+    public void addItem(T item) {
         mListItems.add(item);
         int pos = mListItems.indexOf(item);
         notifyItemInserted(pos);
@@ -147,6 +155,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Recycl
     private void resetItemToAnimate() {
         mItemToAnimate = null;
     }
+
 
     public void onSelectionChanged(RecyclerViewMultiSelectionManager multiSelectionManager) {
         notifySelectionChanged();

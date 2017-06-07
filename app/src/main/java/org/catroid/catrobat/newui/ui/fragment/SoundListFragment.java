@@ -38,6 +38,10 @@ public class SoundListFragment extends TabableFragment<SoundInfo> {
         return new SoundAdapter(new ArrayList<SoundInfo>(), R.layout.list_item);
     }
 
+    @Override
+    protected void addToList(SoundInfo item) {
+        mRecyclerViewAdapter.addItem(item);
+    }
 
     @Override
     protected String getItemName(SoundInfo item) {
@@ -78,5 +82,14 @@ public class SoundListFragment extends TabableFragment<SoundInfo> {
     @Override
     protected void renameItem(SoundInfo item, String itemName) {
         item.setName(itemName);
+    }
+
+    @Override
+    protected SoundInfo createNewItem(String itemName, PathInfoFile pathInfoFile) {
+
+        String uniqueSoundName = Utils.getUniqueSoundName(itemName,
+                mRecyclerViewAdapter.getItems());
+
+        return new SoundInfo(uniqueSoundName, pathInfoFile);
     }
 }

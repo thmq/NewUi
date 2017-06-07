@@ -41,7 +41,7 @@ public class SoundAdapter extends RecyclerViewAdapter<SoundInfo> {
         if (isSelected) {
             listViewHolder.mImageSwitcher.setImageResource(CHECK_MARK_IMAGE_RESOURCE);
         } else {
-            listViewHolder.mImageSwitcher.setImageResource(item.getThumbnailResource());
+            listViewHolder.mImageSwitcher.setImageDrawable(item.getRoundedDrawable());
         }
 
         listViewHolder.updateBackground(isSelected);

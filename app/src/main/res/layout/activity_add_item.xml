@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/app_bar" />
+
+    <LinearLayout
+        android:layout_below="@+id/appbar"
+        android:id="@+id/addItemLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/name_required"
+            android:textSize="20dp"
+            android:paddingBottom="8dp"
+            android:paddingTop="16dp" />
+        <EditText
+            android:id="@+id/addItemNameTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:paddingTop="0dp"
+            android:hint="@string/new_item_name_placeholder"/>
+    </LinearLayout>
+
+
+    <ImageView
+        android:scaleType="center"
+        android:id="@+id/addItemImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addItemLayout"
+        android:layout_margin="20dp"
+        android:tint="@color/colorPrimary"
+        android:src="@drawable/ic_add_circle_white_24dp"
+        android:background="@drawable/border"/>
+
+    <TextView
+        android:layout_margin="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/required_field_explaination"
+        android:textSize="15dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"/>
+
+    <Button
+        android:layout_margin="15dp"
+        android:id="@+id/btnCreateItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:enabled="false"
+        android:text="@string/create_item_primary_action" />
+
+</RelativeLayout>
