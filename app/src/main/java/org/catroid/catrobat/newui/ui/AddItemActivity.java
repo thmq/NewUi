@@ -41,10 +41,10 @@ public class AddItemActivity extends AppCompatActivity {
     private Boolean itemChosen = false;
     private String caller_tag;
 
-    private final String LOOKS = "looks";
-    private final String SOUNDS = "sounds";
-    private final String SPRITES = "sprites";
-    private final String PROJECTS = "projects";
+    private final String LOOKS = "Looks";
+    private final String SOUNDS = "Sounds";
+    private final String SPRITES = "Sprites";
+    private final String PROJECTS = "Projects";
 
     private final int CAMERA = 0;
     private final int GALLERY = 1;
