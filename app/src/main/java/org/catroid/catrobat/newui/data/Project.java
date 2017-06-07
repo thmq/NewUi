@@ -3,10 +3,12 @@ package org.catroid.catrobat.newui.data;
 import android.graphics.Bitmap;
 
 import org.catroid.catrobat.newui.copypaste.CopyPasteable;
+import org.catroid.catrobat.newui.db.brigde.DatabaseBridge;
 import org.catroid.catrobat.newui.db.brigde.PersistableRecord;
 import org.catroid.catrobat.newui.db.brigde.SceneBridge;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Project implements PersistableRecord, CopyPasteable {
@@ -17,6 +19,7 @@ public class Project implements PersistableRecord, CopyPasteable {
     private String description;
     private Bitmap thumbnail;
     private Boolean favorite;
+    private Date mLastAccess;
 
     public Project() {
         // TODO: Maybe use complete signature constructors only - to prevent user errors
@@ -102,4 +105,11 @@ public class Project implements PersistableRecord, CopyPasteable {
         // TODO: Remove any thumbnails!
     }
 
+    public Date getLastAccess() {
+        return mLastAccess;
+    }
+
+    public void setLastAccess(Date lastAccess) {
+        mLastAccess = lastAccess;
+    }
 }

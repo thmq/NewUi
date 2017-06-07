@@ -73,4 +73,17 @@
     <string name="soundrecorder_name">Tap the icon above to start and stop recording.</string>
     <string name="soundrecorder_text_view"></string>
 
+    <!-- Projects View -->
+    <string name="project_description">Description:</string>
+    <string name="project_last_access">Last Access:</string>
+    <string name="project_size">Size:</string>
+    <string name="project_brick_count">Brick Count:</string>
+
+    <string name="bottom_nav_favorites">Favorites</string>
+    <string name="bottom_nav_recent">Recent</string>
+    <string name="bottom_nav_all">All</string>
+    <string name="info_button">Info</string>
+    <string name="tab_name_projects">projects</string>
+    <string name="tab_name_sprite">sprites</string>
+
 </resources>

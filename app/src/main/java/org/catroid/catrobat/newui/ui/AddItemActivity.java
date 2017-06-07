@@ -1,11 +1,11 @@
 package org.catroid.catrobat.newui.ui;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -15,7 +15,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,14 +26,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import org.catroid.catrobat.newui.R;
-import org.catroid.catrobat.newui.soundrecorder.SoundRecorderActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 
 public class AddItemActivity extends AppCompatActivity {
-    private ImageView addImage;
+    private ImageView exploreItem;
     private EditText itemName;
     private Button btnCreate;
     private ArrayList<String> names;
@@ -43,8 +41,10 @@ public class AddItemActivity extends AppCompatActivity {
     private Boolean itemChosen = false;
     private String caller_tag;
 
-    private static String LOOKS;
-    private static String SOUNDS;
+    private final String LOOKS = "looks";
+    private final String SOUNDS = "sounds";
+    private final String SPRITES = "sprites";
+    private final String PROJECTS = "projects";
 
     private final int CAMERA = 0;
     private final int GALLERY = 1;
@@ -63,9 +63,7 @@ public class AddItemActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_activity_add_item);
 
-        LOOKS = getString(R.string.tab_name_looks);
-        SOUNDS = getString(R.string.tab_name_sounds);
-        addImage = (ImageView) findViewById(R.id.addItemImage);
+        exploreItem = (ImageView) findViewById(R.id.addItemImage);
         btnCreate = (Button) findViewById(R.id.btnCreateItem);
         itemName = (EditText) findViewById(R.id.addItemNameTxt);
 
@@ -87,72 +85,22 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
 
-        addImage.setOnClickListener(new View.OnClickListener() {
+        exploreItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 final AlertDialog dialog = new AlertDialog.Builder(AddItemActivity.this).create();
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = null;
-
-                if (caller_tag.equals(LOOKS)) {
-                    layout = inflater.inflate(R.layout.dialog_select_image, null);
-                    dialog.setView(layout);
-
-                    LinearLayout cameraOption = (LinearLayout) layout.findViewById(R.id.option_camera);
-                    cameraOption.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(takePicture, CAMERA);
-                            dialog.dismiss();
-                        }
-                    });
-
-                    LinearLayout galleryOption = (LinearLayout) layout.findViewById(R.id.option_gallery);
-                    galleryOption.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(pickPhoto, GALLERY);
-                            dialog.dismiss();
-                        }
-                    });
-
-                    LinearLayout defaultOption = (LinearLayout) layout.findViewById(R.id.option_set_default_picture);
-                    defaultOption.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            addImage.setImageResource(R.drawable.blue_square);
-                            itemChosen = true;
-                            btnCreate.setEnabled(true);
-                            dialog.dismiss();
-                        }
-                    });
-                } else if (caller_tag.equals(SOUNDS)) {
-                    layout = inflater.inflate(R.layout.dialog_select_sound, null);
-                    dialog.setView(layout);
-
-                    LinearLayout micOption = (LinearLayout) layout.findViewById(R.id.option_mic);
-                    micOption.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //TODO: implement soundrecording - see soundrecorder
-                        }
-                    });
-
-                    LinearLayout storageOption = (LinearLayout) layout.findViewById(R.id.option_storage);
-                    storageOption.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent pickSound = new Intent(Intent.ACTION_PICK,
-                                    android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(pickSound, AUDIO_PICK);
-                            dialog.dismiss();
-                        }
-
-                    });
+                switch (caller_tag) {
+                    case LOOKS:
+                        setListenerForExploreLooks(dialog);
+                        break;
+                    case SOUNDS:
+                        setListenerForExploreSounds(dialog);
+                        break;
+                    case PROJECTS:
+                        setListenerForExploreProjects(dialog);
+                        break;
+                    case SPRITES:
+                        setListenerForExploreSprites(dialog);
                 }
             dialog.show();
         }});
@@ -183,7 +131,7 @@ public class AddItemActivity extends AppCompatActivity {
                     Intent result = new Intent();
                     result.putExtra("name", name);
 
-                    Bitmap bitmapToByteArray = ((BitmapDrawable) addImage.getDrawable()).getBitmap();
+                    Bitmap bitmapToByteArray = ((BitmapDrawable) exploreItem.getDrawable()).getBitmap();
                     byte[] byteArrayBitmap = bitmapToByteArray(bitmapToByteArray);
                     result.putExtra("image", byteArrayBitmap);
 
@@ -201,10 +149,21 @@ public class AddItemActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isNameValid(String name) {
-        if (name == null || name.equals("") || names.contains(name)) {
-                return false;
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(firstRun) {
+            firstRun = false;
+            int width = exploreItem.getWidth();
+            exploreItem.setMinimumHeight(width);
+            exploreItem.setMaxHeight(width);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
 
@@ -219,9 +178,9 @@ public class AddItemActivity extends AppCompatActivity {
             case CAMERA: //Camera
                     Bitmap photo = (Bitmap) returnedIntent.getExtras().get("data");
                     if(photo != null) {
-                        addImage.setImageBitmap(photo);
-                        addImage.setImageTintMode(null);
-                        addImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        exploreItem.setImageBitmap(photo);
+                        exploreItem.setImageTintMode(null);
+                        exploreItem.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         itemChosen = true;
                     } else {
                         itemChosen = false;
@@ -230,9 +189,9 @@ public class AddItemActivity extends AppCompatActivity {
             case GALLERY:
                     item_uri = returnedIntent.getData();
                     if(!item_uri.toString().isEmpty()) {
-                        addImage.setImageURI(item_uri);
-                        addImage.setImageTintMode(null);
-                        addImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        exploreItem.setImageURI(item_uri);
+                        exploreItem.setImageTintMode(null);
+                        exploreItem.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         itemChosen = true;
                     } else {
                         itemChosen = false;
@@ -256,33 +215,92 @@ public class AddItemActivity extends AppCompatActivity {
                 }
                 break;
         }
-        if(itemChosen)
-        {
-            btnCreate.setEnabled(true);
-        }
+
+        if(itemChosen) { btnCreate.setEnabled(true); }
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if(firstRun) {
-            firstRun = false;
-            int width = addImage.getWidth();
-            addImage.setMinimumHeight(width);
-            addImage.setMaxHeight(width);
+    private boolean isNameValid(String name) {
+        if (name == null || name.equals("") || names.contains(name)) {
+            return false;
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
         return true;
+    }
+
+    void setListenerForExploreLooks(final AlertDialog dialog) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.dialog_select_image, null);
+        dialog.setView(layout);
+
+        LinearLayout cameraOption = (LinearLayout) layout.findViewById(R.id.option_camera);
+        cameraOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takePicture, CAMERA);
+                dialog.dismiss();
+            }
+        });
+
+        LinearLayout galleryOption = (LinearLayout) layout.findViewById(R.id.option_gallery);
+        galleryOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto, GALLERY);
+                dialog.dismiss();
+            }
+        });
+
+        LinearLayout defaultOption = (LinearLayout) layout.findViewById(R.id.option_set_default_picture);
+        defaultOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exploreItem.setImageResource(R.drawable.blue_square);
+                itemChosen = true;
+                btnCreate.setEnabled(true);
+                dialog.dismiss();
+            }
+        });
+    }
+
+    void setListenerForExploreSounds(final AlertDialog dialog) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.dialog_select_sound, null);
+        dialog.setView(layout);
+
+        LinearLayout micOption = (LinearLayout) layout.findViewById(R.id.option_mic);
+        micOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: implement soundrecording - see soundrecorder
+            }
+        });
+
+        LinearLayout storageOption = (LinearLayout) layout.findViewById(R.id.option_storage);
+        storageOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pickSound = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickSound, AUDIO_PICK);
+                dialog.dismiss();
+            }
+
+        });
+    }
+
+    void setListenerForExploreProjects(final AlertDialog dialog) {
+        //TODO: implement the listener for exploring/selecting Projects
+    }
+
+    void setListenerForExploreSprites(final AlertDialog dialog) {
+        //TODO: implement the listener for exploring/selecting Sprites
     }
 
     private void setAudioWaveThumbnail(Uri sound) {
         //TODO: calcualte soundwave and make image out of it - delete default image
-        addImage.setImageResource(R.drawable.ic_volume_up_black_24dp);
+        exploreItem.setImageResource(R.drawable.ic_volume_up_black_24dp);
         itemChosen = true;
         btnCreate.setEnabled(true);
     }

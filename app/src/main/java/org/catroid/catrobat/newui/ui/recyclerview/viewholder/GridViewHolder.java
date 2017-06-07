@@ -1,5 +1,6 @@
 package org.catroid.catrobat.newui.ui.recyclerview.viewholder;
 
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -13,6 +14,7 @@ public class GridViewHolder extends RecyclerViewHolder {
     public TextView mTextView;
     public ImageView mImageView;
     public ImageView mFavoriteView;
+    public ImageView mSelectedView;
 
     public static RecyclerViewHolder newInstance(View view) {
         return new GridViewHolder(view);
@@ -26,6 +28,7 @@ public class GridViewHolder extends RecyclerViewHolder {
         mImageView = (ImageView) projectView.findViewById(R.id.project_image_view);
         mTextView = (TextView) projectView.findViewById(R.id.project_title_view);
         mFavoriteView = (ImageView) projectView.findViewById(R.id.favorite_project_image_view);
+        mSelectedView = (ImageView) projectView.findViewById(R.id.selected_project_view);
     }
 
     @Override

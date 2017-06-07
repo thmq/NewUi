@@ -37,8 +37,6 @@ public class RecyclerViewAddItemTest {
         assertEquals("new item 1", itemName.getText());
     }
 
-
-
     private AddItemActivity createAddItemActivity() {
         return new AddItemActivity();
     }

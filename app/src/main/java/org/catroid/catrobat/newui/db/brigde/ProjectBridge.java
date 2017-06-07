@@ -10,7 +10,11 @@ import org.catroid.catrobat.newui.data.Scene;
 import org.catroid.catrobat.newui.db.fetchrequest.ChildCollectionFetchRequest;
 import org.catroid.catrobat.newui.db.util.DataContract;
 
+import java.util.Date;
 import java.util.List;
+
+import static org.catroid.catrobat.newui.db.util.DataContract.ProjectEntry.*;
+
 
 public class ProjectBridge extends DatabaseBridge<Project> {
     public ProjectBridge(Context context) {
@@ -21,10 +25,11 @@ public class ProjectBridge extends DatabaseBridge<Project> {
     protected ContentValues serializeForDatabase(Project project) {
         ContentValues values = new ContentValues();
 
-        values.put(DataContract.ProjectEntry.COLUMN_NAME,  project.getName());
-        values.put(DataContract.ProjectEntry.COLUMN_INFO_TEXT,  project.getInfoText());
-        values.put(DataContract.ProjectEntry.COLUMN_DESCRIPTION,  project.getDescription());
-        values.put(DataContract.ProjectEntry.COLUMN_FAVORITE, project.getFavorite());
+        values.put(COLUMN_NAME,  project.getName());
+        values.put(COLUMN_INFO_TEXT,  project.getInfoText());
+        values.put(COLUMN_DESCRIPTION,  project.getDescription());
+        values.put(COLUMN_FAVORITE, project.getFavorite());
+        values.put(COLUMN_LAST_ACCESS, serializeDate(project.getLastAccess()));
 
         return values;
     }
@@ -33,11 +38,13 @@ public class ProjectBridge extends DatabaseBridge<Project> {
     protected Project unserializeFromDatabaseCursor(Cursor cursor) {
         Project project = new Project();
 
-        project.setId(cursor.getInt(cursor.getColumnIndex(DataContract.ProjectEntry._ID)));
-        project.setName(cursor.getString(cursor.getColumnIndex(DataContract.ProjectEntry.COLUMN_NAME)));
-        project.setInfoText(cursor.getString(cursor.getColumnIndex(DataContract.ProjectEntry.COLUMN_INFO_TEXT)));
-        project.setDescription(cursor.getString(cursor.getColumnIndex(DataContract.ProjectEntry.COLUMN_DESCRIPTION)));
-        project.setFavorite(cursor.getInt(cursor.getColumnIndex(DataContract.ProjectEntry.COLUMN_FAVORITE)) == 1);
+        project.setId(unserializeId(cursor, _ID));
+        project.setName(unserializeString(cursor, COLUMN_NAME));
+        project.setInfoText(unserializeString(cursor, COLUMN_INFO_TEXT));
+        project.setDescription(unserializeString(cursor, COLUMN_DESCRIPTION));
+        project.setFavorite(unserializeBoolean(cursor, COLUMN_FAVORITE));
+
+        project.setLastAccess(unserializeDate(cursor, COLUMN_LAST_ACCESS));
 
         return project;
     }

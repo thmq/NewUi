@@ -1,5 +1,6 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
+import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.copypaste.Clipboard;
 import org.catroid.catrobat.newui.data.Sprite;
 import org.catroid.catrobat.newui.db.brigde.SpriteBridge;
@@ -69,6 +70,6 @@ public class SpriteListFragment extends BaseRecyclerListFragment<Sprite>  {
 
     @Override
     public int getTabNameResource() {
-        return 0;
+        return R.string.tab_name_sprite;
     }
 }

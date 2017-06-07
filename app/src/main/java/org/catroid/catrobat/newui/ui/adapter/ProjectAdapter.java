@@ -7,9 +7,7 @@ import android.view.View;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
-import org.catroid.catrobat.newui.data.LookInfo;
 import org.catroid.catrobat.newui.data.Project;
-import org.catroid.catrobat.newui.db.brigde.ProjectBridge;
 import org.catroid.catrobat.newui.db.fetchrequest.FetchRequest;
 import org.catroid.catrobat.newui.db.fetchrequest.RootCollectionFetchRequest;
 import org.catroid.catrobat.newui.db.selection.ColumnSelection;
@@ -18,10 +16,25 @@ import org.catroid.catrobat.newui.ui.recyclerview.adapter.DatabaseRecyclerViewAd
 import org.catroid.catrobat.newui.ui.recyclerview.viewholder.GridViewHolder;
 import org.catroid.catrobat.newui.ui.recyclerview.viewholder.RecyclerViewHolder;
 
+import static org.catroid.catrobat.newui.ui.adapter.ProjectAdapter.ProjectScope;
+
 public class ProjectAdapter extends DatabaseRecyclerViewAdapter<Project> {
     private static final String TAG = ProjectAdapter.class.getSimpleName();
     public ProjectAdapter(AppCompatActivity context) {
         super(R.layout.project_item, context);
+    }
+
+    public enum ProjectScope {
+        ALL,
+        FAVORITES,
+        RECENT
+    }
+
+    public ProjectScope mCurrentScope = ProjectScope.ALL;
+
+    public void updateScope(ProjectScope scope) {
+        mCurrentScope = scope;
+        restartLoader();
     }
 
     @Override
@@ -29,9 +42,22 @@ public class ProjectAdapter extends DatabaseRecyclerViewAdapter<Project> {
         FetchRequest fetchRequest = new RootCollectionFetchRequest();
 
         Log.d(TAG, "Fetch Request created");
-        // TODO: Add additional Selections
 
-        // fetchRequest.addSelection(new ColumnSelection(DataContract.ProjectEntry.COLUMN_FAVORITE, "1"));
+        switch (mCurrentScope) {
+            case ALL:
+                Log.d(TAG, "Using all scope");
+                break;
+
+            case FAVORITES:
+                fetchRequest.addSelection(new ColumnSelection(DataContract.ProjectEntry.COLUMN_FAVORITE, "1"));
+                Log.d(TAG, "Using fav scope");
+                break;
+
+            case RECENT:
+                Log.d(TAG, "Using recent scope");
+                fetchRequest.setSortOrder(DataContract.ProjectEntry.COLUMN_LAST_ACCESS + " DESC");
+                break;
+        }
 
         return fetchRequest;
     }
@@ -57,11 +83,18 @@ public class ProjectAdapter extends DatabaseRecyclerViewAdapter<Project> {
         viewHolder.mTextView.getBackground().setAlpha(123);
         viewHolder.mTextView.setText(project.getName());
 
+        if (isSelected) {
+            viewHolder.mSelectedView.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.mSelectedView.setVisibility(View.GONE);
+        }
+
         if (project.getFavorite()) {
             viewHolder.mFavoriteView.setImageResource(R.drawable.favorite_white_selected);
         } else {
             viewHolder.mFavoriteView.setImageResource(R.drawable.favorite_white_empty);
         }
+
 
         viewHolder.mFavoriteView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
