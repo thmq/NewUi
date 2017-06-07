@@ -3,6 +3,7 @@ package org.catroid.catrobat.newui.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -24,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import org.catroid.catrobat.newui.R;
+import org.catroid.catrobat.newui.soundrecorder.SoundRecorderActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -41,6 +43,15 @@ public class AddItemActivity extends AppCompatActivity {
 
     private static String LOOKS;
     private static String SOUNDS;
+
+    private final int CAMERA = 0;
+    private final int GALLERY = 1;
+    private final int PLACE_HOLDER1 = 2;
+    private final int PLACE_HOLDER2 = 3;
+    private final int MIC = 4;
+    private final int AUDIO_PICK = 5;
+
+    private Uri item_uri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +90,11 @@ public class AddItemActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 final AlertDialog dialog = new AlertDialog.Builder(AddItemActivity.this).create();
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = null;
 
-                if(caller_tag.equals(LOOKS)) {
-                    LayoutInflater inflater = getLayoutInflater();
-                    View layout = inflater.inflate(R.layout.dialog_select_image, null);
+                if (caller_tag.equals(LOOKS)) {
+                    layout = inflater.inflate(R.layout.dialog_select_image, null);
                     dialog.setView(layout);
 
                     LinearLayout cameraOption = (LinearLayout) layout.findViewById(R.id.option_camera);
@@ -90,7 +102,7 @@ public class AddItemActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(takePicture, 0);
+                            startActivityForResult(takePicture, CAMERA);
                             dialog.dismiss();
                         }
                     });
@@ -101,26 +113,50 @@ public class AddItemActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(pickPhoto, 1);
+                            startActivityForResult(pickPhoto, GALLERY);
                             dialog.dismiss();
                         }
                     });
-                } else if(caller_tag.equals(SOUNDS)) {
 
-                LinearLayout defaultOption = (LinearLayout) layout.findViewById(R.id.option_set_default_picture);
-                defaultOption.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        addImage.setImageResource(R.drawable.blue_square);
-                        bitmapSet = true;
-                        btnCreate.setEnabled(true);
-                        dialog.dismiss();
-                    }
-                });
+                    LinearLayout defaultOption = (LinearLayout) layout.findViewById(R.id.option_set_default_picture);
+                    defaultOption.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            addImage.setImageResource(R.drawable.blue_square);
+                            itemChosen = true;
+                            btnCreate.setEnabled(true);
+                            dialog.dismiss();
+                        }
+                    });
+                } else if (caller_tag.equals(SOUNDS)) {
+                    layout = inflater.inflate(R.layout.dialog_select_sound, null);
+                    dialog.setView(layout);
 
-                dialog.show();
-            }
-        });
+                    LinearLayout micOption = (LinearLayout) layout.findViewById(R.id.option_mic);
+                    micOption.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //TODO fix sound recorder
+                            /*Intent openMic = new Intent(getApplicationContext(), SoundRecorderActivity.class);
+                            startActivityForResult(openMic, MIC);
+                            dialog.dismiss();*/
+                        }
+                    });
+
+                    LinearLayout storageOption = (LinearLayout) layout.findViewById(R.id.option_storage);
+                    storageOption.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent pickSound = new Intent(Intent.ACTION_PICK,
+                                    android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pickSound, AUDIO_PICK);
+                            dialog.dismiss();
+                        }
+
+                    });
+                }
+            dialog.show();
+        }});
 
         itemName.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -148,17 +184,13 @@ public class AddItemActivity extends AppCompatActivity {
                     Intent result = new Intent();
                     result.putExtra("name", name);
 
-                    if(caller_tag.equals(LOOKS)){
-                        Bitmap bitmap = ((BitmapDrawable) addImage.getDrawable()).getBitmap();
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] byteArrayBitmap = stream.toByteArray();
-                        result.putExtra("image", byteArrayBitmap);
+                    Bitmap bitmapToByteArray = ((BitmapDrawable) addImage.getDrawable()).getBitmap();
+                    byte[] byteArrayBitmap = bitmapToByteArray(bitmapToByteArray);
+                    result.putExtra("image", byteArrayBitmap);
 
-
-                    } else if(caller_tag.equals(SOUNDS)){
-
-                    }
+                     if(caller_tag.equals(SOUNDS)){
+                        result.putExtra("item_uri", item_uri.toString());
+                     }
 
                     setResult(Activity.RESULT_OK, result);
                     finish();
@@ -180,40 +212,52 @@ public class AddItemActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+    protected void onActivityResult(int requestCode, int resultCode, Intent returnedIntent) {
+        super.onActivityResult(requestCode, resultCode, returnedIntent);
+        if(resultCode != RESULT_OK) {
+            return;
+        }
         switch(requestCode) {
-            case 0: //Camera
-                if(resultCode == RESULT_OK){
-                    Bitmap photo = (Bitmap) imageReturnedIntent.getExtras().get("data");
+            case CAMERA: //Camera
+                    Bitmap photo = (Bitmap) returnedIntent.getExtras().get("data");
                     if(photo != null) {
                         addImage.setImageBitmap(photo);
-                        //Uri selectedImage = imageReturnedIntent.getData();
-                        //addImage.setImageURI(selectedImage);
                         addImage.setImageTintMode(null);
                         addImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         itemChosen = true;
                     } else {
                         itemChosen = false;
                     }
-                }
+                break;
+            case GALLERY:
+                    item_uri = returnedIntent.getData();
+                    if(!item_uri.toString().isEmpty()) {
+                        addImage.setImageURI(item_uri);
+                        addImage.setImageTintMode(null);
+                        addImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        itemChosen = true;
+                    } else {
+                        itemChosen = false;
+                    }
+                break;
+            case PLACE_HOLDER1:
+                break;
+            case PLACE_HOLDER2:
+                break;
+            case MIC:
 
                 break;
-            case 1:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    if(!selectedImage.toString().isEmpty()) {
-                        addImage.setImageURI(selectedImage);
-                        addImage.setImageTintMode(null);
-                        addImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        itemChosen = true;
-                    } else {
-                        itemChosen = false;
-                    }
+            case AUDIO_PICK:
+                item_uri = returnedIntent.getData();
+                if(!item_uri.toString().isEmpty()) {
+                    getAudioWaveThumbnail(item_uri);
+                    itemChosen = true;
+                } else {
+                    itemChosen = false;
                 }
                 break;
         }
-        if(bitmapSet)
+        if(itemChosen)
         {
             btnCreate.setEnabled(true);
         }
@@ -235,5 +279,16 @@ public class AddItemActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
+    }
+
+    private Bitmap getAudioWaveThumbnail(Uri sound) {
+        //TODO calcualte soundwave
+        return BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.blue_square);
+    }
+
+    private byte[] bitmapToByteArray(Bitmap bitmap){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
     }
 }

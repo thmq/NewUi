@@ -14,4 +14,7 @@
     <!-- Hint text dimens -->
     <dimen name="hint_text_icon">40dp</dimen>
     <dimen name="hint_text_size">14dp</dimen>
+
+    <!-- SoundRecorder -->
+    <dimen name="activity_text_view_margin_large">35dp</dimen>
 </resources>

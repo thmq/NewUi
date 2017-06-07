@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -186,11 +187,21 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == ADD_NEW_ITEM_REQUEST && resultCode == RESULT_OK) {
             String name = data.getStringExtra("name");
+            Uri sound_uri = null;
+
+            if(data.getStringExtra("sound_uri") != null) {
+                sound_uri = Uri.parse(data.getStringExtra("sound_uri"));
+            }
+
             byte[] byteArray = data.getByteArrayExtra("image");
             Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
             PathInfoFile pathInfoFile = StorageHandler.createImage(bitmap, name);
             T item = createNewItem(name, pathInfoFile);
+            if(sound_uri != null) {
+                //item.
+                //TODO handle sound storing
+            }
             addToList(item);
         }
     }

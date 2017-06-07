@@ -14,6 +14,7 @@
     <string name="title_activity_recycle_view">RecycleViewActivity</string>
     <string name="title_activity_list_view">ListViewActivity</string>
     <string name="title_activity_add_item">AddItemActivity</string>
+    <string name="title_activity_sound_recorder">SoundRecorderActivity</string>
 
     <!-- General Dialog Strings -->
     <string name="dialog_new_name">new name:</string>
@@ -58,14 +59,15 @@
     <string name="dialog_select_image_gallery">Gallery</string>
     <string name="dialog_select_image_camera">Camera</string>
     <string name="dialog_select_image_title">Select image source</string>
-
-
-
-    <!-- Bricks -->
-    <string name="brick_set_x">Set X:</string>
+    <string name="dialog_select_sound_mic">Microphone</string>
+    <string name="dialog_select_sound_folder">Folder</string>
 
     <!-- Look Bricks -->
     <string name="brick_set_x">Set X:</string>
     <string name="brick_set_look">Switch to look</string>
+
+    <!-- SoundRecorder -->
+    <string name="soundrecorder_name">Tap the icon above to start and stop recording.</string>
+    <string name="soundrecorder_text_view"></string>
 
 </resources>

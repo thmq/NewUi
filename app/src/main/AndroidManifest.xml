@@ -41,6 +41,11 @@
             android:label="@string/title_activity_add_item"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".soundrecorder.SoundRecorderActivity"
+            android:label="@string/title_activity_sound_recorder"
+            android:screenOrientation="portrait" />
+
 
     </application>
 

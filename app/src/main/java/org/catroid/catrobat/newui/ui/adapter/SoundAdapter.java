@@ -31,7 +31,7 @@ public class SoundAdapter extends RecyclerViewAdapter<SoundInfo> {
         if (isSelected) {
             holder.mImageSwitcher.setImageResource(CHECK_MARK_IMAGE_RESOURCE);
         } else {
-            holder.mImageSwitcher.setImageResource(item.getThumbnailResource());
+            holder.mImageSwitcher.setImageDrawable(item.getThumbnailDrawable());
         }
     }
 }

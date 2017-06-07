@@ -1,6 +1,8 @@
 package org.catroid.catrobat.newui.data;
 
+import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.copypaste.CopyPasteable;
@@ -52,9 +54,6 @@ public class SoundInfo extends ItemInfo implements Serializable, CopyPasteable {
     public void setAndCopyToPathInfo(PathInfoFile pathInfo) throws Exception {
         StorageHandler.copyFile(mPathInfo, pathInfo);
         setPathInfo(mPathInfo);
-    }
-    public int getThumbnailResource() {
-        return R.drawable.ic_insert_photo_black_24dp;
     }
 
     public String getDuration() {
