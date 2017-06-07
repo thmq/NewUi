@@ -51,4 +51,14 @@
     <string name="brick_set_look">Switch to look</string>
     <string name="title_activity_sprite">SpriteActivity</string>
 
+    <!-- Projects View -->
+    <string name="project_description">Description:</string>
+    <string name="project_last_access">Last Access:</string>
+    <string name="project_size">Size:</string>
+    <string name="project_brick_count">Brick Count:</string>
+
+    <string name="bottom_nav_favorites">Favorites</string>
+    <string name="bottom_nav_recent">Recent</string>
+    <string name="bottom_nav_all">All</string>
+
 </resources>

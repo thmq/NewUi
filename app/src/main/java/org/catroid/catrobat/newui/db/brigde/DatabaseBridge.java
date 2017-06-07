@@ -14,6 +14,7 @@ import org.catroid.catrobat.newui.db.fetchrequest.FetchRequest;
 import org.catroid.catrobat.newui.db.util.DataContract;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public abstract class DatabaseBridge<T extends PersistableRecord> {
@@ -146,5 +147,38 @@ public abstract class DatabaseBridge<T extends PersistableRecord> {
     public void unregisterContentObserver(ContentObserver observer) {
         getContentResolver().unregisterContentObserver(observer);
     }
+
+    protected long serializeDate(Date date) {
+        if (date != null) {
+            return date.getTime();
+        } else {
+            return 0;
+        }
+
+    }
+
+    protected long unserializeId(Cursor cursor, String column) {
+        return unserializeLong(cursor, column);
+    }
+
+    protected long unserializeLong(Cursor cursor, String column) {
+        return cursor.getLong(cursor.getColumnIndex(column));
+    }
+
+    protected boolean unserializeBoolean(Cursor cursor, String column) {
+        return cursor.getInt(cursor.getColumnIndex(column)) == 1;
+    }
+
+    protected String unserializeString(Cursor cursor, String column) {
+        return cursor.getString(cursor.getColumnIndex(column));
+    }
+
+    protected Date unserializeDate(Cursor cursor, String column) {
+        long millis = unserializeLong(cursor, column);
+
+        return new Date(millis);
+    }
+
+
 
 }

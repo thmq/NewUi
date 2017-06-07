@@ -55,7 +55,8 @@ public class CatroidDBHelper extends SQLiteOpenHelper {
                 SQLHelper.modifierUnique(SQLHelper.stringColumnDefinition(ProjectEntry.COLUMN_NAME)),
                 SQLHelper.stringColumnDefinition(ProjectEntry.COLUMN_INFO_TEXT),
                 SQLHelper.stringColumnDefinition(ProjectEntry.COLUMN_DESCRIPTION),
-                SQLHelper.booleanColumnDefinition(ProjectEntry.COLUMN_FAVORITE)
+                SQLHelper.booleanColumnDefinition(ProjectEntry.COLUMN_FAVORITE),
+                SQLHelper.dateColumnDefinition(ProjectEntry.COLUMN_LAST_ACCESS)
         });
     }
 

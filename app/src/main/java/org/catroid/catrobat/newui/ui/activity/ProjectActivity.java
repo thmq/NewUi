@@ -1,9 +1,13 @@
 package org.catroid.catrobat.newui.ui.activity;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +16,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -22,20 +27,31 @@ import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.Project;
 
+import org.catroid.catrobat.newui.db.brigde.ProjectBridge;
 import org.catroid.catrobat.newui.ui.adapter.OnSwipeTouchListener;
+import org.catroid.catrobat.newui.ui.adapter.ProjectAdapter;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
 import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragment;
 import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragmentDelegate;
 import org.catroid.catrobat.newui.ui.fragment.ProjectListFragment;
 
+import java.util.Date;
+
 import static android.view.View.GONE;
 
 public class ProjectActivity extends AppCompatActivity implements BaseRecyclerListFragmentDelegate<Project> {
 
+    private static final String TAG = ProjectActivity.class.getSimpleName();
     private WebView mWebView;
     private OnSwipeTouchListener onSwipeTouchListener;
-    private Boolean flinged;
     private ProjectListFragment mProjectListFragment;
+
+    private View mBottomSheet;
+    private BottomSheetBehavior mBottomSheetBehavior;
+    private BottomNavigationView mBottomNavigationView;
+    private int mLastTabPosition;
+
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,18 +66,98 @@ public class ProjectActivity extends AppCompatActivity implements BaseRecyclerLi
         requestAndroidPermissions();
 
         setupWebView();
-        setupRecyclerListFragment();
+        setupProjectListFragment();
         setupFAB();
+
+        setupBottomSheet();
+        setupBottomSheetNavigation();
+        selectBottomTab(1);
     }
 
-    private void setupRecyclerListFragment() {
+
+    private void setupBottomSheet() {
+        mBottomSheet = (View) findViewById(R.id.bottom_sheet);
+        mBottomSheet.setVisibility(View.INVISIBLE);
+
+        mBottomSheetBehavior = (BottomSheetBehavior) BottomSheetBehavior.from(mBottomSheet);
+        mBottomSheetBehavior.setHideable(true);
+
+        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+    }
+
+    private void selectBottomTab(int tabPosition) {
+        mBottomNavigationView.getMenu().getItem(tabPosition).setChecked(true);
+        mLastTabPosition = tabPosition;
+    }
+
+    private void setupBottomSheetNavigation() {
+        mBottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
+                        int newSelectedBottomTab = mapMenuItemToPosition(item);
+                        if (newSelectedBottomTab == mLastTabPosition) {
+                            return true;
+                        }
+
+                        ProjectAdapter.ProjectScope newProjectScope = getScopeForMenuItem(item);
+
+                        if (newSelectedBottomTab > mLastTabPosition) {
+                            mProjectListFragment.animateSlideRightToScope(newProjectScope);
+                        } else {
+                            mProjectListFragment.animateSlideLeftToScope(newProjectScope);
+                        }
+
+                        mLastTabPosition = newSelectedBottomTab;
+
+                        return true;
+                    }
+                });
+    }
+
+    private ProjectAdapter.ProjectScope getScopeForMenuItem(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.bottom_action_favorites:
+                return ProjectAdapter.ProjectScope.FAVORITES;
+            case R.id.bottom_action_recent:
+                return ProjectAdapter.ProjectScope.RECENT;
+            case R.id.bottom_action_all:
+            default:
+                return ProjectAdapter.ProjectScope.ALL;
+        }
+    }
+
+    private int mapMenuItemToPosition(@NonNull MenuItem item) {
+        int position;
+        switch (item.getItemId()) {
+            case R.id.bottom_action_favorites:
+                position = 0;
+                break;
+            case R.id.bottom_action_all:
+                position = 1;
+                break;
+            case R.id.bottom_action_recent:
+                position = 2;
+                break;
+            default:
+                position = 1;
+                break;
+        }
+
+        return position;
+    }
+
+
+    private void setupProjectListFragment() {
         mProjectListFragment = (ProjectListFragment) getSupportFragmentManager().findFragmentById(R.id.project_fragment);
         mProjectListFragment.setBaseRecyclerListFragmentDelegate(this);
+        mProjectListFragment.setProjectActivity(this);
     }
 
     private void setupFAB() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onAddProjectClicked();
@@ -93,9 +189,10 @@ public class ProjectActivity extends AppCompatActivity implements BaseRecyclerLi
         }
 
         setSwipeThresholdForWebView();
-        onSwipeTouchListener = setupSwipeListener();
+        onSwipeTouchListener = createOnSwipeListener();
         mWebView.setOnTouchListener(onSwipeTouchListener);
     }
+
 
     private void requestAndroidPermissions() {
         ActivityCompat.requestPermissions(ProjectActivity.this, new String[]
@@ -141,7 +238,7 @@ public class ProjectActivity extends AppCompatActivity implements BaseRecyclerLi
         }
     }
 
-    private OnSwipeTouchListener setupSwipeListener() {
+    private OnSwipeTouchListener createOnSwipeListener() {
         OnSwipeTouchListener touchListener = new OnSwipeTouchListener() {
 
             @Override
@@ -176,6 +273,36 @@ public class ProjectActivity extends AppCompatActivity implements BaseRecyclerLi
         scenesActivityIntent.putExtra(SceneActivity.PROJECT_ID_KEY, project.getId());
         scenesActivityIntent.putExtra(SceneActivity.PROJECT_NAME_KEY, project.getName());
 
+        updateProjectLastAccess(project);
+
         startActivity(scenesActivityIntent);
+    }
+
+    private void updateProjectLastAccess(Project project) {
+        ProjectBridge bridge = new ProjectBridge(this);
+
+        project.setLastAccess(new Date());
+
+        bridge.update(project);
+    }
+
+    public void onProjectListFragmentScrolled(ProjectListFragment fragment, int dx, int dy) {
+        if(dy > Constants.SCROLL_ACTION_MIN_THRESHOLD) {
+            if (mWebView.getVisibility() != View.GONE) {
+                mWebView.setVisibility(GONE);
+            }
+            mBottomNavigationView.setVisibility(View.INVISIBLE);
+
+            ObjectAnimator mObjectAnimator = ObjectAnimator.ofFloat(mFab, "translationY", getResources().getDimension(R.dimen.bottom_navigation_height));
+            mObjectAnimator.setDuration(300);
+            mObjectAnimator.start();
+
+        } else if(dy < (-1) * Constants.SCROLL_ACTION_MIN_THRESHOLD) {
+            ObjectAnimator mObjectAnimator = ObjectAnimator.ofFloat(mFab, "translationY", (-0.05f) * getResources().getDimension(R.dimen.bottom_navigation_height));
+            mObjectAnimator.setDuration(300);
+            mObjectAnimator.start();
+
+            mBottomNavigationView.setVisibility(View.VISIBLE);
+        }
     }
 }

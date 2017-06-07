@@ -2,6 +2,7 @@ package org.catroid.catrobat.newui.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -9,17 +10,14 @@ import android.util.Log;
 import android.view.View;
 
 import org.catroid.catrobat.newui.R;
-import org.catroid.catrobat.newui.data.Project;
 import org.catroid.catrobat.newui.data.Scene;
-import org.catroid.catrobat.newui.data.Sprite;
-import org.catroid.catrobat.newui.db.brigde.SceneBridge;
 import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragment;
 import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragmentDelegate;
 import org.catroid.catrobat.newui.ui.fragment.SceneListFragment;
 
 public class SceneActivity extends AppCompatActivity implements BaseRecyclerListFragmentDelegate<Scene> {
-    public static final String PROJECT_ID_KEY = "project_id";
-    public static final String PROJECT_NAME_KEY = "project_name";
+    public static final String PROJECT_ID_KEY = "scene_id";
+    public static final String PROJECT_NAME_KEY = "scene_name";
     private static final String TAG = SceneActivity.class.getSimpleName();
     private long mProjectId;
     private SceneListFragment mSceneFragment;
@@ -36,17 +34,20 @@ public class SceneActivity extends AppCompatActivity implements BaseRecyclerList
         if (intent != null) {
             mProjectId = intent.getLongExtra(PROJECT_ID_KEY, -1);
 
-            Log.d(TAG, "Setting project id: " + mProjectId);
+            if (mProjectId == -1 && savedInstanceState != null) {
+                mProjectId = savedInstanceState.getLong(PROJECT_ID_KEY, -1);
+            }
 
             if (mProjectId == -1) {
                 throw new UnsupportedOperationException();
             }
+
+            Log.d(TAG, "Project Id: " + mProjectId);
         }
 
         setupFAB();
         setupRecyclerListFragment();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     private void setupRecyclerListFragment() {
