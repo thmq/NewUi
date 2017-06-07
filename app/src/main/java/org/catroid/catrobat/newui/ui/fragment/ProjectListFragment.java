@@ -1,9 +1,14 @@
 package org.catroid.catrobat.newui.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -11,14 +16,11 @@ import android.view.animation.AnimationUtils;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.copypaste.Clipboard;
-import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.Project;
 import org.catroid.catrobat.newui.db.brigde.ProjectBridge;
-import org.catroid.catrobat.newui.db.fetchrequest.FetchRequest;
 import org.catroid.catrobat.newui.ui.activity.ProjectActivity;
 import org.catroid.catrobat.newui.ui.adapter.ProjectAdapter;
-
-import static android.view.View.GONE;
+import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapter;
 
 public class ProjectListFragment extends BaseRecyclerListFragment<Project> {
 
@@ -28,6 +30,7 @@ public class ProjectListFragment extends BaseRecyclerListFragment<Project> {
     private Animation mSlideInRight;
 
     private ProjectActivity mProjectActivity;
+    private MenuItem mInfoButtonItem;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -144,5 +147,36 @@ public class ProjectListFragment extends BaseRecyclerListFragment<Project> {
             }
         });
     }
+    
+    @Override
+    public int getContextMenuResource() {
+        return R.menu.context_menu_project;
+    }
 
+    @Override
+    public void onMenuInflatedForActionMode(ActionMode mode, Menu menu) {
+        super.onMenuInflatedForActionMode(mode, menu);
+        mInfoButtonItem = menu.findItem(R.id.btnInfo);
+    }
+
+    @Override
+    public boolean onContextMenuActionItemClicked(ActionMode mode, MenuItem item) {
+        if (item.getItemId() == R.id.btnInfo) {
+            Project project = mRecyclerViewAdapter.getSelectedItems().get(0);
+
+            mProjectActivity.showInfoForProject(project);
+
+            return true;
+        } else {
+            return super.onContextMenuActionItemClicked(mode, item);
+        }
+    }
+
+    @Override
+    public void onSelectionChanged(RecyclerViewAdapter<Project> adapter) {
+        super.onSelectionChanged(adapter);
+
+        Log.d(TAG, "selection changed");
+        setContextMenuItemVisibility(mInfoButtonItem, adapter.getSelectedItems().size() == 1);
+    }
 }

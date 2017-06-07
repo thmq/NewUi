@@ -93,7 +93,7 @@
             android:layout_marginBottom="@dimen/bottom_sheet_default_text_size"/>
 
         <TextView
-            android:id="@+id/bottom_sheet_description_final"
+            android:id="@+id/bottom_sheet_description_label"
             android:text="@string/project_description"
             android:textSize="@dimen/bottom_sheet_default_text_size"
             android:layout_below="@id/bottom_sheet_title"
@@ -106,14 +106,14 @@
             android:text="gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
             android:textSize="@dimen/bottom_sheet_default_text_size"
-            android:layout_below="@id/bottom_sheet_description_final"
+            android:layout_below="@id/bottom_sheet_description_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/bottom_sheet_default_text_size"/>
 
 
         <TextView
-            android:id="@+id/bottom_sheet_last_access_final"
+            android:id="@+id/bottom_sheet_last_access_label"
             android:text="@string/project_last_access"
             android:textSize="@dimen/bottom_sheet_default_text_size"
             android:layout_below="@id/bottom_sheet_description"
@@ -125,14 +125,14 @@ gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
             android:id="@+id/bottom_sheet_last_access"
             android:text="31.05.2017"
             android:textSize="@dimen/bottom_sheet_default_text_size"
-            android:layout_alignBaseline="@id/bottom_sheet_last_access_final"
+            android:layout_alignBaseline="@id/bottom_sheet_last_access_label"
             android:layout_alignParentRight="true"
             android:layout_width="@dimen/bottom_sheet_variable_text_width"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/bottom_sheet_project_size_final"
-            android:layout_below="@id/bottom_sheet_last_access_final"
+            android:id="@+id/bottom_sheet_project_size_label"
+            android:layout_below="@id/bottom_sheet_last_access_label"
             android:layout_alignParentLeft="true"
             android:text="@string/project_size"
             android:textSize="@dimen/bottom_sheet_default_text_size"
@@ -143,25 +143,25 @@ gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
             android:id="@+id/bottom_sheet_project_size"
             android:text="412 Kb"
             android:textSize="@dimen/bottom_sheet_default_text_size"
-            android:layout_alignBaseline="@id/bottom_sheet_project_size_final"
+            android:layout_alignBaseline="@id/bottom_sheet_project_size_label"
             android:layout_alignParentRight="true"
             android:layout_width="@dimen/bottom_sheet_variable_text_width"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/bottom_sheet_brick_count_final"
+            android:id="@+id/bottom_sheet_brick_count_label"
             android:text="@string/project_brick_count"
             android:textSize="@dimen/bottom_sheet_default_text_size"
-            android:layout_below="@id/bottom_sheet_project_size_final"
+            android:layout_below="@id/bottom_sheet_project_size_label"
             android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/bottom_sheet_brick_count"
+            android:id="@+id/x"
             android:text="12 456"
             android:textSize="@dimen/bottom_sheet_default_text_size"
-            android:layout_alignBaseline="@id/bottom_sheet_brick_count_final"
+            android:layout_alignBaseline="@id/bottom_sheet_brick_count_label"
             android:layout_alignParentRight="true"
             android:layout_width="@dimen/bottom_sheet_variable_text_width"
             android:layout_height="wrap_content" />

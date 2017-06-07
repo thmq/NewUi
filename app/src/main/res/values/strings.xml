@@ -60,5 +60,6 @@
     <string name="bottom_nav_favorites">Favorites</string>
     <string name="bottom_nav_recent">Recent</string>
     <string name="bottom_nav_all">All</string>
+    <string name="info_button">Info</string>
 
 </resources>

@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +27,7 @@ import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.Project;
 
 import org.catroid.catrobat.newui.db.brigde.ProjectBridge;
+import org.catroid.catrobat.newui.ui.ProjectBottomSheet;
 import org.catroid.catrobat.newui.ui.adapter.OnSwipeTouchListener;
 import org.catroid.catrobat.newui.ui.adapter.ProjectAdapter;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
@@ -46,18 +46,17 @@ public class ProjectActivity extends AppCompatActivity implements BaseRecyclerLi
     private OnSwipeTouchListener onSwipeTouchListener;
     private ProjectListFragment mProjectListFragment;
 
-    private View mBottomSheet;
-    private BottomSheetBehavior mBottomSheetBehavior;
     private BottomNavigationView mBottomNavigationView;
     private int mLastTabPosition;
 
     private FloatingActionButton mFab;
+    private ProjectBottomSheet mBottomSheet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.project_activity_view);
+        setContentView(R.layout.activity_projects_view);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -70,19 +69,12 @@ public class ProjectActivity extends AppCompatActivity implements BaseRecyclerLi
         setupFAB();
 
         setupBottomSheet();
-        setupBottomSheetNavigation();
+        setupBottomNavigation();
         selectBottomTab(1);
     }
 
-
     private void setupBottomSheet() {
-        mBottomSheet = (View) findViewById(R.id.bottom_sheet);
-        mBottomSheet.setVisibility(View.INVISIBLE);
-
-        mBottomSheetBehavior = (BottomSheetBehavior) BottomSheetBehavior.from(mBottomSheet);
-        mBottomSheetBehavior.setHideable(true);
-
-        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        mBottomSheet = new ProjectBottomSheet(findViewById(R.id.bottom_sheet));
     }
 
     private void selectBottomTab(int tabPosition) {
@@ -90,30 +82,39 @@ public class ProjectActivity extends AppCompatActivity implements BaseRecyclerLi
         mLastTabPosition = tabPosition;
     }
 
-    private void setupBottomSheetNavigation() {
+    private void setupBottomNavigation() {
+        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+
+        final BottomNavigationView bottomNavigationView = mBottomNavigationView;
         mBottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
 
                     @Override
                     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
-                        int newSelectedBottomTab = mapMenuItemToPosition(item);
-                        if (newSelectedBottomTab == mLastTabPosition) {
-                            return true;
-                        }
-
-                        ProjectAdapter.ProjectScope newProjectScope = getScopeForMenuItem(item);
-
-                        if (newSelectedBottomTab > mLastTabPosition) {
-                            mProjectListFragment.animateSlideRightToScope(newProjectScope);
-                        } else {
-                            mProjectListFragment.animateSlideLeftToScope(newProjectScope);
-                        }
-
-                        mLastTabPosition = newSelectedBottomTab;
+                        onBottomSheetNavigationItemSelected(bottomNavigationView, item);
 
                         return true;
                     }
                 });
+    }
+
+    private void onBottomSheetNavigationItemSelected(BottomNavigationView bottomNavigationView, MenuItem item) {
+        int newSelectedBottomTab = mapMenuItemToPosition(item);
+        if (newSelectedBottomTab == mLastTabPosition) {
+            return;
+        }
+
+        ProjectAdapter.ProjectScope newProjectScope = getScopeForMenuItem(item);
+
+        if (newSelectedBottomTab > mLastTabPosition) {
+            mProjectListFragment.animateSlideRightToScope(newProjectScope);
+        } else {
+            mProjectListFragment.animateSlideLeftToScope(newProjectScope);
+        }
+
+        mLastTabPosition = newSelectedBottomTab;
+
+        return;
     }
 
     private ProjectAdapter.ProjectScope getScopeForMenuItem(MenuItem item) {
@@ -147,7 +148,6 @@ public class ProjectActivity extends AppCompatActivity implements BaseRecyclerLi
 
         return position;
     }
-
 
     private void setupProjectListFragment() {
         mProjectListFragment = (ProjectListFragment) getSupportFragmentManager().findFragmentById(R.id.project_fragment);
@@ -192,7 +192,6 @@ public class ProjectActivity extends AppCompatActivity implements BaseRecyclerLi
         onSwipeTouchListener = createOnSwipeListener();
         mWebView.setOnTouchListener(onSwipeTouchListener);
     }
-
 
     private void requestAndroidPermissions() {
         ActivityCompat.requestPermissions(ProjectActivity.this, new String[]
@@ -304,5 +303,10 @@ public class ProjectActivity extends AppCompatActivity implements BaseRecyclerLi
 
             mBottomNavigationView.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void showInfoForProject(Project project) {
+        mBottomSheet.updateViewForProject(project);
+        mBottomSheet.show();
     }
 }

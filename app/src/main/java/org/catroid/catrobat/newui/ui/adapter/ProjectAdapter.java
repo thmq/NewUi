@@ -83,11 +83,18 @@ public class ProjectAdapter extends DatabaseRecyclerViewAdapter<Project> {
         viewHolder.mTextView.getBackground().setAlpha(123);
         viewHolder.mTextView.setText(project.getName());
 
+        if (isSelected) {
+            viewHolder.mSelectedView.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.mSelectedView.setVisibility(View.GONE);
+        }
+
         if (project.getFavorite()) {
             viewHolder.mFavoriteView.setImageResource(R.drawable.favorite_white_selected);
         } else {
             viewHolder.mFavoriteView.setImageResource(R.drawable.favorite_white_empty);
         }
+
 
         viewHolder.mFavoriteView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

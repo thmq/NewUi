@@ -25,7 +25,6 @@ import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.dialog.RenameItemDialog;
 import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapterDelegate;
-import org.catroid.catrobat.newui.ui.recyclerview.viewholder.RecyclerViewHolder;
 import org.catroid.catrobat.newui.utils.Utils;
 
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
     protected ActionMode mActionMode;
     protected RecyclerView mRecyclerView;
-    protected MenuItem mEditButton;
+    protected MenuItem mEditButtonItem;
     protected RecyclerViewAdapter<T> mRecyclerViewAdapter;
     protected ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
@@ -48,9 +47,9 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate a menu resource providing context menu items
             MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.context_menu, menu);
+            inflater.inflate(getContextMenuResource(), menu);
 
-            mEditButton = menu.findItem(R.id.btnEdit);
+            onMenuInflatedForActionMode(mode, menu);
 
             setTabColor(ContextCompat.getColor(getActivity().getApplicationContext(),
                     R.color.colorActionMode));
@@ -67,32 +66,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.btnEdit:
-                    showItemRenameDialog();
-
-                    return true;
-                case R.id.btnCopy:
-                    copyItems(mRecyclerViewAdapter.getSelectedItems());
-                    mRecyclerViewAdapter.clearSelection();
-                    getActivity().invalidateOptionsMenu();
-
-                    return true;
-
-                case R.id.btnDelete:
-                    try {
-                        removeItems(mRecyclerViewAdapter.getSelectedItems());
-                    } catch (Exception e) {
-                        Context context = getActivity().getApplicationContext();
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    mRecyclerViewAdapter.clearSelection();
-                    return true;
-
-                default:
-                    return false;
-            }
+            return onContextMenuActionItemClicked(mode, item);
         }
 
         @Override
@@ -104,6 +78,10 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
             mActionMode = null;
         }
     };
+
+    public void onMenuInflatedForActionMode(ActionMode mode, Menu menu) {
+        mEditButtonItem = menu.findItem(R.id.btnEdit);
+    }
 
     private List<BaseRecyclerListFragmentObserver> mObservers = new ArrayList<>();
     private BaseRecyclerListFragmentDelegate mBaseRecyclerListFragmentDelegate;
@@ -158,6 +136,36 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
         return super.onOptionsItemSelected(item);
     }
+
+    public boolean onContextMenuActionItemClicked(ActionMode mode, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btnEdit:
+                showItemRenameDialog();
+
+                return true;
+            case R.id.btnCopy:
+                copyItems(mRecyclerViewAdapter.getSelectedItems());
+                mRecyclerViewAdapter.clearSelection();
+                getActivity().invalidateOptionsMenu();
+
+                return true;
+
+            case R.id.btnDelete:
+                try {
+                    removeItems(mRecyclerViewAdapter.getSelectedItems());
+                } catch (Exception e) {
+                    Context context = getActivity().getApplicationContext();
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+                mRecyclerViewAdapter.clearSelection();
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
 
     public abstract RecyclerViewAdapter<T> createAdapter();
 
@@ -259,21 +267,14 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
             }
 
             boolean editButtonVisibility = selectedItems.size() <= 1;
-            setEditButtonVisibility(editButtonVisibility);
+            setContextMenuItemVisibility(mEditButtonItem, editButtonVisibility);
         }
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
 
-        mEditButton = (MenuItem) v.findViewById(R.id.btnEdit);
-    }
-
-    private void setEditButtonVisibility(boolean visible) {
-
-        if (mEditButton != null && mEditButton.isVisible() != visible) {
-            mEditButton.setVisible(visible);
+    protected void setContextMenuItemVisibility(MenuItem item, boolean visible) {
+        if (item != null && item.isVisible() != visible) {
+            item.setVisible(visible);
             getActivity().invalidateOptionsMenu();
         }
     }
@@ -352,5 +353,9 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
         if (mBaseRecyclerListFragmentDelegate != null) {
             mBaseRecyclerListFragmentDelegate.onItemClicked(this, item);
         }
+    }
+
+    public int getContextMenuResource() {
+        return R.menu.context_menu;
     }
 }
