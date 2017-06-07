@@ -53,7 +53,9 @@
     <!-- Tab Names-->
     <string name="tab_name_looks">Looks</string>
     <string name="tab_name_sounds">Sounds</string>
-    
+    <string name="tab_name_scene">Scene</string>
+    <string name="title_activity_scene">SceneActivity</string>
+
     <string name="dialog_select_image_placeholder1">...</string>
     <string name="dialog_select_image_placeholder2">...</string>
     <string name="dialog_select_image_gallery">Gallery</string>
@@ -65,6 +67,7 @@
     <!-- Look Bricks -->
     <string name="brick_set_x">Set X:</string>
     <string name="brick_set_look">Switch to look</string>
+    <string name="title_activity_sprite">SpriteActivity</string>
 
     <!-- SoundRecorder -->
     <string name="soundrecorder_name">Tap the icon above to start and stop recording.</string>

@@ -1,6 +1,11 @@
 package org.catroid.catrobat.newui.ui.adapter;
 
+import android.view.View;
+
 import org.catroid.catrobat.newui.data.LookInfo;
+import org.catroid.catrobat.newui.ui.recyclerview.viewholder.ListViewHolder;
+import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.recyclerview.viewholder.RecyclerViewHolder;
 
 import java.util.List;
 
@@ -11,15 +16,23 @@ public class LookAdapter extends RecyclerViewAdapter<LookInfo> {
     }
 
     @Override
-    public void bindDataToViewHolder(LookInfo item, ViewHolder holder, boolean isSelected) {
-        holder.mNameView.setText(item.getName());
-        holder.mDetailsView.setText("");
+    public RecyclerViewHolder createViewHolder(final View view) {
+        return new ListViewHolder(view);
+    }
+
+    @Override
+    public void bindDataToViewHolder(LookInfo item, RecyclerViewHolder holder, boolean isSelected) {
+        ListViewHolder listViewHolder = (ListViewHolder) holder;
+        listViewHolder.mNameView.setText(item.getName());
+        listViewHolder.mDetailsView.setText("");
 
         if (isSelected) {
-            holder.mImageSwitcher.setImageResource(CHECK_MARK_IMAGE_RESOURCE);
+            listViewHolder.mImageSwitcher.setImageResource(CHECK_MARK_IMAGE_RESOURCE);
         } else {
-            holder.mImageSwitcher.setImageDrawable(item.getRoundedDrawable());
+            listViewHolder.mImageSwitcher.setImageDrawable(item.getRoundedDrawable());
         }
+
+        listViewHolder.updateBackground(isSelected);
     }
 
 }

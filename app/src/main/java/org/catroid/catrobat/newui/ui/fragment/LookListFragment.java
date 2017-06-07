@@ -14,7 +14,7 @@ import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
 import org.catroid.catrobat.newui.ui.AddItemActivity;
 import org.catroid.catrobat.newui.ui.adapter.LookAdapter;
-import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.featureDiscovery.SpriteViewFeatureDiscoveryManager;
 import org.catroid.catrobat.newui.utils.Utils;
 
@@ -25,13 +25,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
-        implements NewItemDialog.NewItemInterface{
+public class LookListFragment extends TabableFragment<LookInfo>
+        implements NewItemDialog.NewItemInterface {
     public static final String TAG = LookListFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number_look_list";
 
-    public static BaseRecyclerListFragment newInstance(int sectionNumber) {
-        BaseRecyclerListFragment fragment = new LookListFragment();
+    public static LookListFragment newInstance(int sectionNumber) {
+        LookListFragment fragment = new LookListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
@@ -69,6 +69,7 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     @Override
     protected void addToList(LookInfo item) {
         mRecyclerViewAdapter.addItem(item);
+
     }
 
     @Override
@@ -98,7 +99,6 @@ public class LookListFragment extends BaseRecyclerListFragment<LookInfo>
     protected void renameItem(LookInfo item, String itemName) {
         item.setName(itemName);
     }
-
 
     @Override
     protected LookInfo createNewItem(String itemName) {

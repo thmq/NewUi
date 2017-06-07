@@ -1,9 +1,13 @@
 package org.catroid.catrobat.newui.ui.adapter;
 
 import android.content.res.Resources;
+import android.view.View;
 
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.data.SoundInfo;
+import org.catroid.catrobat.newui.ui.recyclerview.viewholder.ListViewHolder;
+import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.recyclerview.viewholder.RecyclerViewHolder;
 
 import java.util.ArrayList;
 
@@ -14,8 +18,14 @@ public class SoundAdapter extends RecyclerViewAdapter<SoundInfo> {
     }
 
     @Override
-    public void bindDataToViewHolder(SoundInfo item, ViewHolder holder, boolean isSelected) {
-        Resources res = holder.mItemView.getResources();
+    public RecyclerViewHolder createViewHolder(View view) {
+        return new ListViewHolder(view);
+    }
+
+    @Override
+    public void bindDataToViewHolder(SoundInfo item, RecyclerViewHolder holder, boolean isSelected) {
+        ListViewHolder listViewHolder = (ListViewHolder) holder;
+        Resources res = listViewHolder.mItemView.getResources();
 
         String durationDescription = item.getDuration();
         if (durationDescription == null) {
@@ -25,13 +35,15 @@ public class SoundAdapter extends RecyclerViewAdapter<SoundInfo> {
         String durationLabel = res.getString(R.string.sound_duration_label);
         String duration = durationLabel + ": " + durationDescription;
 
-        holder.mNameView.setText(item.getName());
-        holder.mDetailsView.setText(duration);
+        listViewHolder.mNameView.setText(item.getName());
+        listViewHolder.mDetailsView.setText(duration);
 
         if (isSelected) {
-            holder.mImageSwitcher.setImageResource(CHECK_MARK_IMAGE_RESOURCE);
+            listViewHolder.mImageSwitcher.setImageResource(CHECK_MARK_IMAGE_RESOURCE);
         } else {
-            holder.mImageSwitcher.setImageDrawable(item.getThumbnailDrawable());
+            listViewHolder.mImageSwitcher.setImageDrawable(item.getThumbnailDrawable());
         }
+
+        listViewHolder.updateBackground(isSelected);
     }
 }

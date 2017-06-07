@@ -1,43 +1,40 @@
 package org.catroid.catrobat.newui.data;
 
 import org.catroid.catrobat.newui.copypaste.CopyPasteable;
+import org.catroid.catrobat.newui.db.brigde.PersistableRecord;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sprite implements Serializable, CopyPasteable {
+public class Sprite implements Serializable, CopyPasteable, PersistableRecord {
 
     public static final String TAG = Sprite.class.getSimpleName();
     private static final long serialVersionUID = 1L;
     //TODO: uncomment after XStream integration
     //@XStreamAsAttribute
-    private String mName;
 
-    private List<LookInfo> mLooks = new ArrayList<>();
-    private List<SoundInfo> mSounds = new ArrayList<>();
+    private long mId;
+    private String mName;
+    private long mSceneId;
+
+    @Override
+    public void setId(long id) {
+        mId = id;
+    }
+
+    @Override
+    public long getId() {
+        return mId;
+    }
 
     public String getName() {
         return mName;
     }
 
-    public List<LookInfo> getLooks() {
-        return mLooks;
+    public void setName(String name) {
+        mName = name;
     }
-
-    public void setLooks(List<LookInfo> looks) {
-        mLooks = looks;
-    }
-
-
-    public List<SoundInfo> getSounds() {
-        return mSounds;
-    }
-
-    public void setSounds(List<SoundInfo> sounds) {
-        mSounds = sounds;
-    }
-
 
     @Override
     public boolean equals(Object object) {
@@ -57,42 +54,34 @@ public class Sprite implements Serializable, CopyPasteable {
 
     @Override
     public void prepareForClipboard() throws Exception {
-        for (LookInfo look : mLooks) {
-            look.prepareForClipboard();
-        }
-
-        for (SoundInfo sound : mSounds) {
-            sound.prepareForClipboard();
-        }
     }
 
     @Override
     public void cleanupFromClipboard() throws Exception {
-        for (LookInfo look : mLooks) {
-            look.cleanupFromClipboard();
-        }
 
-        for (SoundInfo sound : mSounds) {
-            sound.cleanupFromClipboard();
-        }
     }
 
     @Override
     public Sprite clone() throws CloneNotSupportedException {
-        Sprite clonedSprite = (Sprite) super.clone();
+        return null;
+    }
 
-        List<LookInfo> looks = new ArrayList<>();
-        for (LookInfo look : mLooks) {
-            looks.add(look.clone());
-        }
-        clonedSprite.mLooks = looks;
 
-        List<SoundInfo> sounds = new ArrayList<>();
-        for (SoundInfo sound : mSounds) {
-            sounds.add(sound.clone());
-        }
-        clonedSprite.mSounds = sounds;
+    @Override
+    public void beforeDestroy() {
 
-        return clonedSprite;
+    }
+
+    @Override
+    public void afterDestroy() {
+
+    }
+
+    public long getSceneId() {
+        return mSceneId;
+    }
+
+    public void setSceneId(long sceneId) {
+        mSceneId = sceneId;
     }
 }

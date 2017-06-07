@@ -1,9 +1,7 @@
-package org.catroid.catrobat.newui.ui;
+package org.catroid.catrobat.newui.ui.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,7 +16,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
-import android.widget.GridView;
 import android.widget.Toast;
 
 import org.catroid.catrobat.newui.R;
@@ -26,22 +23,19 @@ import org.catroid.catrobat.newui.data.Constants;
 import org.catroid.catrobat.newui.data.Project;
 
 import org.catroid.catrobat.newui.ui.adapter.OnSwipeTouchListener;
-import org.catroid.catrobat.newui.ui.adapter.ProjectViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.WebViewManager;
-
-import java.util.ArrayList;
+import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragment;
+import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragmentDelegate;
+import org.catroid.catrobat.newui.ui.fragment.ProjectListFragment;
 
 import static android.view.View.GONE;
 
-public class ProjectActivity extends AppCompatActivity {
+public class ProjectActivity extends AppCompatActivity implements BaseRecyclerListFragmentDelegate<Project> {
 
     private WebView mWebView;
-    private GridView mGridView;
-    private ProjectViewAdapter mProjectViewAdapter;
-    private ArrayList<Project> mProjects = new ArrayList<>();
     private OnSwipeTouchListener onSwipeTouchListener;
     private Boolean flinged;
-
+    private ProjectListFragment mProjectListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +45,35 @@ public class ProjectActivity extends AppCompatActivity {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ActivityCompat.requestPermissions(ProjectActivity.this, new String[]
-                {Manifest.permission.INTERNET}, 1);
-        ActivityCompat.requestPermissions(ProjectActivity.this, new String[]
-                {Manifest.permission.ACCESS_WIFI_STATE}, 1);
-        ActivityCompat.requestPermissions(ProjectActivity.this, new String[]
-                {Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+        Constants.PROJECT_IMAGE_SIZE = getSizeForGridViewImages();
 
+        requestAndroidPermissions();
+
+        setupWebView();
+        setupRecyclerListFragment();
+        setupFAB();
+    }
+
+    private void setupRecyclerListFragment() {
+        mProjectListFragment = (ProjectListFragment) getSupportFragmentManager().findFragmentById(R.id.project_fragment);
+        mProjectListFragment.setBaseRecyclerListFragmentDelegate(this);
+    }
+
+    private void setupFAB() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onAddProjectClicked();
+            }
+        });
+    }
+
+    private void onAddProjectClicked() {
+        mProjectListFragment.onAddButtonClicked();
+    }
+
+    private void setupWebView() {
         mWebView = (WebView) findViewById(R.id.webview);
         try {
             if (!(WebViewManager.loadFromURL(mWebView, Constants.PROJECT_NEWS_URL, this))) {
@@ -76,38 +92,18 @@ public class ProjectActivity extends AppCompatActivity {
             Toast.makeText(this, "NOT connected !!!", Toast.LENGTH_LONG).show();
         }
 
-
-        Constants.PROJECT_IMAGE_SIZE = getSizeForGridViewImages();
-
-        mProjectViewAdapter = new ProjectViewAdapter(this, R.layout.project_item, mProjects);
-
-        mGridView = (GridView) findViewById(R.id.project_gridview);
-        mGridView.setAdapter(mProjectViewAdapter);
-
-        // Fill in Test-Data
-        for (int i = 0; i < 12; i++) {
-            String text = "Item " + i;
-            if (addNewProject(R.drawable.blue_test_pic, text)) {
-                mProjectViewAdapter.notifyDataSetChanged();
-            } else {
-                Toast.makeText(this, "Could not add File: " + text, Toast.LENGTH_LONG).show();
-            }
-        }
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Toast.makeText(getApplicationContext(), "Replace with Action",
-                        Toast.LENGTH_LONG).show();
-            }
-        });
-
-
         setSwipeThresholdForWebView();
-        onSwipeTouchListener = setUpSwipeListener();
+        onSwipeTouchListener = setupSwipeListener();
         mWebView.setOnTouchListener(onSwipeTouchListener);
+    }
+
+    private void requestAndroidPermissions() {
+        ActivityCompat.requestPermissions(ProjectActivity.this, new String[]
+                {Manifest.permission.INTERNET}, 1);
+        ActivityCompat.requestPermissions(ProjectActivity.this, new String[]
+                {Manifest.permission.ACCESS_WIFI_STATE}, 1);
+        ActivityCompat.requestPermissions(ProjectActivity.this, new String[]
+                {Manifest.permission.ACCESS_NETWORK_STATE}, 1);
 
     }
 
@@ -128,23 +124,6 @@ public class ProjectActivity extends AppCompatActivity {
         return (int) dp;
     }
 
-    private Boolean addNewProject(int resID, String projectInfo) {
-
-        try {
-            Bitmap image = BitmapFactory.decodeResource(this.getResources(),
-                    resID);
-            Bitmap.createScaledBitmap(image, Constants.PROJECT_IMAGE_SIZE,
-                    Constants.PROJECT_IMAGE_SIZE, false);
-
-            mProjects.add(mProjects.size(), new Project(image, projectInfo));
-        } catch (Exception ex) {
-            Log.wtf("ADD NEW PROJECT ", ex.getMessage());
-            return false;
-        }
-
-        return true;
-    }
-
     private void setSwipeThresholdForWebView() {
 
         try {
@@ -162,7 +141,7 @@ public class ProjectActivity extends AppCompatActivity {
         }
     }
 
-    private OnSwipeTouchListener setUpSwipeListener() {
+    private OnSwipeTouchListener setupSwipeListener() {
         OnSwipeTouchListener touchListener = new OnSwipeTouchListener() {
 
             @Override
@@ -190,4 +169,13 @@ public class ProjectActivity extends AppCompatActivity {
         return touchListener;
     }
 
+    @Override
+    public void onItemClicked(BaseRecyclerListFragment<Project> fragment, Project project) {
+        Intent scenesActivityIntent = new Intent(this, SceneActivity.class);
+
+        scenesActivityIntent.putExtra(SceneActivity.PROJECT_ID_KEY, project.getId());
+        scenesActivityIntent.putExtra(SceneActivity.PROJECT_NAME_KEY, project.getName());
+
+        startActivity(scenesActivityIntent);
+    }
 }

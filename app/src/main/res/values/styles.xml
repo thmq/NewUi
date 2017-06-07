@@ -14,7 +14,7 @@
         <item name="editTextStyle">@style/EditTextStyle</item>
     </style>
 
-    <style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.OptionsMenu" parent="ThemeOverlay.AppCompat.Light" />
 

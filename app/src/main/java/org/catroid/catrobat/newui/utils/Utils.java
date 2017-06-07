@@ -2,6 +2,7 @@ package org.catroid.catrobat.newui.utils;
 
 
 import org.catroid.catrobat.newui.data.LookInfo;
+import org.catroid.catrobat.newui.data.Scene;
 import org.catroid.catrobat.newui.data.SoundInfo;
 import org.catroid.catrobat.newui.io.PathInfoDirectory;
 import org.catroid.catrobat.newui.io.StorageHandler;
@@ -57,6 +58,8 @@ public final class Utils {
     }
 
     public static boolean isItemNameUnique(String itemName, List scope) {
+        // FIXME: THIS METHOD IS REALLY DERPY!
+
         Set<String> nameSet = new HashSet<>();
         if (scope.size() > 0) {
             if (scope.get(0) instanceof LookInfo) {
@@ -69,10 +72,16 @@ public final class Utils {
                     nameSet.add(item.getName());
                 }
             }
+            if (scope.get(0) instanceof Scene) {
+                for (Scene item : (List<Scene>) scope) {
+                    nameSet.add(item.getName());
+                }
+            }
         }
         if (nameSet.contains(itemName)) {
             return false;
         }
         return true;
     }
+
 }

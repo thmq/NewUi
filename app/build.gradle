@@ -39,14 +39,14 @@ dependencies {
         exclude module: 'support-annotations'
         exclude module: 'recyclerview-v7'
     }
-    testCompile "org.mockito:mockito-core:2.+"
+
+
 
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support:design:25.3.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.9.1'
-
+    testCompile 'org.mockito:mockito-core:2.+'
     testCompile 'junit:junit:4.12'
-
     checkstyle 'com.puppycrawl.tools:checkstyle:7.6.1'
 }

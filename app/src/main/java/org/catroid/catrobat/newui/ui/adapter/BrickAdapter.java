@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import org.catroid.catrobat.newui.data.brick.BaseBrick;
 import org.catroid.catrobat.newui.data.brick.BrickViewHolder;
+import org.catroid.catrobat.newui.ui.recyclerview.multiselection.RecyclerViewMultiSelectionManager;
 
 import java.util.ArrayList;
 import java.util.List;

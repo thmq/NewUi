@@ -7,31 +7,20 @@ import org.catroid.catrobat.newui.copypaste.Clipboard;
 import org.catroid.catrobat.newui.data.SoundInfo;
 import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
-import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.adapter.SoundAdapter;
 import org.catroid.catrobat.newui.utils.Utils;
 
 import java.util.ArrayList;
 
 
-public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
+public class SoundListFragment extends TabableFragment<SoundInfo> {
 
     public static final String TAG = SoundListFragment.class.getSimpleName();
     private static final String ARG_SECTION_NUMBER = "section_number_sound_list";
 
-    @Override
-    protected void addToList(SoundInfo item) {
-        mRecyclerViewAdapter.addItem(item);
-    }
-
-    @Override
-    protected SoundInfo createNewItem(String itemName, PathInfoFile pathInfoFile) {
-        //TODO
-        return null;
-    }
-
-    public static BaseRecyclerListFragment newInstance(int sectionNumber) {
-        BaseRecyclerListFragment fragment = new SoundListFragment();
+    public static SoundListFragment newInstance(int sectionNumber) {
+        SoundListFragment fragment = new SoundListFragment();
 
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -49,6 +38,10 @@ public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
         return new SoundAdapter(new ArrayList<SoundInfo>(), R.layout.list_item);
     }
 
+    @Override
+    protected void addToList(SoundInfo item) {
+//        TODO: implement method
+    }
 
     @Override
     protected String getItemName(SoundInfo item) {
@@ -89,5 +82,10 @@ public class SoundListFragment extends BaseRecyclerListFragment<SoundInfo> {
     @Override
     protected void renameItem(SoundInfo item, String itemName) {
         item.setName(itemName);
+    }
+
+    @Override
+    protected SoundInfo createNewItem(String itemName, PathInfoFile pathInfoFile) {
+        return null;
     }
 }

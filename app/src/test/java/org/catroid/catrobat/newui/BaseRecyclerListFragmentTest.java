@@ -1,7 +1,13 @@
 package org.catroid.catrobat.newui;
 
-import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+
+import org.catroid.catrobat.newui.copypaste.Clipboard;
+import org.catroid.catrobat.newui.copypaste.CopyPasteable;
+import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapter;
 import org.catroid.catrobat.newui.ui.fragment.BaseRecyclerListFragment;
+import org.catroid.catrobat.newui.ui.recyclerview.viewholder.RecyclerViewHolder;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -27,7 +33,7 @@ public class BaseRecyclerListFragmentTest {
         return new TestFragment();
     }
 
-    class TestItem {
+    class TestItem implements CopyPasteable {
         String mName;
 
         TestItem() {
@@ -37,14 +43,24 @@ public class BaseRecyclerListFragmentTest {
         TestItem(String name) {
             mName = name;
         }
+
+        @Override
+        public void prepareForClipboard() throws Exception {
+
+        }
+
+        @Override
+        public void cleanupFromClipboard() throws Exception {
+
+        }
+
+        @Override
+        public CopyPasteable clone() throws CloneNotSupportedException {
+            return null;
+        }
     }
 
     public class TestFragment extends BaseRecyclerListFragment<TestItem> {
-        @Override
-        public int getTabNameResource() {
-            return 0;
-        }
-
         @Override
         public RecyclerViewAdapter<TestItem> createAdapter() {
             return new TestAdapter(new ArrayList<TestItem>(), 0);
@@ -52,6 +68,11 @@ public class BaseRecyclerListFragmentTest {
 
         @Override
         protected String getItemName(TestItem item) {
+            return null;
+        }
+
+        @Override
+        protected Clipboard.ItemType getItemType() {
             return null;
         }
 
@@ -80,7 +101,12 @@ public class BaseRecyclerListFragmentTest {
             }
 
             @Override
-            public void bindDataToViewHolder(TestItem item, ViewHolder holder, boolean isSelected) {
+            public RecyclerViewHolder createViewHolder(View view) {
+                return null;
+            }
+
+            @Override
+            public void bindDataToViewHolder(TestItem item, RecyclerViewHolder holder, boolean isSelected) {
 
             }
         }

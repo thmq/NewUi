@@ -11,4 +11,5 @@
     <!-- SoundRecorder -->
     <color name="button_background_top_border_color">#4D7F8F</color>
 
+    <color name="list_item_selected_bg">#DDDDDD</color>
 </resources>

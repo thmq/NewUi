@@ -1,4 +1,4 @@
-package org.catroid.catrobat.newui.ui;
+package org.catroid.catrobat.newui.ui.activity;
 
 import android.Manifest;
 import android.os.Bundle;
@@ -14,9 +14,9 @@ import android.view.View;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.ui.adapter.SpriteViewPagerAdapter;
 
-public class SpriteActivity extends AppCompatActivity {
+public class SpriteDetailActivity extends AppCompatActivity {
 
-    public static final String TAG = SpriteActivity.class.getSimpleName();
+    public static final String TAG = SpriteDetailActivity.class.getSimpleName();
     SpriteViewPagerAdapter mSpriteViewPagerAdapter;
     ViewPager mViewPager;
 
@@ -29,8 +29,6 @@ public class SpriteActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mSpriteViewPagerAdapter = new SpriteViewPagerAdapter(this);
-
-        final AppCompatActivity activity = this;
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSpriteViewPagerAdapter);
@@ -49,7 +47,7 @@ public class SpriteActivity extends AppCompatActivity {
             }
         });
 
-        ActivityCompat.requestPermissions(SpriteActivity.this, new String[]
+        ActivityCompat.requestPermissions(SpriteDetailActivity.this, new String[]
                 {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
     }
 

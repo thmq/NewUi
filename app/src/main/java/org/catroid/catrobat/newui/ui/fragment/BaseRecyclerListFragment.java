@@ -25,14 +25,13 @@ import android.widget.Toast;
 import org.catroid.catrobat.newui.R;
 import org.catroid.catrobat.newui.copypaste.Clipboard;
 import org.catroid.catrobat.newui.copypaste.CopyPasteable;
-import org.catroid.catrobat.newui.data.ItemInfo;
 import org.catroid.catrobat.newui.dialog.NewItemDialog;
 import org.catroid.catrobat.newui.dialog.RenameItemDialog;
+import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapter;
+import org.catroid.catrobat.newui.ui.recyclerview.adapter.RecyclerViewAdapterDelegate;
 import org.catroid.catrobat.newui.io.PathInfoFile;
 import org.catroid.catrobat.newui.io.StorageHandler;
 import org.catroid.catrobat.newui.ui.AddItemActivity;
-import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapter;
-import org.catroid.catrobat.newui.ui.adapter.RecyclerViewAdapterDelegate;
 import org.catroid.catrobat.newui.utils.Utils;
 
 import java.io.Serializable;
@@ -43,7 +42,7 @@ import static android.app.Activity.RESULT_OK;
 
 public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends Fragment
         implements RecyclerViewAdapterDelegate<T>, NewItemDialog.NewItemInterface,
-        RenameItemDialog.RenameItemInterface, Serializable {
+        RenameItemDialog.RenameItemInterface, Serializable, Tabable {
 
     public static final String TAG = BaseRecyclerListFragment.class.getSimpleName();
     public static final int ADD_NEW_ITEM_REQUEST = 1;
@@ -117,12 +116,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
     };
 
     private List<BaseRecyclerListFragmentObserver> mObservers = new ArrayList<>();
-
-    public static Fragment newInstance(int sectionNumber) {
-        return null;
-    }
-
-    public abstract int getTabNameResource();
+    private BaseRecyclerListFragmentDelegate mBaseRecyclerListFragmentDelegate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -132,18 +126,25 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
         mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recycler_view,
                 container, false);
 
-        mRecyclerViewAdapter = createAdapter();
-        mRecyclerViewAdapter.setDelegate(this);
-
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
-
         return mRecyclerView;
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
+        mRecyclerViewAdapter = createAdapter();
+        mRecyclerViewAdapter.setDelegate(this);
+
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+
         getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRecyclerViewAdapter.cleanup();
     }
 
     @Override
@@ -178,6 +179,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
         Intent intent = new Intent(getContext(), AddItemActivity.class);
         intent.putExtra("names_list", names);
+//        intent.putExtra("caller_tag", getTag());
         intent.putExtra("caller_tag", getString(getTabNameResource()));
         startActivityForResult(intent, ADD_NEW_ITEM_REQUEST);
     }
@@ -221,7 +223,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
     private void showItemRenameDialog() {
         T item = mRecyclerViewAdapter.getSelectedItems().get(0);
-        
+
         RenameItemDialog dialog = RenameItemDialog.newInstance(
                 R.string.dialog_rename_item,
                 R.string.dialog_item_name_label,
@@ -239,7 +241,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
     protected abstract String getItemName(T item);
 
-    private boolean copyItems(List<T> items) {
+    protected boolean copyItems(List<T> items) {
         boolean success;
 
         try {
@@ -254,14 +256,14 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
         return success;
     }
 
-    private void pasteItems() {
+    protected void pasteItems() {
         List<T> items = (List<T>) Clipboard.getInstance().getItemsForType(getItemType());
 
         if (items != null) {
             for (T item : items) {
                 try {
                     T copiedItem = copyItem(item);
-                    mRecyclerViewAdapter.addItem(copiedItem);
+                    mRecyclerViewAdapter.insertItem(copiedItem);
                 } catch (Exception e) {
                     Log.d(TAG, e.getMessage());
                     e.printStackTrace();
@@ -274,11 +276,11 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
     protected abstract T copyItem(T item) throws Exception;
 
-    private void removeItems(List<T> items) {
+    protected void removeItems(List<T> items) {
         for (T item : items) {
             try {
                 cleanupItem(item);
-                mRecyclerViewAdapter.removeItem(item);
+                mRecyclerViewAdapter.destroyItem(item);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -341,7 +343,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
         T item = createNewItem(itemName);
 
         if (item != null) {
-            mRecyclerViewAdapter.addItem(item);
+            mRecyclerViewAdapter.insertItem(item);
 
             for (BaseRecyclerListFragmentObserver observer : mObservers) {
                 observer.onNewItemAdded(this, item);
@@ -358,7 +360,7 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
             renameItem(item, itemName);
 
-            mRecyclerViewAdapter.itemChanged(item);
+            mRecyclerViewAdapter.updateItem(item);
             mRecyclerViewAdapter.clearSelection();
         }
     }
@@ -382,5 +384,20 @@ public abstract class BaseRecyclerListFragment<T extends CopyPasteable> extends 
 
     public void removeObserver(BaseRecyclerListFragmentObserver observer) {
         mObservers.remove(observer);
+    }
+
+    @Override
+    public void onItemClicked(RecyclerViewAdapter<T> adapter, T item) {
+        notifyOnItemClicked(item);
+    }
+
+    public void setBaseRecyclerListFragmentDelegate(BaseRecyclerListFragmentDelegate<T> baseRecyclerListFragmentDelegate) {
+        mBaseRecyclerListFragmentDelegate = baseRecyclerListFragmentDelegate;
+    }
+
+    private void notifyOnItemClicked(T item) {
+        if (mBaseRecyclerListFragmentDelegate != null) {
+            mBaseRecyclerListFragmentDelegate.onItemClicked(this, item);
+        }
     }
 }
